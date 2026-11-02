@@ -5,8 +5,8 @@ import { AdminShell } from "@/components/admin-shell";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Nahda Admin",
-  description: "Nahda Publications administration",
+  title: "Omicron Admin",
+  description: "Omicron Publications administration",
 };
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

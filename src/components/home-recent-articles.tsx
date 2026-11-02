@@ -50,129 +50,15 @@ function typeLabel(articleType: string) {
   );
 }
 
-function Authors({ names, limit = 3 }: { names: string[]; limit?: number }) {
-  const label =
+function authorLine(names: string[], limit = 3) {
+  return (
     names.slice(0, limit).map(authorDisplayName).join(", ") +
-    (names.length > limit ? " et al." : "");
-  return (
-    <p className="mt-1.5 text-sm font-semibold leading-snug text-[var(--brand-orange)] sm:mt-2 sm:text-base">
-      {label}
-    </p>
-  );
-}
-
-function ImageFrame({
-  src,
-  className,
-  sizes,
-}: {
-  src: string | null | undefined;
-  className?: string;
-  sizes: string;
-}) {
-  return (
-    <div
-      className={`relative overflow-hidden bg-[var(--surface)] ${className ?? ""}`}
-    >
-      {src ? (
-        <Image
-          src={src}
-          alt=""
-          fill
-          className="object-cover object-center transition duration-700 group-hover:scale-[1.03]"
-          sizes={sizes}
-          unoptimized
-        />
-      ) : (
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #1e6847 0%, #0b1f33 55%, #163d32 100%)",
-          }}
-        />
-      )}
-    </div>
-  );
-}
-
-function IndexedAside({
-  platforms,
-  section,
-  className,
-}: {
-  platforms: RecentIndexedPlatform[];
-  section: RecentIndexedSection;
-  className?: string;
-}) {
-  return (
-    <aside
-      className={className}
-      aria-label={section.title || "Where Nahda publications appear"}
-      data-aos="fade-up"
-      data-aos-delay="100"
-      data-aos-duration="900"
-    >
-      <div className="border-t border-[var(--line)]/80 pt-4 sm:pt-5">
-        {section.eyebrow ? (
-          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--accent)] sm:text-[11px]">
-            {section.eyebrow}
-          </p>
-        ) : null}
-        <h3 className="mt-1 font-[family-name:var(--font-display)] text-lg leading-snug text-[var(--ink)] sm:text-xl">
-          {section.title}
-        </h3>
-        {section.body ? (
-          <p className="mt-1.5 text-sm leading-relaxed text-[var(--muted)]">
-            {section.body}
-          </p>
-        ) : null}
-
-        <ul className="mt-4 space-y-2 sm:space-y-2.5">
-          {platforms.map((platform, index) => (
-            <li key={platform.id ?? `${platform.name}-${index}`}>
-              <Link
-                href={platform.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-3.5 rounded-xl px-1 py-2.5 transition hover:bg-white/70 sm:gap-4 sm:px-2 sm:py-3"
-              >
-                <span className="flex h-16 w-[4.75rem] shrink-0 items-center justify-center rounded-xl bg-white p-2 ring-1 ring-[var(--line)] sm:h-[4.5rem] sm:w-[5.5rem] sm:p-2.5">
-                  <Image
-                    src={platform.logoUrl}
-                    alt=""
-                    width={160}
-                    height={88}
-                    className="h-10 w-auto max-w-full object-contain sm:h-12"
-                    unoptimized
-                  />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-semibold text-[var(--ink)] group-hover:text-[var(--accent)] sm:text-base">
-                    {platform.name}
-                  </span>
-                  <span className="mt-0.5 block line-clamp-2 text-xs leading-snug text-[var(--muted)] sm:text-sm">
-                    {platform.blurb}
-                  </span>
-                </span>
-                <span
-                  aria-hidden
-                  className="shrink-0 text-sm font-semibold text-[var(--accent)] opacity-70 transition group-hover:translate-x-0.5 group-hover:opacity-100"
-                >
-                  →
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </aside>
+    (names.length > limit ? " et al." : "")
   );
 }
 
 /**
- * Featured strip of the newest published papers — sits under the homepage carousel.
- * Desktop: indexed platforms fill the space under the featured paper (not separate cards).
+ * Nature-style research highlights: one lead story + a quiet reading list.
  */
 export function HomeRecentArticles({
   articles,
@@ -182,7 +68,7 @@ export function HomeRecentArticles({
   if (articles.length === 0) return null;
 
   const [featured, ...rest] = articles;
-  const side = rest.slice(0, 2);
+  const side = rest.slice(0, 4);
   const featuredMeta = [
     featured.journalTitle,
     formatVolumeIssue(featured.volume, featured.issue),
@@ -204,160 +90,175 @@ export function HomeRecentArticles({
 
   return (
     <section
-      className="border-b border-[var(--line)] bg-[var(--accent-soft)]/40"
-      aria-label="Recently published articles"
+      className="nature-section border-b border-[var(--line)] bg-[var(--paper)]"
+      aria-label="Research highlights"
     >
-      <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-14">
-        <div
-          className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3"
-          data-aos="fade-up"
-          data-aos-duration="900"
-        >
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+        <header className="flex flex-col gap-3 border-b border-[var(--line)] pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)] sm:text-xs">
-              Just published
-            </p>
-            <h2 className="mt-1.5 font-[family-name:var(--font-display)] text-2xl leading-tight text-[var(--ink)] sm:mt-2 sm:text-4xl">
-              Most recent papers
-            </h2>
-            <p className="mt-2 text-base leading-relaxed text-[var(--muted)] sm:mt-3 sm:text-lg">
-              The newest open scholarship from the Nahda journal family.
-            </p>
+            <h2 className="acs-section-title">Latest from the journals</h2>
           </div>
           <Link
             href="/articles"
-            className="shrink-0 self-start text-sm font-semibold text-[var(--accent)] hover:underline sm:self-auto sm:text-base"
+            className="shrink-0 text-[15px] font-medium text-[var(--accent)] underline underline-offset-4"
+          >
+            Browse all research
+          </Link>
+        </header>
+
+        <div className="mt-10 grid gap-12 lg:grid-cols-[1.35fr_0.9fr] lg:gap-14">
+          <Link
+            href={`/articles/${featured.slug}`}
+            className="group block"
+            data-aos="fade-up"
+            data-aos-duration="900"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--surface)]">
+              {featured.imageUrl ? (
+                <Image
+                  src={featured.imageUrl}
+                  alt=""
+                  fill
+                  className="object-cover transition duration-700 group-hover:scale-[1.02]"
+                  sizes="(max-width: 1024px) 100vw, 60vw"
+                  unoptimized
+                />
+              ) : (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, #1a3a5a 0%, #c84e27 100%)",
+                  }}
+                />
+              )}
+            </div>
+            <div className="mt-5">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                {typeLabel(featured.articleType)}
+                {featured.openAccess ? " · Open access" : ""}
+              </p>
+              <h3 className="mt-2 text-2xl font-bold leading-snug text-[var(--ink)] transition group-hover:text-[var(--accent)] sm:text-[1.75rem]">
+                {featured.title}
+              </h3>
+              <p className="mt-3 text-sm font-medium text-[var(--muted)]">
+                {authorLine(featured.authors)}
+              </p>
+              <p className="mt-1 text-xs text-[var(--muted)]">
+                {featuredMeta}
+                <span className="text-[var(--line)]"> · </span>
+                {featured.publishedAt}
+              </p>
+              <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--muted)]">
+                {htmlToPlainText(featured.abstract).trim().slice(0, 220) ||
+                  typeLabel(featured.articleType)}
+                {htmlToPlainText(featured.abstract).trim().length > 220
+                  ? "…"
+                  : ""}
+              </p>
+              <span className="mt-5 inline-flex text-sm font-semibold text-[var(--accent)]">
+                Read the paper
+              </span>
+            </div>
+          </Link>
+
+          <div
+            className="flex flex-col"
             data-aos="fade-up"
             data-aos-delay="80"
             data-aos-duration="900"
           >
-            View all articles →
-          </Link>
-        </div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+              Also this week
+            </p>
+            <ul className="mt-4 divide-y divide-[var(--line)] border-t border-[var(--line)]">
+              {side.length === 0 ? (
+                <li className="py-8 text-sm text-[var(--muted)]">
+                  More papers will appear here as they are published.
+                </li>
+              ) : (
+                side.map((article) => {
+                  const meta = [
+                    article.journalTitle,
+                    formatVolumeIssue(article.volume, article.issue),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ");
+                  return (
+                    <li key={article.id}>
+                      <Link
+                        href={`/articles/${article.slug}`}
+                        className="group flex gap-4 py-5 transition"
+                      >
+                        <div className="relative hidden h-20 w-24 shrink-0 overflow-hidden bg-[var(--surface)] sm:block">
+                          {article.imageUrl ? (
+                            <Image
+                              src={article.imageUrl}
+                              alt=""
+                              fill
+                              className="object-cover transition duration-500 group-hover:scale-[1.03]"
+                              sizes="96px"
+                              unoptimized
+                            />
+                          ) : (
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-navy)] to-[var(--accent)]" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
+                            {typeLabel(article.articleType)}
+                          </p>
+                          <h3 className="mt-1.5 text-lg font-semibold leading-snug text-[var(--ink)] transition group-hover:text-[var(--accent)]">
+                            {article.title}
+                          </h3>
+                          <p className="mt-1.5 line-clamp-1 text-sm text-[var(--muted)]">
+                            {authorLine(article.authors, 2)}
+                          </p>
+                          <p className="mt-1 text-xs text-[var(--muted)]">
+                            {meta}
+                            {meta ? " · " : ""}
+                            {article.publishedAt}
+                          </p>
+                        </div>
+                      </Link>
+                    </li>
+                  );
+                })
+              )}
+            </ul>
 
-        <div className="mt-6 grid items-start gap-4 sm:mt-8 sm:gap-5 lg:grid-cols-[1.35fr_1fr]">
-          {/* Featured + platforms (desktop fills height under the paper) */}
-          <div className="flex flex-col gap-4 sm:gap-5">
-            <Link
-              href={`/articles/${featured.slug}`}
-              className="group flex flex-col overflow-hidden rounded-2xl bg-[var(--ink)] text-white shadow-[0_20px_40px_-24px_rgba(11,31,51,0.55)] transition hover:-translate-y-1 hover:shadow-[0_28px_48px_-20px_rgba(30,104,71,0.45)] sm:rounded-3xl"
-              data-aos="fade-up"
-              data-aos-delay="60"
-              data-aos-duration="950"
-            >
-              <div className="relative">
-                <ImageFrame
-                  src={featured.imageUrl}
-                  className="h-[160px] w-full bg-[#061018] sm:h-[230px]"
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                />
-                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-[var(--ink)] to-transparent sm:h-12" />
-                <div className="absolute left-3 top-3 flex flex-wrap gap-1.5 sm:left-5 sm:top-5 sm:gap-2">
-                  <span className="rounded-full bg-[var(--accent)] px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white sm:px-3 sm:py-1 sm:text-[11px]">
-                    Newest
-                  </span>
-                  {featured.openAccess ? (
-                    <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white sm:px-3 sm:py-1 sm:text-[11px]">
-                      Open access
-                    </span>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="relative z-10 flex flex-col px-4 py-3.5 sm:px-6 sm:py-5">
-                <p className="line-clamp-2 text-xs font-medium text-emerald-200 sm:line-clamp-none sm:text-sm">
-                  {featuredMeta}
-                  <span className="text-white/45"> · {featured.publishedAt}</span>
-                </p>
-                <h3 className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold leading-snug text-white sm:mt-1.5 sm:text-2xl">
-                  {featured.title}
-                </h3>
-                <Authors names={featured.authors} limit={3} />
-                <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-white/70 sm:mt-2 sm:text-base">
-                  {htmlToPlainText(featured.abstract).trim() ||
-                    typeLabel(featured.articleType)}
-                </p>
-                <span className="mt-2.5 inline-flex items-center gap-1 text-sm font-semibold text-emerald-200 group-hover:underline sm:mt-3 sm:text-base">
-                  Read paper
-                  <span aria-hidden>→</span>
-                </span>
-              </div>
-            </Link>
-
-            {/* Desktop: fill the gap under the featured paper */}
-            <IndexedAside
-              platforms={platforms}
-              section={section}
-              className="hidden lg:block"
-            />
-          </div>
-
-          {/* Next two */}
-          <div className="flex flex-col gap-4 sm:gap-5">
-            {side.length === 0 ? (
-              <div
-                className="flex flex-1 items-center justify-center rounded-2xl border border-dashed border-[var(--line)] bg-white p-5 text-sm text-[var(--muted)] sm:rounded-3xl sm:p-6 sm:text-base"
-                data-aos="fade-up"
-                data-aos-delay="120"
-                data-aos-duration="900"
-              >
-                More papers will appear here as they are published.
-              </div>
-            ) : (
-              side.map((article, index) => {
-                const meta = [
-                  article.journalTitle,
-                  formatVolumeIssue(article.volume, article.issue),
-                ]
-                  .filter(Boolean)
-                  .join(" · ");
-                return (
-                  <Link
-                    key={article.id}
-                    href={`/articles/${article.slug}`}
-                    className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-sm transition hover:-translate-y-1 hover:border-[var(--accent)]/30 hover:shadow-md sm:rounded-3xl"
-                    data-aos="fade-up"
-                    data-aos-delay={String(140 + index * 100)}
-                    data-aos-duration="950"
-                  >
-                    <ImageFrame
-                      src={article.imageUrl}
-                      className="h-[140px] w-full border-b border-[var(--line)] bg-[#f4f7f5] sm:h-auto sm:aspect-[16/9]"
-                      sizes="(max-width: 1024px) 100vw, 380px"
-                    />
-                    <div className="flex min-w-0 flex-col p-3.5 sm:p-5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="rounded bg-[var(--accent-soft)] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[var(--accent)] sm:text-[11px]">
-                          {typeLabel(article.articleType)}
-                        </span>
-                        <span className="text-xs text-[var(--muted)] sm:text-sm">
-                          {article.publishedAt}
-                        </span>
-                      </div>
-                      <p className="mt-1.5 line-clamp-1 text-xs font-semibold text-[var(--accent)] sm:mt-2 sm:line-clamp-none sm:text-sm">
-                        {meta}
-                      </p>
-                      <h3 className="mt-1 font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--ink)] group-hover:text-[var(--accent)] sm:text-xl">
-                        {article.title}
-                      </h3>
-                      <Authors names={article.authors} limit={2} />
-                      <span className="mt-2.5 text-sm font-semibold text-[var(--accent)] sm:mt-3 sm:text-base">
-                        Read more →
-                      </span>
-                    </div>
-                  </Link>
-                );
-              })
-            )}
+            <div className="mt-auto border-t border-[var(--line)] pt-8">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">
+                {section.eyebrow || "Discoverable"}
+              </p>
+              <h3 className="mt-2 font-[family-name:var(--font-display)] text-xl text-[var(--ink)]">
+                {section.title}
+              </h3>
+              <ul className="mt-5 flex flex-wrap gap-4">
+                {platforms.map((platform, index) => (
+                  <li key={platform.id ?? `${platform.name}-${index}`}>
+                    <Link
+                      href={platform.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-12 items-center gap-2 rounded-md border border-[var(--line)] bg-white px-3 transition hover:border-[var(--accent)]/40"
+                      title={platform.name}
+                    >
+                      <Image
+                        src={platform.logoUrl}
+                        alt={platform.name}
+                        width={96}
+                        height={36}
+                        className="h-7 w-auto max-w-[88px] object-contain"
+                        unoptimized
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
-
-        {/* Mobile / tablet: platforms under the paper grid */}
-        <IndexedAside
-          platforms={platforms}
-          section={section}
-          className="mt-6 lg:hidden"
-        />
       </div>
     </section>
   );

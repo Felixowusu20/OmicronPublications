@@ -14,7 +14,7 @@ const bodySchema = z.object({
 
 /**
  * Placeholder runner for editorial AI tools.
- * Returns structured sample findings until NAHDA_AI_* / provider keys are set,
+ * Returns structured sample findings until OMICRON_AI_* / provider keys are set,
  * then this route will call the configured model.
  */
 export async function POST(request: Request) {

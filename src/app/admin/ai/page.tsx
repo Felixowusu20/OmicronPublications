@@ -11,7 +11,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { useAdminAuth } from "@/components/admin-auth-provider";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import {
   REVIEW_STATUS_OPTIONS,
   type AiReviewReport,
@@ -76,7 +76,7 @@ export default function AdminAiPage() {
       id: uid(),
       role: "system",
       at: Date.now(),
-      text: "Welcome to the Nahda AI review desk. Search and select a submitted paper (or attach its file), then ask me to run the full editorial checklist. I’ll return arranged notes; use After the review to download the letter and email authors with a decision status.",
+      text: "Welcome to the Omicron AI review desk. Search and select a submitted paper (or attach its file), then ask me to run the full editorial checklist. I’ll return arranged notes; use After the review to download the letter and email authors with a decision status.",
     },
   ]);
   const [busy, setBusy] = useState(false);
@@ -213,7 +213,7 @@ export default function AdminAiPage() {
     ];
     pushMessage({
       role: "assistant",
-      text: "Running the Nahda desk checklist on this paper.",
+      text: "Running the Omicron desk checklist on this paper.",
       progress: progressLabels,
     });
 
@@ -294,7 +294,7 @@ export default function AdminAiPage() {
       const a = document.createElement("a");
       const safe = latestReport.manuscriptId.replace(/[^A-Za-z0-9._-]+/g, "_");
       a.href = url;
-      a.download = `Nahda-AI-Review-${safe}.doc`;
+      a.download = `Omicron-AI-Review-${safe}.doc`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -368,7 +368,7 @@ export default function AdminAiPage() {
   if (bootLoading) {
     return (
       <div className="py-16">
-        <NahdaLoader variant="inline" label="Opening AI review desk…" />
+        <OmicronLoader variant="inline" label="Opening AI review desk…" />
       </div>
     );
   }
@@ -385,7 +385,7 @@ export default function AdminAiPage() {
         <div className="relative flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0 max-w-2xl">
             <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
-              Nahda AI review desk
+              Omicron AI review desk
             </p>
             <h1 className="mt-1 font-[family-name:var(--font-display)] text-xl text-[var(--ink)] sm:text-2xl">
               Chat · check · document · notify
@@ -580,7 +580,7 @@ export default function AdminAiPage() {
                 Review chat
               </p>
               <p className="text-xs text-[var(--muted)]">
-                Conversation with Nahda AI Assist
+                Conversation with Omicron AI Assist
               </p>
             </div>
             {busy ? (
@@ -867,7 +867,7 @@ function ChatBubble({
       >
         {!mine ? (
           <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--accent)]">
-            Nahda AI
+            Omicron AI
           </p>
         ) : null}
         <p className="whitespace-pre-wrap text-[13px] sm:text-sm">{message.text}</p>

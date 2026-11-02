@@ -24,7 +24,7 @@ export async function generateMetadata({
   const { slug, issueKey: key } = await params;
   try {
     const journal = await prisma.journal.findUnique({ where: { slug } });
-    if (!journal?.isActive) return { title: "Issue | Nahda Publications" };
+    if (!journal?.isActive) return { title: "Issue | Omicron Publications" };
     const parsed = parseIssueKey(key);
     const label = issueTitle(parsed.volume, parsed.issue);
     const meta = buildJournalMetadata({
@@ -42,7 +42,7 @@ export async function generateMetadata({
       },
     };
   } catch {
-    return { title: "Issue | Nahda Publications" };
+    return { title: "Issue | Omicron Publications" };
   }
 }
 

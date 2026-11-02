@@ -9,7 +9,7 @@ import { jsonCreated, jsonError, jsonOk } from "@/lib/api";
 /**
  * Automation webhook for channel → announcements.
  * Auth: Authorization: Bearer <ANNOUNCEMENT_WEBHOOK_SECRET>
- *        or x-nahda-webhook-secret header
+ *        or x-omicron-webhook-secret header
  *
  * Body options:
  *  { "text": "<pasted WhatsApp post>" }
@@ -37,7 +37,7 @@ function authorize(request: Request): boolean {
   const bearer = auth?.toLowerCase().startsWith("bearer ")
     ? auth.slice(7).trim()
     : null;
-  const header = request.headers.get("x-nahda-webhook-secret")?.trim();
+  const header = request.headers.get("x-omicron-webhook-secret")?.trim();
   return bearer === secret || header === secret;
 }
 

@@ -35,9 +35,9 @@ export type HomeSectionContent = {
 
 export const DEFAULT_GOALS_SECTION: HomeSectionContent = {
   key: "goals",
-  eyebrow: "Get started",
-  title: "Find the right resources for your goals",
-  body: "Whether you are submitting a manuscript, reading open research, or guiding peer review, Nahda Publications supports every stage of scholarly communication.",
+  eyebrow: "Authors & readers",
+  title: "Start with Omicron",
+  body: "Submit a paper, choose a journal, or read open research — pick the path that matches what you need next.",
 };
 
 export const DEFAULT_INDEXED_SECTION: HomeSectionContent = {
@@ -52,7 +52,7 @@ export const DEFAULT_GOAL_TABS: GoalTabContent[] = [
     key: "publish",
     label: "Research & publish",
     title: "Move ideas from manuscript to open publication",
-    body: "Submit through our guided workflow, track peer review, and publish with a Nahda Identifier across our journal portfolio.",
+    body: "Submit through our guided workflow, track peer review, and publish with an Omicron Identifier across our journal portfolio.",
     story: "Experiment → peer-reviewed paper",
     imageUrl:
       "https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=1400&q=80",
@@ -88,7 +88,7 @@ export const DEFAULT_GOAL_TABS: GoalTabContent[] = [
     key: "authors",
     label: "For authors",
     title: "Support at every stage of your paper",
-    body: "From fees and waivers to production proofs, Nahda keeps the pathway transparent so you can focus on the science.",
+    body: "From fees and waivers to production proofs, Omicron keeps the pathway transparent so you can focus on the science.",
     story: "Draft → supported submission",
     imageUrl:
       "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=1400&q=80",
@@ -106,17 +106,17 @@ export const DEFAULT_GOAL_TABS: GoalTabContent[] = [
     key: "discover",
     label: "Discover research",
     title: "Read the latest open scholarship",
-    body: "Search published articles, follow volume and issue archives, and resolve Nahda Identifiers for citable records.",
+    body: "Search published articles, follow volume and issue archives, and resolve Omicron Identifiers for citable records.",
     story: "Search → cite open work",
     imageUrl:
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1400&q=80",
     imageAlt: "Scientific data charts and analytics on a research screen",
     imageCaption:
-      "Explore open findings—search articles, follow issues, and resolve NIDs for trusted citations.",
+      "Explore open findings—search articles, follow issues, and resolve OIDs for trusted citations.",
     links: [
       { label: "Browse articles", href: "/articles" },
       { label: "Search catalog", href: "/search" },
-      { label: "About Nahda", href: "/about" },
+      { label: "About Omicron", href: "/about" },
     ],
     sortOrder: 3,
   },
@@ -144,8 +144,8 @@ export const DEFAULT_INDEXED_PLATFORMS: IndexedPlatformContent[] = [
   {
     name: "Google Scholar",
     blurb:
-      "Citation profiles and indexed Nahda articles for discovery worldwide.",
-    href: "https://scholar.google.com/scholar?q=%22Nahda+Publications%22",
+      "Citation profiles and indexed Omicron articles for discovery worldwide.",
+    href: "https://scholar.google.com/scholar?q=%22Omicron+Publications%22",
     logoUrl: "/brand/google-scholar-clean.png",
     sortOrder: 0,
   },

@@ -13,7 +13,6 @@ import { htmlToPlainText } from "@/lib/import-manuscript";
 export function seoBaseUrl(): string {
   const fromEnv = getAppBaseUrlOptional();
   if (fromEnv) return fromEnv;
-  if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`;
   return "http://localhost:3000";
 }
 
@@ -99,7 +98,7 @@ export function buildArticleMetadata(article: ScholarArticleInput): Metadata {
   const other: Record<string, string | string[]> = {
     citation_title: article.title,
     citation_journal_title: article.journal.title,
-    citation_publisher: "Nahda Publications",
+    citation_publisher: "Omicron Publications",
     citation_abstract_html_url: canonical,
     citation_fulltext_html_url: canonical,
   };
@@ -158,7 +157,7 @@ export function buildArticleMetadata(article: ScholarArticleInput): Metadata {
       url: canonical,
       title: article.title,
       description,
-      siteName: "Nahda Publications",
+      siteName: "Omicron Publications",
       publishedTime:
         typeof article.publishedAt === "string"
           ? new Date(article.publishedAt).toISOString()
@@ -180,7 +179,7 @@ export function buildArticleMetadata(article: ScholarArticleInput): Metadata {
       ...other,
       "DC.title": article.title,
       "DC.creator": authorsLine,
-      "DC.publisher": "Nahda Publications",
+      "DC.publisher": "Omicron Publications",
       "DC.date": date.replace(/\//g, "-"),
       "DC.identifier": doi
         ? isCrossrefDoi(doi)
@@ -205,7 +204,7 @@ export function buildJournalMetadata(input: {
   const canonical = absoluteUrl(`/journals/${input.slug}`);
   const description = input.description.replace(/\s+/g, " ").trim().slice(0, 320);
   return {
-    title: `${input.title} | Nahda Publications`,
+    title: `${input.title} | Omicron Publications`,
     description,
     alternates: { canonical },
     openGraph: {
@@ -213,7 +212,7 @@ export function buildJournalMetadata(input: {
       url: canonical,
       title: input.title,
       description,
-      siteName: "Nahda Publications",
+      siteName: "Omicron Publications",
       images: input.coverImageUrl ? [{ url: input.coverImageUrl }] : undefined,
     },
     twitter: {

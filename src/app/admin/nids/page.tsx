@@ -30,9 +30,9 @@ type Settings = {
 export default function NidRegistryPage() {
   const { user } = useAdminAuth();
   const [settings, setSettings] = useState<Settings>({
-    prefix: "nid",
-    label: "Nahda Identifier (NID)",
-    publisherName: "Nahda Publications",
+    prefix: "oid",
+    label: "Omicron Identifier (OID)",
+    publisherName: "Omicron Publications",
     notes: "",
   });
   const [records, setRecords] = useState<NidRecord[]>([]);
@@ -182,7 +182,7 @@ export default function NidRegistryPage() {
           NID registry
         </h1>
         <p className="mt-2 max-w-3xl text-sm text-[var(--muted)]">
-          Nahda Identifiers (NIDs) are free IDs Nahda mints for published papers
+          Omicron Identifiers (NIDs) are free IDs Omicron mints for published papers
           — not Crossref DOIs. Pattern{" "}
           <code className="rounded bg-[var(--surface)] px-1.5 py-0.5 text-xs">
             {settings.prefix}/journal.year.####
@@ -233,7 +233,7 @@ export default function NidRegistryPage() {
               House NID settings
             </h2>
             <p className="mt-1 text-xs text-[var(--muted)]">
-              Customize the free NID prefix. These are Nahda Identifiers you
+              Customize the free NID prefix. These are Omicron Identifiers you
               register and give to authors — not DOI Agency numbers.
             </p>
           </div>
@@ -248,7 +248,7 @@ export default function NidRegistryPage() {
                   prefix: e.target.value.trim().toLowerCase(),
                 }))
               }
-              placeholder="nid"
+              placeholder="oid"
             />
           </label>
           <label className="field">

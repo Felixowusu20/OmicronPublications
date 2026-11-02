@@ -135,118 +135,68 @@ export function NavbarSearch({ variant = "header" }: Props) {
       onSubmit={runSearch}
       className={
         variant === "header"
-          ? "relative flex min-w-0 flex-1 items-stretch"
-          : "relative flex min-w-0 flex-1 items-center gap-2 rounded-full border border-[var(--line)] bg-white px-3 py-1.5 text-[var(--muted)]"
+          ? "relative flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--surface)] px-2.5 transition focus-within:border-[var(--accent)]/50 focus-within:bg-white focus-within:ring-2 focus-within:ring-[var(--accent-soft)]"
+          : "relative flex h-9 min-w-0 flex-1 items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--surface)] px-2.5 text-[var(--muted)] transition focus-within:border-[var(--accent)]/50 focus-within:bg-white"
       }
       role="search"
     >
-      {variant === "header" ? (
-        <>
-          <span className="inline-flex h-9 items-center rounded-l-lg border border-r-0 border-[var(--line)] bg-white px-2.5 text-[var(--muted)]">
-            <SearchIcon />
-          </span>
-          <div className="relative min-w-0 flex-1">
-            <input
-              type="search"
-              className="h-9 min-w-0 w-full border border-[var(--line)] bg-white px-2.5 text-sm outline-none focus:border-[var(--accent)]"
-              value={q}
-              onChange={(e) => onQueryChange(e.target.value)}
-              onFocus={() => setOpen(true)}
-              onBlur={() => window.setTimeout(() => setOpen(false), 120)}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  setOpen(false);
-                  setActiveIndex(-1);
-                  return;
-                }
-                suggestionKeydown(
-                  event,
-                  suggestions,
-                  activeIndex,
-                  setActiveIndex,
-                  pickSuggestion,
-                );
-              }}
-              placeholder={isHome ? "Search this page…" : "Search papers…"}
-              aria-label={isHome ? "Search this page" : "Search papers"}
-              aria-autocomplete="list"
-              aria-controls={listId}
-              aria-expanded={suggestOpen}
-              enterKeyHint="search"
-              autoCapitalize="off"
-              autoCorrect="off"
-              autoComplete="off"
-            />
-            {suggestOpen ? (
-              <SearchSuggestionList
-                id={listId}
-                items={suggestions}
-                activeIndex={activeIndex}
-                onPick={pickSuggestion}
-                onHover={setActiveIndex}
-              />
-            ) : null}
-          </div>
-          <button
-            type="submit"
-            className="h-9 shrink-0 rounded-r-lg bg-[var(--accent)] px-4 text-xs font-semibold text-white hover:bg-[#0c5756]"
-          >
-            Search
-          </button>
-        </>
-      ) : (
-        <>
-          <SearchIcon />
-          <div className="relative min-w-0 flex-1">
-            <input
-              type="search"
-              className="min-w-0 w-full bg-transparent text-sm text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
-              value={q}
-              onChange={(e) => onQueryChange(e.target.value)}
-              onFocus={() => setOpen(true)}
-              onBlur={() => window.setTimeout(() => setOpen(false), 120)}
-              onKeyDown={(event) => {
-                if (event.key === "Escape") {
-                  setOpen(false);
-                  setActiveIndex(-1);
-                  return;
-                }
-                suggestionKeydown(
-                  event,
-                  suggestions,
-                  activeIndex,
-                  setActiveIndex,
-                  pickSuggestion,
-                );
-              }}
-              placeholder="Search…"
-              aria-label={isHome ? "Search this page" : "Search papers"}
-              aria-autocomplete="list"
-              aria-controls={listId}
-              aria-expanded={suggestOpen}
-              enterKeyHint="search"
-              autoCapitalize="off"
-              autoCorrect="off"
-              autoComplete="off"
-            />
-            {suggestOpen ? (
-              <SearchSuggestionList
-                id={listId}
-                items={suggestions}
-                activeIndex={activeIndex}
-                onPick={pickSuggestion}
-                onHover={setActiveIndex}
-              />
-            ) : null}
-          </div>
-          <button
-            type="submit"
-            className="shrink-0 rounded-full bg-[var(--accent)] px-2.5 py-1 text-[11px] font-semibold text-white"
-          >
-            Go
-          </button>
-        </>
-      )}
+      <span className="shrink-0 text-[var(--muted)]">
+        <SearchIcon />
+      </span>
+      <div className="relative min-w-0 flex-1">
+        <input
+          type="search"
+          className="min-w-0 w-full bg-transparent text-sm text-[var(--ink)] outline-none placeholder:text-[var(--muted)]"
+          value={q}
+          onChange={(e) => onQueryChange(e.target.value)}
+          onFocus={() => setOpen(true)}
+          onBlur={() => window.setTimeout(() => setOpen(false), 120)}
+          onKeyDown={(event) => {
+            if (event.key === "Escape") {
+              setOpen(false);
+              setActiveIndex(-1);
+              return;
+            }
+            suggestionKeydown(
+              event,
+              suggestions,
+              activeIndex,
+              setActiveIndex,
+              pickSuggestion,
+            );
+          }}
+          placeholder={
+            variant === "header"
+              ? isHome
+                ? "Search…"
+                : "Search papers…"
+              : "Search…"
+          }
+          aria-label={isHome ? "Search this page" : "Search papers"}
+          aria-autocomplete="list"
+          aria-controls={listId}
+          aria-expanded={suggestOpen}
+          enterKeyHint="search"
+          autoCapitalize="off"
+          autoCorrect="off"
+          autoComplete="off"
+        />
+        {suggestOpen ? (
+          <SearchSuggestionList
+            id={listId}
+            items={suggestions}
+            activeIndex={activeIndex}
+            onPick={pickSuggestion}
+            onHover={setActiveIndex}
+          />
+        ) : null}
+      </div>
+      <button
+        type="submit"
+        className="shrink-0 rounded-md bg-[var(--accent)] px-2.5 py-1 text-[11px] font-semibold text-white transition hover:bg-[#a83f1f]"
+      >
+        Go
+      </button>
     </form>
   );
 

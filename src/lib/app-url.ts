@@ -1,6 +1,6 @@
 /**
- * Canonical public site origin from NEXT_PUBLIC_APP_URL (set in Vercel env).
- * Never hardcode localhost into emails, Paystack redirects, or production links.
+ * Canonical public site origin from NEXT_PUBLIC_APP_URL.
+ * Never hardcode localhost into emails, payment redirects, or production links.
  */
 export function getAppBaseUrl(): string {
   const raw = (process.env.NEXT_PUBLIC_APP_URL ?? "").trim().replace(/\/$/, "");
@@ -12,7 +12,7 @@ export function getAppBaseUrl(): string {
   }
 
   throw new Error(
-    "NEXT_PUBLIC_APP_URL is not set. Add it in Vercel → Settings → Environment Variables.",
+    "NEXT_PUBLIC_APP_URL is not set. Add it to your host environment variables.",
   );
 }
 

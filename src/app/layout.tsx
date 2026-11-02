@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Libre_Franklin, Source_Serif_4 } from "next/font/google";
+import { Outfit, Source_Sans_3 } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
 import { AosProvider } from "@/components/aos-provider";
 import { CookieConsentGate } from "@/components/cookie-consent-gate";
@@ -7,44 +7,51 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { seoBaseUrl } from "@/lib/seo/scholar";
 import "./globals.css";
 
-const body = Libre_Franklin({
+/** ACS-style institutional sans for body + headings. */
+const body = Source_Sans_3({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const display = Source_Serif_4({
-  variable: "--font-display",
+/** Brand lockup face for the Omicron wordmark only. */
+const brand = Outfit({
+  variable: "--font-brand",
   subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(seoBaseUrl()),
   title: {
-    default: "Nahda Publications",
-    template: "%s | Nahda Publications",
+    default: "Omicron Publications",
+    template: "%s | Omicron Publications",
   },
   description:
-    "Peer-reviewed open-access journals. Submit manuscripts, track peer review, and discover scholarly articles with NID-backed records.",
-  applicationName: "Nahda Publications",
+    "Peer-reviewed open-access journals in chemistry, biology, physics, and related fields. Submit manuscripts, track peer review, and discover scholarly articles with OID-backed records.",
+  applicationName: "Omicron Publications",
   keywords: [
-    "Nahda Publications",
+    "Omicron Publications",
     "open access journals",
     "peer review",
     "scholarly publishing",
-    "NID",
+    "OID",
+    "chemistry",
+    "biology",
+    "physics",
   ],
-  authors: [{ name: "Nahda Publications" }],
+  authors: [{ name: "Omicron Publications" }],
   openGraph: {
     type: "website",
-    siteName: "Nahda Publications",
-    title: "Nahda Publications",
+    siteName: "Omicron Publications",
+    title: "Omicron Publications",
     description:
       "Peer-reviewed open-access journals and scholarly articles.",
     url: seoBaseUrl(),
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nahda Publications",
+    title: "Omicron Publications",
     description:
       "Peer-reviewed open-access journals and scholarly articles.",
   },
@@ -78,7 +85,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${body.variable} ${display.variable} h-full`}
+      className={`${body.variable} ${brand.variable} h-full`}
       suppressHydrationWarning
     >
       <body

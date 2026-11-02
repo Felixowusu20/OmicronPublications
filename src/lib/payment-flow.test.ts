@@ -38,7 +38,7 @@ test("customer API response contains USD only", () => {
     internalAmount: 77500,
     internalCurrency: "GHS",
     exchangeRate: 15.5,
-    paystackReference: "nahda_ref",
+    paystackReference: "omicron_ref",
   });
   assert.ok(customer);
   assert.equal(customer.currency, "USD");
@@ -187,10 +187,10 @@ test("customer success copy shows \"$50 USD\"", () => {
     authorName: "Ada",
     title: "A study",
     manuscriptId: "N-1",
-    journalTitle: "Nahda Journal",
+    journalTitle: "Omicron Journal",
     amountLabel: formatCustomerUsd(5000),
     paidAtLabel: "Aug 20, 2026",
-    receiptNumber: "NPR-1",
+    receiptNumber: "OPR-1",
     submissionUrl: "https://example.com/submissions/1",
   });
   assert.match(html, /\$50 USD/);
@@ -203,7 +203,7 @@ test("customer payment message shows PayPal APC instructions", () => {
     authorName: "Ada",
     title: "A study",
     manuscriptId: "N-1",
-    journalTitle: "Nahda Journal",
+    journalTitle: "Omicron Journal",
     journalAlias: "NJ",
     amountLabel: formatCustomerUsd(5000),
     dashboardUrl: "https://example.com/dashboard",
@@ -213,8 +213,8 @@ test("customer payment message shows PayPal APC instructions", () => {
   assert.match(html, /\$50 USD/);
   assert.match(html, /Asareowusuclems2024@gmail.com/);
   assert.match(html, /Asare Clement/);
-  assert.match(html, /Nahda Publications PayPal/);
-  assert.match(html, /official PayPal account used by Nahda Publications/i);
+  assert.match(html, /Omicron Publications PayPal/);
+  assert.match(html, /official PayPal account used by Omicron Publications/i);
   assert.match(html, /APC-NJ-N-1/);
   assert.match(html, /N-1/);
   assert.match(html, /NJ/);
@@ -237,7 +237,7 @@ test("admin can still see the internal GHS transaction information", () => {
     internalAmount: 77500,
     internalCurrency: "GHS",
     exchangeRate: 15.5,
-    paystackReference: "nahda_ref",
+    paystackReference: "omicron_ref",
   });
   assert.ok(admin);
   assert.equal(admin.amountLabel, "$50 USD");
@@ -245,7 +245,7 @@ test("admin can still see the internal GHS transaction information", () => {
   assert.equal(admin.internalCurrency, "GHS");
   assert.equal(admin.internalAmountLabel, "GHS 775.00");
   assert.equal(admin.exchangeRate, 15.5);
-  assert.equal(admin.paystackReference, "nahda_ref");
+  assert.equal(admin.paystackReference, "omicron_ref");
 });
 
 test("abandoned authorization is not shown as a customer error", () => {
@@ -272,7 +272,7 @@ test("bank OTP is not invented from an abandoned charge", () => {
   );
 });
 
-test("bank 3DS uses Nahda OTP fields instead of a bank page", () => {
+test("bank 3DS uses Omicron OTP fields instead of a bank page", () => {
   assert.deepEqual(
     mapPaystackAuthStatus(
       { status: "open_url", url: "https://acs.example" },

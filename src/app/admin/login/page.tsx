@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
     <AuthSplitLayout
       imageSrc={AUTH_IMAGES.adminLogin}
       imageAlt="Bright modern editorial office"
-      brand="Nahda Admin"
+      brand="Omicron Admin"
       headline="Editorial control for journals and submissions."
       subhead="Review manuscripts and manage CMS content."
     >
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
           Admin access
         </p>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-xl text-[var(--ink)]">
-          Sign in to Nahda Admin
+          Sign in to Omicron Admin
         </h1>
         <form onSubmit={onSubmit} className="mt-4 space-y-2.5">
           <label className="field">

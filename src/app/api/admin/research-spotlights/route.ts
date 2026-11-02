@@ -1,11 +1,19 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonCreated, jsonError, jsonOk, unauthorized } from "@/lib/api";
+import { optionalMediaUrlSchema } from "@/lib/media-url";
+import { ensureResearchSpotlightsSeeded } from "@/lib/home-cms-seed";
 import { requireAdmin } from "@/lib/session";
 
 export async function GET() {
   const admin = await requireAdmin();
   if (!admin) return unauthorized();
+
+  try {
+    await ensureResearchSpotlightsSeeded();
+  } catch (err) {
+    console.error(err);
+  }
 
   const spotlights = await prisma.researchSpotlight.findMany({
     include: {
@@ -27,9 +35,9 @@ export async function GET() {
 const schema = z.object({
   title: z.string().min(2),
   summary: z.string().optional().nullable(),
-  logoUrl: z.string().url().optional().nullable(),
+  logoUrl: optionalMediaUrlSchema,
   logoPublicId: z.string().optional().nullable(),
-  imageUrl: z.string().url().optional().nullable(),
+  imageUrl: optionalMediaUrlSchema,
   imagePublicId: z.string().optional().nullable(),
   articleId: z.string().min(1).optional().nullable(),
   externalHref: z.string().optional().nullable(),

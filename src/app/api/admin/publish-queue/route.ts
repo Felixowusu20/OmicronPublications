@@ -240,7 +240,7 @@ export async function POST(request: Request) {
           : null;
     if (!publishedPdfUrl) {
       return jsonError(
-        "Generate the Nahda-styled PDF from the article template before publishing. The original Word or Google Docs file is not used as the public download.",
+        "Generate the Omicron-styled PDF from the article template before publishing. The original Word or Google Docs file is not used as the public download.",
         400,
       );
     }

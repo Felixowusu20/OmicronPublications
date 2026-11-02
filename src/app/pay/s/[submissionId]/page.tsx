@@ -3,7 +3,7 @@
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ApcPayPanel } from "@/components/apc-pay-panel";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { RequireAuth } from "@/components/require-auth";
 
 type PayInfo = {
@@ -61,7 +61,7 @@ function AuthorPayInner({ submissionId }: { submissionId: string }) {
 
   if (!info || paid) {
     return (
-      <NahdaLoader
+      <OmicronLoader
         variant="screen"
         label={
           paid

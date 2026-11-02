@@ -15,10 +15,10 @@ const SIZES: Record<Variant, { box: string; icon: string; text: string }> = {
 };
 
 /**
- * Brand loading state: the Nahda favicon pumping inside pulsing rings.
+ * Brand loading state: the Omicron favicon pumping inside pulsing rings.
  * Safe in server components — animation is pure CSS.
  */
-export function NahdaLoader({ label, variant = "panel", className }: Props) {
+export function OmicronLoader({ label, variant = "panel", className }: Props) {
   const size = SIZES[variant];
   const onDark = variant === "dark";
 
@@ -54,7 +54,7 @@ export function NahdaLoader({ label, variant = "panel", className }: Props) {
         <img
           src="/favicon.png"
           alt=""
-          className={`nahda-favicon-pump relative ${size.icon} rounded-2xl object-contain shadow-lg ${
+          className={`omicron-favicon-pump relative ${size.icon} rounded-2xl object-contain shadow-lg ${
             onDark ? "ring-1 ring-white/25" : "ring-1 ring-[var(--accent)]/20"
           }`}
         />
@@ -63,10 +63,10 @@ export function NahdaLoader({ label, variant = "panel", className }: Props) {
       <div className={isRow ? "text-left" : "text-center"}>
         <p
           className={`text-[10px] font-semibold uppercase tracking-[0.2em] ${
-            onDark ? "text-emerald-200/90" : "text-[var(--accent)]"
+            onDark ? "text-[#f3c4b0]" : "text-[var(--accent)]"
           }`}
         >
-          Nahda Publications
+          Omicron Publications
         </p>
         <p
           className={`mt-1 ${size.text} ${
@@ -84,7 +84,7 @@ export function NahdaLoader({ label, variant = "panel", className }: Props) {
           }`}
           aria-hidden
         >
-          <div className="nahda-load-bar h-full w-1/2 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--brand-orange)]" />
+          <div className="omicron-load-bar h-full w-1/2 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--brand-orange)]" />
         </div>
       )}
     </div>

@@ -11,13 +11,13 @@ import {
   useState,
 } from "react";
 import { useAutosave } from "@/hooks/use-autosave";
-import { NahdaArticleTemplate } from "@/components/atlas-article-template";
+import { OmicronArticleTemplate } from "@/components/atlas-article-template";
 import {
   ManuscriptEditor,
   type ManuscriptFigure,
 } from "@/components/manuscript-editor";
 import { ManuscriptImportPanel } from "@/components/manuscript-import";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { formatAuthorWithOrcid, parseAuthorOrcid } from "@/lib/orcid";
 import { htmlToPlainText } from "@/lib/import-manuscript";
 import { formatArticleDate } from "@/lib/article-dates";
@@ -323,7 +323,7 @@ function ManuscriptsPageInner() {
 
       <div className="grid gap-6 lg:grid-cols-[240px_1fr]">
         <aside>
-          {loading && <NahdaLoader variant="inline" label="Loading queue…" />}
+          {loading && <OmicronLoader variant="inline" label="Loading queue…" />}
           {!loading && queue.length === 0 && (
             <p className="text-sm text-[var(--muted)]">
               No accepted papers yet. Accept one from the inbox first.
@@ -430,7 +430,7 @@ function ManuscriptsPageInner() {
                 <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--muted)]">
                   Journal template · header through abstract
                 </p>
-                <NahdaArticleTemplate
+                <OmicronArticleTemplate
                   journalTitle={selected.journal.title}
                   journalShortTitle={selected.journal.shortTitle}
                   journalSlug={selected.journal.slug}
@@ -573,7 +573,7 @@ function ManuscriptsPageInner() {
 export default function ManuscriptsPage() {
   return (
     <Suspense
-      fallback={<NahdaLoader variant="panel" label="Loading manuscripts…" />}
+      fallback={<OmicronLoader variant="panel" label="Loading manuscripts…" />}
     >
       <ManuscriptsPageInner />
     </Suspense>

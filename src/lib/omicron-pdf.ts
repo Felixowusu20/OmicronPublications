@@ -1,10 +1,10 @@
 /**
- * Build an A4 PDF from the live Nahda article template in the admin browser.
- * Hobby-plan Vercel functions cannot run Chrome, so this never calls the server.
+ * Build an A4 PDF from the live Omicron article template in the admin browser.
+ * Server hosts may not run Chrome, so this never calls the server.
  *
  * Paged.js paginates like Chrome Print (whole A4 sheets, two columns, figures
  * stay together). Each sheet is captured once — never sliced through a line.
- * The Nahda footer is drawn in jsPDF so author PDFs have no admin chrome.
+ * The Omicron footer is drawn in jsPDF so author PDFs have no admin chrome.
  */
 
 import { CLOUDINARY_MAX_UPLOAD_BYTES } from "@/lib/prepare-upload-file";
@@ -56,36 +56,36 @@ const PAGED_CSS = `
   column-fill: auto !important;
 }
 
-.nahda-paged-article {
+.omicron-paged-article {
   font-family: Georgia, "Times New Roman", serif;
-  color: #0b1f33;
+  color: #1a3a5a;
 }
 
-.nahda-paged-article .nahda-article-inner,
-.nahda-paged-article .nahda-article-flow,
-.nahda-paged-article .nahda-article-body {
+.omicron-paged-article .omicron-article-inner,
+.omicron-paged-article .omicron-article-flow,
+.omicron-paged-article .omicron-article-body {
   display: contents !important;
 }
 
-.nahda-paged-article > header,
-.nahda-paged-article .nahda-article-front,
-.nahda-paged-article .nahda-article-abstract,
-.nahda-paged-article .nahda-keywords,
-.nahda-paged-article figure,
-.nahda-paged-article .nahda-end-matter,
-.nahda-paged-article .nahda-span-all,
-.nahda-paged-article .nahda-workflow,
-.nahda-paged-article .nahda-table-wrap {
+.omicron-paged-article > header,
+.omicron-paged-article .omicron-article-front,
+.omicron-paged-article .omicron-article-abstract,
+.omicron-paged-article .omicron-keywords,
+.omicron-paged-article figure,
+.omicron-paged-article .omicron-end-matter,
+.omicron-paged-article .omicron-span-all,
+.omicron-paged-article .omicron-workflow,
+.omicron-paged-article .omicron-table-wrap {
   column-span: all;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
 }
 
-.nahda-paged-article .nahda-article-body > figure,
-.nahda-paged-article .nahda-article-body > .nahda-table-wrap,
-.nahda-paged-article .nahda-article-body > .nahda-workflow,
-.nahda-paged-article .nahda-article-body > .nahda-supplementary {
+.omicron-paged-article .omicron-article-body > figure,
+.omicron-paged-article .omicron-article-body > .omicron-table-wrap,
+.omicron-paged-article .omicron-article-body > .omicron-workflow,
+.omicron-paged-article .omicron-article-body > .omicron-supplementary {
   column-span: all;
   width: 100%;
   max-width: 100%;
@@ -93,10 +93,10 @@ const PAGED_CSS = `
   page-break-inside: avoid;
 }
 
-.nahda-paged-article .nahda-references ~ figure:has(img),
-.nahda-paged-article .nahda-references ~ figure:has(table),
-.nahda-paged-article .nahda-references ~ .nahda-table-wrap,
-.nahda-paged-article .nahda-references ~ .nahda-workflow {
+.omicron-paged-article .omicron-references ~ figure:has(img),
+.omicron-paged-article .omicron-references ~ figure:has(table),
+.omicron-paged-article .omicron-references ~ .omicron-table-wrap,
+.omicron-paged-article .omicron-references ~ .omicron-workflow {
   column-span: all;
   break-inside: avoid;
   page-break-inside: avoid;
@@ -104,7 +104,7 @@ const PAGED_CSS = `
   max-width: 100%;
 }
 
-.nahda-paged-article .nahda-supplementary {
+.omicron-paged-article .omicron-supplementary {
   column-span: all;
   display: block;
   width: 100%;
@@ -113,15 +113,15 @@ const PAGED_CSS = `
   page-break-inside: avoid;
 }
 
-.nahda-paged-article h1,
-.nahda-paged-article h2,
-.nahda-paged-article h3,
-.nahda-paged-article h4 {
+.omicron-paged-article h1,
+.omicron-paged-article h2,
+.omicron-paged-article h3,
+.omicron-paged-article h4 {
   break-after: avoid;
   page-break-after: avoid;
 }
 
-.nahda-paged-article img {
+.omicron-paged-article img {
   display: block;
   max-width: 100%;
   width: auto;
@@ -130,14 +130,14 @@ const PAGED_CSS = `
   object-fit: contain;
 }
 
-.nahda-paged-article figure,
-.nahda-paged-article .nahda-workflow {
+.omicron-paged-article figure,
+.omicron-paged-article .omicron-workflow {
   max-height: 230mm;
   margin: 0.7em 0 0.85em;
 }
 
-.nahda-paged-article p,
-.nahda-paged-article li {
+.omicron-paged-article p,
+.omicron-paged-article li {
   orphans: 3;
   widows: 3;
 }
@@ -194,12 +194,12 @@ export function pdfErrorMessage(err: unknown, fallback: string) {
 export function beginArticlePrint(_title?: string) {
   printTitleBefore = document.title;
   document.title = "\u200b";
-  document.documentElement.classList.add("nahda-print-article");
+  document.documentElement.classList.add("omicron-print-article");
 }
 
 export function endArticlePrint() {
   if (printTitleBefore) document.title = printTitleBefore;
-  document.documentElement.classList.remove("nahda-print-article");
+  document.documentElement.classList.remove("omicron-print-article");
 }
 
 const PRINT_HEADER_MM = 13;
@@ -230,7 +230,7 @@ export async function stripChromePrintHeader(file: File): Promise<File> {
     const base = file.name.replace(/\.pdf$/i, "") || "article";
     return new File([copy], `${base}.pdf`, { type: "application/pdf" });
   } catch (err) {
-    console.warn("[nahda-pdf] could not strip print header", err);
+    console.warn("[omicron-pdf] could not strip print header", err);
     return file;
   }
 }
@@ -273,8 +273,8 @@ function restoreCaptureStyles(root: HTMLElement, widthPx?: number) {
       el.tagName === "IMG" ||
       el.tagName === "FIGURE" ||
       el.tagName === "TABLE" ||
-      el.classList.contains("nahda-workflow") ||
-      el.classList.contains("nahda-table-wrap");
+      el.classList.contains("omicron-workflow") ||
+      el.classList.contains("omicron-table-wrap");
     el.style.opacity = "1";
     el.style.visibility = "visible";
     el.style.overflow = keepMax ? el.style.overflow : "visible";
@@ -290,7 +290,7 @@ function restoreCaptureStyles(root: HTMLElement, widthPx?: number) {
 
 function fitUnbreakableBlocks(root: HTMLElement, maxCssPx: number) {
   const blocks = root.querySelectorAll<HTMLElement>(
-    "figure, .nahda-workflow, .nahda-table-wrap",
+    "figure, .omicron-workflow, .omicron-table-wrap",
   );
   blocks.forEach((el) => {
     el.style.breakInside = "avoid";
@@ -340,10 +340,10 @@ function jpegDataUrl(canvas: HTMLCanvasElement, quality: number): string {
 }
 
 function footerBits(root: HTMLElement): FooterBits {
-  const footer = root.querySelector(".nahda-running-footer");
+  const footer = root.querySelector(".omicron-running-footer");
   const copyright =
     footer?.querySelector("p")?.textContent?.replace(/\s+/g, " ").trim() ||
-    `© ${new Date().getFullYear()} The Authors. Published by Nahda Publications`;
+    `© ${new Date().getFullYear()} The Authors. Published by Omicron Publications`;
   const doiLink = footer?.querySelector("a");
   const doi =
     doiLink?.textContent?.replace(/\s+/g, " ").trim() ||
@@ -354,7 +354,7 @@ function footerBits(root: HTMLElement): FooterBits {
 
 async function loadLogo(): Promise<LogoPng | null> {
   try {
-    const res = await fetch("/brand/logo-nahda.png");
+    const res = await fetch("/brand/logo-omicron.png");
     if (!res.ok) return null;
     const blob = await res.blob();
     const dataUrl = await new Promise<string>((resolve, reject) => {
@@ -707,11 +707,11 @@ async function captureWindow(
 function preparePagedArticle(article: HTMLElement): HTMLElement {
   const clone = article.cloneNode(true) as HTMLElement;
   clone.removeAttribute("id");
-  clone.classList.add("nahda-paged-article");
-  clone.classList.remove("nahda-pdf-print", "nahda-pdf-source");
-  clone.querySelectorAll(".nahda-running-footer, tfoot").forEach((el) => el.remove());
+  clone.classList.add("omicron-paged-article");
+  clone.classList.remove("omicron-pdf-print", "omicron-pdf-source");
+  clone.querySelectorAll(".omicron-running-footer, tfoot").forEach((el) => el.remove());
 
-  const table = clone.querySelector(".nahda-print-frame");
+  const table = clone.querySelector(".omicron-print-frame");
   const cell = table?.querySelector("tbody > tr > td");
   if (table && cell && table.parentElement) {
     while (cell.firstChild) table.parentElement.insertBefore(cell.firstChild, table);
@@ -751,7 +751,7 @@ function cleanupPaged(
   }
   mount?.remove();
   document
-    .querySelectorAll("[data-nahda-paged], style[data-pagedjs-inserted-styles]")
+    .querySelectorAll("[data-omicron-paged], style[data-pagedjs-inserted-styles]")
     .forEach((el) => el.remove());
 }
 
@@ -767,7 +767,7 @@ async function capturePagedPages(
     markImagesCors(prepared);
 
     mount = document.createElement("div");
-    mount.setAttribute("data-nahda-paged", "true");
+    mount.setAttribute("data-omicron-paged", "true");
     const vars = article.getAttribute("style") || "";
     mount.setAttribute(
       "style",
@@ -795,7 +795,7 @@ async function capturePagedPages(
       .filter(Boolean);
     const sheets = [
       ...previewStyles,
-      { [`${window.location.origin}/nahda-paged.css`]: PAGED_CSS },
+      { [`${window.location.origin}/omicron-paged.css`]: PAGED_CSS },
     ];
     await withTimeout(
       previewer.preview(prepared, sheets, mount),
@@ -858,7 +858,7 @@ async function capturePagedPages(
 
     return pages.length ? pages : null;
   } catch (err) {
-    console.warn("[nahda-pdf] paged layout failed, using fallback", err);
+    console.warn("[omicron-pdf] paged layout failed, using fallback", err);
     return null;
   } finally {
     cleanupPaged(mount, previewer);
@@ -928,11 +928,11 @@ export async function articleTemplateToPdf(
   source: HTMLElement,
 ): Promise<Blob> {
   const article =
-    source.matches(".nahda-article")
+    source.matches(".omicron-article")
       ? source
-      : source.querySelector<HTMLElement>(".nahda-article");
+      : source.querySelector<HTMLElement>(".omicron-article");
   if (!article) {
-    throw new Error("The Nahda article template is not ready yet.");
+    throw new Error("The Omicron article template is not ready yet.");
   }
 
   if (typeof document !== "undefined" && "fonts" in document) {
@@ -959,19 +959,19 @@ export async function articleTemplateToPdf(
 
   if (blob.size < 100) {
     throw new Error(
-      "The Nahda print PDF was empty. Try Print preview, then Publish again.",
+      "The Omicron print PDF was empty. Try Print preview, then Publish again.",
     );
   }
   return blob;
 }
 
-export function nahdaPdfFile(title: string, blob: Blob) {
+export function omicronPdfFile(title: string, blob: Blob) {
   const base = (title || "article")
     .replace(/[^\w\s-]+/g, "")
     .trim()
     .replace(/\s+/g, "-")
     .slice(0, 80);
-  return new File([blob], `${base || "nahda-article"}.pdf`, {
+  return new File([blob], `${base || "omicron-article"}.pdf`, {
     type: "application/pdf",
   });
 }

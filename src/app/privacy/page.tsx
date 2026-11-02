@@ -6,7 +6,7 @@ import { getCmsPage, parseCmsBody } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "Privacy Policy for Nahda Publications — how we collect, use, and protect personal information.",
+    "Privacy Policy for Omicron Publications — how we collect, use, and protect personal information.",
 };
 
 export default async function PrivacyPage() {
@@ -41,7 +41,7 @@ export default async function PrivacyPage() {
         </Link>{" "}
         ·{" "}
         <Link href="/about" className="font-semibold text-[var(--accent)] hover:underline">
-          About Nahda
+          About Omicron
         </Link>
       </p>
     </div>

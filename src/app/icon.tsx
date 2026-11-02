@@ -3,6 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 32, height: 32 };
 export const contentType = "image/png";
 
+/** Fallback OG icon — browsers prefer /favicon.png from metadata.icons. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -13,17 +14,33 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0B1F33",
-          borderRadius: 8,
-          border: "1.5px solid #0F6B6A",
-          color: "#FFFFFF",
-          fontSize: 11,
-          fontWeight: 700,
-          fontFamily: "Georgia, Times New Roman, serif",
-          letterSpacing: "0.5px",
+          background: "#ffffff",
+          borderRadius: 6,
         }}
       >
-        AAP
+        <div
+          style={{
+            width: 22,
+            height: 22,
+            borderRadius: 999,
+            border: "5px solid #C84E27",
+            boxSizing: "border-box",
+            position: "relative",
+            display: "flex",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: -3,
+              right: -3,
+              width: 8,
+              height: 8,
+              borderRadius: 999,
+              background: "#1A3A5A",
+            }}
+          />
+        </div>
       </div>
     ),
     { ...size },

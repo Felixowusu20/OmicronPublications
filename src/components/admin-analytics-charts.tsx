@@ -29,14 +29,14 @@ export type EngagementBar = {
 };
 
 const PALETTE = [
-  "#1e6847",
-  "#2a7f9e",
-  "#d65c33",
-  "#6b5b95",
-  "#c4a35a",
-  "#3d6f8f",
-  "#8b4513",
-  "#4a7c59",
+  "#c84e27",
+  "#1a3a5a",
+  "#e07a4d",
+  "#2f5478",
+  "#a83f1f",
+  "#5a7a98",
+  "#8f3518",
+  "#3d5a3d",
 ];
 
 function formatNum(n: number) {
@@ -64,7 +64,7 @@ export function EngagementChart({ items }: { items: EngagementBar[] }) {
           Views
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-sm bg-[#d65c33]" />
+          <span className="h-2.5 w-2.5 rounded-sm bg-[#c84e27]" />
           Downloads
         </span>
       </div>
@@ -93,7 +93,7 @@ export function EngagementChart({ items }: { items: EngagementBar[] }) {
               <BarTrack
                 value={item.downloads}
                 max={max}
-                color="#d65c33"
+                color="#c84e27"
                 label="Downloads"
               />
             </div>
@@ -173,7 +173,7 @@ export function TrendChart({ months }: { months: MonthPoint[] }) {
           Views
         </span>
         <span className="inline-flex items-center gap-1.5">
-          <span className="h-0.5 w-4 bg-[#d65c33]" />
+          <span className="h-0.5 w-4 bg-[#c84e27]" />
           Downloads
         </span>
         <span className="inline-flex items-center gap-1.5">
@@ -249,7 +249,7 @@ export function TrendChart({ months }: { months: MonthPoint[] }) {
         <polyline
           points={dlPts}
           fill="none"
-          stroke="#d65c33"
+          stroke="#c84e27"
           strokeWidth="2"
           strokeLinejoin="round"
           strokeLinecap="round"
@@ -364,7 +364,7 @@ export function JournalDonut({ journals }: { journals: JournalSlice[] }) {
             textAnchor="middle"
             fontSize="18"
             fontWeight="700"
-            fill="#0b1f33"
+            fill="#1a3a5a"
           >
             {formatNum(total)}
           </text>
@@ -419,7 +419,7 @@ export function RankingChart({
   }
 
   const max = Math.max(1, ...items.map((i) => i[metric]));
-  const color = metric === "views" ? "var(--accent)" : "#d65c33";
+  const color = metric === "views" ? "var(--accent)" : "#c84e27";
 
   return (
     <ul className="space-y-3">

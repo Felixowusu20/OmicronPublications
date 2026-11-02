@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { articlesPathForField, RESEARCH_FIELDS } from "@/lib/research-fields";
 
 export type ResearchSpotlightCard = {
   id: string;
@@ -15,99 +16,22 @@ export type ResearchSpotlightCard = {
   ctaLabel?: string | null;
 };
 
-function Card({
-  item,
-  aosDelay,
-}: {
-  item: ResearchSpotlightCard;
-  aosDelay: number;
-}) {
-  const inner = (
-    <>
-      <div className="relative aspect-[16/10] overflow-hidden bg-[var(--surface)]">
-        {item.imageUrl ? (
-          <Image
-            src={item.imageUrl}
-            alt={item.articleTitle || item.title}
-            fill
-            className="object-cover transition duration-700 group-hover:scale-[1.04]"
-            sizes="(max-width: 640px) 80vw, 280px"
-            unoptimized
-          />
-        ) : (
-          <div className="flex h-full items-center justify-center bg-gradient-to-br from-[var(--surface)] to-[var(--line)] px-6 text-center text-sm text-[var(--muted)]">
-            {item.title}
-          </div>
-        )}
-        {item.logoUrl ? (
-          <div className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center overflow-hidden rounded-xl border border-white/70 bg-white/95 p-1.5 shadow-sm backdrop-blur">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={item.logoUrl}
-              alt=""
-              className="max-h-full max-w-full object-contain"
-            />
-          </div>
-        ) : null}
-      </div>
-      <div className="flex flex-1 flex-col gap-2 p-4">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
-          Research area
-        </p>
-        <h3 className="font-[family-name:var(--font-display)] text-lg leading-snug text-[var(--ink)]">
-          {item.title}
-        </h3>
-        {item.summary ? (
-          <p className="line-clamp-2 text-sm text-[var(--muted)]">
-            {item.summary}
-          </p>
-        ) : null}
-        {item.articleTitle ? (
-          <p className="mt-auto line-clamp-2 text-xs font-medium text-[var(--ink)]/80">
-            {item.articleTitle}
-          </p>
-        ) : (
-          <span className="mt-auto" />
-        )}
-        {item.href && item.ctaLabel ? (
-          <span className="text-xs font-semibold text-[var(--accent)]">
-            {item.ctaLabel} →
-          </span>
-        ) : null}
-      </div>
-    </>
-  );
+const FALLBACK_FIELDS = RESEARCH_FIELDS.slice(0, 6).map((f) => ({
+  id: f.id,
+  title: f.label,
+  summary: f.summary,
+}));
 
-  const className =
-    "research-spotlight-card group flex w-[min(82vw,280px)] shrink-0 flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-[0_10px_30px_-18px_rgba(11,58,83,0.35)] sm:w-[min(78vw,280px)]";
-
-  const aosProps = {
-    "data-aos": "fade-up",
-    "data-aos-delay": String(aosDelay),
-    "data-aos-duration": "900",
-  } as const;
-
-  if (item.href) {
-    return (
-      <Link href={item.href} className={className} {...aosProps}>
-        {inner}
-      </Link>
-    );
-  }
-
-  return (
-    <article className={className} {...aosProps}>
-      {inner}
-    </article>
-  );
-}
-
+/**
+ * Interactive field index — select a discipline to preview it.
+ */
 export function ResearchSpotlights({
   initialItems = [],
 }: {
   initialItems?: ResearchSpotlightCard[];
 }) {
   const [items, setItems] = useState<ResearchSpotlightCard[]>(initialItems);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialItems.length > 0) return;
@@ -121,51 +45,133 @@ export function ResearchSpotlights({
       });
   }, [initialItems.length]);
 
-  if (items.length === 0) return null;
+  const fields: ResearchSpotlightCard[] = useMemo(
+    () =>
+      items.length > 0
+        ? items
+        : FALLBACK_FIELDS.map((f) => ({
+            id: f.id,
+            title: f.title,
+            summary: f.summary,
+            href: articlesPathForField(f.id),
+            ctaLabel: "Browse field articles",
+          })),
+    [items],
+  );
 
-  // Show unique cards (not the marquee duplicate loop) for AOS visibility;
-  // keep marquee track for continuous motion.
-  const loop =
-    items.length === 1 ? [...items, ...items, ...items] : [...items, ...items];
+  const active =
+    fields.find((f) => f.id === (activeId ?? fields[0]?.id)) ?? fields[0];
+
+  if (!active) return null;
 
   return (
     <section
-      className="research-spotlights border-b border-[var(--line)] bg-white"
-      aria-label="Scientific research areas"
-      data-aos="fade-up"
-      data-aos-duration="900"
+      className="border-b border-[var(--line)] bg-[var(--paper)]"
+      aria-label="Research disciplines"
     >
-      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 sm:pt-16">
-        <div
-          className="flex flex-wrap items-end justify-between gap-3"
-          data-aos="fade-up"
-          data-aos-delay="60"
-          data-aos-duration="900"
-        >
-          <div className="max-w-2xl">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-              Featured research
-            </p>
-            <h2 className="mt-1.5 font-[family-name:var(--font-display)] text-2xl leading-tight tracking-tight text-[var(--ink)] sm:mt-2 sm:text-4xl">
-              Scientific research areas
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--muted)] sm:mt-3 sm:text-base">
-              Explore partner research themes and the papers we have published
-              in those areas.
-            </p>
-          </div>
-        </div>
-      </div>
+      <div className="mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20">
+        <header className="max-w-2xl border-b border-[var(--line)] pb-6">
+          <h2 className="acs-section-title">What we publish</h2>
+          <p className="mt-3 text-[1.05rem] leading-relaxed text-[var(--muted)]">
+            Fields are bound to journals. When an author submits to a journal
+            and the paper is published, it appears under the matching
+            Chemistry, Biology, and related fields.
+          </p>
+        </header>
 
-      <div className="research-spotlights-track mt-6 pb-8 sm:mt-8 sm:pb-12">
-        <div className="research-spotlights-marquee">
-          {loop.map((item, index) => (
-            <Card
-              key={`${item.id}-${index}`}
-              item={item}
-              aosDelay={Math.min((index % items.length) * 90, 360)}
-            />
-          ))}
+        <div className="mt-10 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12 lg:items-stretch">
+          <ul className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
+            {fields.map((field, index) => {
+              const selected = field.id === active.id;
+              return (
+                <li key={field.id}>
+                  <button
+                    type="button"
+                    onMouseEnter={() => setActiveId(field.id)}
+                    onFocus={() => setActiveId(field.id)}
+                    onClick={() => setActiveId(field.id)}
+                    className={`flex w-full items-center gap-4 py-4 text-left transition sm:py-5 ${
+                      selected
+                        ? "text-[var(--accent)]"
+                        : "text-[var(--ink)] hover:text-[var(--accent)]"
+                    }`}
+                    aria-pressed={selected}
+                  >
+                    <span
+                      className={`w-8 shrink-0 text-xs font-semibold tracking-[0.12em] ${
+                        selected ? "text-[var(--accent)]" : "text-[var(--muted)]"
+                      }`}
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="min-w-0 flex-1 text-lg font-semibold sm:text-xl">
+                      {field.title}
+                    </span>
+                    <span
+                      className={`h-2 w-2 shrink-0 rounded-full transition ${
+                        selected
+                          ? "bg-[var(--accent)]"
+                          : "bg-transparent ring-1 ring-[var(--line)]"
+                      }`}
+                      aria-hidden
+                    />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div
+            key={active.id}
+            className="flex flex-col overflow-hidden border border-[var(--line)] bg-[var(--surface)]"
+          >
+            <div className="relative aspect-[16/10] overflow-hidden bg-[var(--ink)] sm:aspect-[16/9]">
+              {active.imageUrl ? (
+                <Image
+                  src={active.imageUrl}
+                  alt={active.articleTitle || active.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 55vw"
+                  unoptimized
+                />
+              ) : (
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(145deg, #1a3a5a 0%, #243f5c 45%, #c84e27 120%)",
+                  }}
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/70 via-transparent to-transparent" />
+              <p className="absolute bottom-4 left-4 right-4 font-[family-name:var(--font-display)] text-2xl text-white sm:bottom-5 sm:left-5 sm:text-3xl">
+                {active.title}
+              </p>
+            </div>
+
+            <div className="flex flex-1 flex-col p-5 sm:p-7">
+              {active.summary ? (
+                <p className="text-base leading-relaxed text-[var(--muted)] sm:text-lg">
+                  {active.summary}
+                </p>
+              ) : null}
+              {active.articleTitle ? (
+                <p className="mt-4 text-sm font-medium text-[var(--ink)]">
+                  Featured: {active.articleTitle}
+                </p>
+              ) : null}
+              <div className="mt-auto pt-6">
+                <Link
+                  href={active.href || "/journals"}
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent)] underline-offset-4 hover:underline"
+                >
+                  {active.ctaLabel || "Browse journals"}
+                  <span aria-hidden>→</span>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>

@@ -1,11 +1,11 @@
 /**
- * Nahda Identifier (NID) — pure helpers safe for client + server.
+ * Omicron Identifier (OID) — pure helpers safe for client + server.
  * Not a Crossref/DOI Agency DOI. Stored in PublishedArticle.doi for compatibility.
  *
  * DB operations live in `@/lib/doi-db` so browser bundles never pull in `pg`.
  */
 
-export const DEFAULT_NID_PREFIX = "nid";
+export const DEFAULT_NID_PREFIX = "oid";
 
 /** @deprecated Use DEFAULT_NID_PREFIX — kept for older imports. */
 export const ATLAS_DOI_PREFIX = DEFAULT_NID_PREFIX;
@@ -52,7 +52,7 @@ export function isValidDoiShape(input: string): boolean {
   return isValidNidShape(input);
 }
 
-/** Public Nahda NID path. */
+/** Public Omicron NID path. */
 export function nidPath(id: string): string {
   return `/nid/${normalizeDoi(id)}`;
 }

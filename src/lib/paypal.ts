@@ -1,15 +1,15 @@
 /**
- * Nahda Publications PayPal APC collection.
+ * Omicron Publications PayPal APC collection.
  * Payments are sent manually to this PayPal account (not Paystack).
  */
 
 export const PAYPAL_ACCOUNT = {
-  /** PayPal login / send-to email (Nahda Publications). */
+  /** PayPal login / send-to email (Omicron Publications). */
   email: "Asareowusuclems2024@gmail.com",
   /** PayPal account display name. */
   accountName: "Asare Clement",
   /** Legal / publishing house that owns this account. */
-  organization: "Nahda Publications",
+  organization: "Omicron Publications",
   /** Open PayPal login / send-money flow. */
   sendUrl: "https://www.paypal.com/signin",
 } as const;
@@ -29,12 +29,12 @@ export function journalPaymentAlias(journal: {
   const slug = (journal.slug ?? "").trim();
   if (slug) return slug.toUpperCase();
   const title = (journal.title ?? "").trim();
-  return title || "NAHDA";
+  return title || "OMICRON";
 }
 
 /**
  * Unique payment memo for PayPal notes so finance can match the manuscript.
- * Example: APC-AJS-NAHDA-2026-0142
+ * Example: APC-AJS-OMICRON-2026-0142
  */
 export function makePaypalPaymentReference(opts: {
   journalAlias: string;
@@ -50,5 +50,5 @@ export function makePaypalPaymentReference(opts: {
     .replace(/^-|-$/g, "")
     .toUpperCase()
     .slice(0, 32);
-  return `APC-${journal || "NAHDA"}-${ms || "MS"}`;
+  return `APC-${journal || "OMICRON"}-${ms || "MS"}`;
 }

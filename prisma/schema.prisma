@@ -442,13 +442,13 @@ model HomeSection {
   updatedAt DateTime @updatedAt
 }
 
-/// House NID (Nahda Identifier) configuration — free IDs minted on publish.
+/// House OID (Omicron Identifier) configuration — free IDs minted on publish.
 model DoiSettings {
   id            String   @id @default("default")
-  /// Prefix only, e.g. "nid" (no trailing slash). Not a Crossref DOI prefix.
-  prefix        String   @default("nid")
-  label         String   @default("Nahda Identifier (NID)")
-  publisherName String   @default("Nahda Publications")
+  /// Prefix only, e.g. "oid" (no trailing slash). Not a Crossref DOI prefix.
+  prefix        String   @default("oid")
+  label         String   @default("Omicron Identifier (OID)")
+  publisherName String   @default("Omicron Publications")
   notes         String?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt

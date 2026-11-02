@@ -1,4 +1,4 @@
-/** Paystack Charge / verify statuses → Nahda checkout steps. */
+/** Paystack Charge / verify statuses → Omicron checkout steps. */
 
 export type ChargeAuthPhase = "start" | "auth" | "check";
 
@@ -18,7 +18,7 @@ export function isPaystackChargePaid(data: {
 /**
  * Map a Paystack charge payload to a checkout status.
  *
- * Bank 3DS (`open_url`) uses the same Nahda OTP fields as `send_otp`.
+ * Bank 3DS (`open_url`) uses the same Omicron OTP fields as `send_otp`.
  * The customer never sees the bank 3DS page — they type the live bank OTP here.
  */
 export function mapPaystackAuthStatus(

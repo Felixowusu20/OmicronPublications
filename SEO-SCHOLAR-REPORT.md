@@ -1,4 +1,4 @@
-# Nahda Publications — Google Scholar & SEO Readiness Report
+# Omicron Publications — Google Scholar & SEO Readiness Report
 
 **Date:** 2026-08-03  
 **Scope:** Scholar metadata, JSON-LD, sitemaps, robots, journal/issue discovery, public PDFs, DOI-ready architecture  
@@ -96,7 +96,7 @@
 3. Apply at https://doaj.org with sample articles that have complete Scholar tags + PDFs.
 
 ### Google Search Console / Scholar
-1. Verify `nahdapublications.org` in GSC; submit `https://nahdapublications.org/sitemap.xml`.
+1. Verify `omicronpublications.org` in GSC; submit `https://omicronpublications.org/sitemap.xml`.
 2. Confirm `NEXT_PUBLIC_APP_URL` is set to the production origin.
 3. Spot-check View Source on an article for `citation_title`, `citation_author`, `citation_pdf_url`, and JSON-LD.
 4. Use Scholar’s inclusion guidelines; ensure PDFs are not blocked by robots or login.

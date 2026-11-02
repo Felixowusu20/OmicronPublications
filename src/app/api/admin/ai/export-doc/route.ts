@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     const report = body.report as AiReviewReport;
     const html = reportToDocHtml(report);
     const safeId = report.manuscriptId.replace(/[^A-Za-z0-9._-]+/g, "_");
-    const filename = `Nahda-AI-Review-${safeId}.doc`;
+    const filename = `Omicron-AI-Review-${safeId}.doc`;
 
     return new Response(html, {
       status: 200,

@@ -47,8 +47,8 @@ export const articleTypes: ArticleType[] = [
 export const journals: Journal[] = [
   {
     id: "j-001",
-    slug: "nahda-journal-of-science-and-technology",
-    title: "Nahda Journal of Science and Technology and Technology",
+    slug: "omicron-journal-of-science-and-technology",
+    title: "Omicron Journal of Science and Technology and Technology",
     shortTitle: "NJST",
     issn: "2456-1120",
     eIssn: "2456-1139",
@@ -71,8 +71,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-002",
-    slug: "nahda-journal-of-health-and-biomedical-research",
-    title: "Nahda Journal of Health and Biomedical Research",
+    slug: "omicron-journal-of-health-and-biomedical-research",
+    title: "Omicron Journal of Health and Biomedical Research",
     shortTitle: "NJHBR",
     issn: "2789-4412",
     eIssn: "2789-4420",
@@ -95,8 +95,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-003",
-    slug: "nahda-journal-of-agriculture-food-and-sustainability",
-    title: "Nahda Journal of Agriculture, Food and Sustainability",
+    slug: "omicron-journal-of-agriculture-food-and-sustainability",
+    title: "Omicron Journal of Agriculture, Food and Sustainability",
     shortTitle: "NJAFS",
     issn: "2810-2201",
     eIssn: "2810-221X",
@@ -118,8 +118,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-004",
-    slug: "nahda-journal-of-education-learning-and-development",
-    title: "Nahda Journal of Education, Learning and Development",
+    slug: "omicron-journal-of-education-learning-and-development",
+    title: "Omicron Journal of Education, Learning and Development",
     shortTitle: "NJELD",
     issn: "2398-0044",
     eIssn: "2398-0052",
@@ -141,8 +141,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-005",
-    slug: "nahda-journal-of-business-economics-and-innovation",
-    title: "Nahda Journal of Business, Economics and Innovation",
+    slug: "omicron-journal-of-business-economics-and-innovation",
+    title: "Omicron Journal of Business, Economics and Innovation",
     shortTitle: "NJBEI",
     issn: "2822-1104",
     eIssn: "2822-1112",
@@ -165,8 +165,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-006",
-    slug: "nahda-journal-of-social-sciences-and-humanities",
-    title: "Nahda Journal of Social Sciences and Humanities",
+    slug: "omicron-journal-of-social-sciences-and-humanities",
+    title: "Omicron Journal of Social Sciences and Humanities",
     shortTitle: "NJSSH",
     issn: "2831-4408",
     eIssn: "2831-4416",
@@ -188,8 +188,8 @@ export const journals: Journal[] = [
   },
   {
     id: "j-007",
-    slug: "nahda-journal-of-interdisciplinary-research",
-    title: "Nahda Journal of Interdisciplinary Research",
+    slug: "omicron-journal-of-interdisciplinary-research",
+    title: "Omicron Journal of Interdisciplinary Research",
     shortTitle: "NJIR",
     issn: "2610-8893",
     eIssn: "2610-8907",
@@ -223,7 +223,7 @@ export const submissions: Submission[] = [
     keywords: ["malaria", "deep learning", "medical imaging", "diagnosis"],
     articleType: "Research Article",
     journalId: "j-001",
-    journalTitle: "Nahda Journal of Science and Technology",
+    journalTitle: "Omicron Journal of Science and Technology",
     status: "Under Review",
     authors: [
       {
@@ -260,7 +260,7 @@ export const submissions: Submission[] = [
     keywords: ["maternal health", "primary care", "Nigeria", "health systems"],
     articleType: "Research Article",
     journalId: "j-002",
-    journalTitle: "Nahda Journal of Health and Biomedical Research",
+    journalTitle: "Omicron Journal of Health and Biomedical Research",
     status: "Minor Revision",
     authors: [
       {
@@ -286,7 +286,7 @@ export const submissions: Submission[] = [
     keywords: ["GNN", "climate", "interpolation", "geospatial"],
     articleType: "Research Article",
     journalId: "j-003",
-    journalTitle: "Nahda Journal of Interdisciplinary Research",
+    journalTitle: "Omicron Journal of Interdisciplinary Research",
     status: "Draft",
     authors: [
       {
@@ -311,7 +311,7 @@ export const submissions: Submission[] = [
     keywords: ["open data", "mobility", "Africa", "review"],
     articleType: "Review Article",
     journalId: "j-001",
-    journalTitle: "Nahda Journal of Science and Technology",
+    journalTitle: "Omicron Journal of Science and Technology",
     status: "Published",
     authors: [
       {
@@ -384,7 +384,7 @@ export const announcements: Announcement[] = [
     date: "2026-07-01",
     summary:
       "AHSR invites submissions on climate-sensitive health systems through 30 September 2026.",
-    href: "/journals/nahda-journal-of-health-and-biomedical-research",
+    href: "/journals/omicron-journal-of-health-and-biomedical-research",
   },
   {
     id: "an-2",
@@ -400,12 +400,12 @@ export const announcements: Announcement[] = [
     date: "2026-05-20",
     summary:
       "Accepted articles now appear in the current numbered issue within days of proof approval.",
-    href: "/journals/nahda-journal-of-education-learning-and-development",
+    href: "/journals/omicron-journal-of-education-learning-and-development",
   },
 ];
 
 export const editorialBoards: Record<string, EditorialMember[]> = {
-  "nahda-journal-of-science-and-technology": [
+  "omicron-journal-of-science-and-technology": [
     {
       name: "Prof. Helen Markovic",
       role: "Editor-in-Chief",
@@ -431,7 +431,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Poland",
     },
   ],
-  "nahda-journal-of-health-and-biomedical-research": [
+  "omicron-journal-of-health-and-biomedical-research": [
     {
       name: "Prof. Kwame Mensah",
       role: "Editor-in-Chief",
@@ -451,7 +451,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Egypt",
     },
   ],
-  "nahda-journal-of-interdisciplinary-research": [
+  "omicron-journal-of-interdisciplinary-research": [
     {
       name: "Prof. Sofia Almeida",
       role: "Editor-in-Chief",
@@ -471,7 +471,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Russia",
     },
   ],
-  "nahda-journal-of-education-learning-and-development": [
+  "omicron-journal-of-education-learning-and-development": [
     {
       name: "Dr. Priya Natarajan",
       role: "Editor-in-Chief",
@@ -485,7 +485,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Brazil",
     },
   ],
-  "nahda-journal-of-agriculture-food-and-sustainability": [
+  "omicron-journal-of-agriculture-food-and-sustainability": [
     {
       name: "Prof. Amina Diallo",
       role: "Editor-in-Chief",
@@ -493,7 +493,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Senegal",
     },
   ],
-  "nahda-journal-of-business-economics-and-innovation": [
+  "omicron-journal-of-business-economics-and-innovation": [
     {
       name: "Prof. Elena Vargas",
       role: "Editor-in-Chief",
@@ -501,7 +501,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
       country: "Spain",
     },
   ],
-  "nahda-journal-of-social-sciences-and-humanities": [
+  "omicron-journal-of-social-sciences-and-humanities": [
     {
       name: "Prof. Samuel Okeke",
       role: "Editor-in-Chief",
@@ -514,7 +514,7 @@ export const editorialBoards: Record<string, EditorialMember[]> = {
 export const journalIssues: JournalIssue[] = [
   {
     id: "iss-1",
-    journalSlug: "nahda-journal-of-science-and-technology",
+    journalSlug: "omicron-journal-of-science-and-technology",
     volume: "12",
     issue: "3",
     year: "2026",
@@ -525,7 +525,7 @@ export const journalIssues: JournalIssue[] = [
   },
   {
     id: "iss-2",
-    journalSlug: "nahda-journal-of-science-and-technology",
+    journalSlug: "omicron-journal-of-science-and-technology",
     volume: "12",
     issue: "2",
     year: "2026",
@@ -536,7 +536,7 @@ export const journalIssues: JournalIssue[] = [
   },
   {
     id: "iss-3",
-    journalSlug: "nahda-journal-of-health-and-biomedical-research",
+    journalSlug: "omicron-journal-of-health-and-biomedical-research",
     volume: "8",
     issue: "4",
     year: "2025",
@@ -547,7 +547,7 @@ export const journalIssues: JournalIssue[] = [
   },
   {
     id: "iss-4",
-    journalSlug: "nahda-journal-of-interdisciplinary-research",
+    journalSlug: "omicron-journal-of-interdisciplinary-research",
     volume: "19",
     issue: "1",
     year: "2026",
@@ -558,7 +558,7 @@ export const journalIssues: JournalIssue[] = [
   },
   {
     id: "iss-5",
-    journalSlug: "nahda-journal-of-education-learning-and-development",
+    journalSlug: "omicron-journal-of-education-learning-and-development",
     volume: "5",
     issue: "1",
     year: "2026",
@@ -577,8 +577,8 @@ export const publishedArticles: PublishedArticle[] = [
     title: "Open Datasets for African Urban Mobility Research: A Review",
     authors: ["Amara Okonkwo", "Lena Hartmann"],
     affiliations: ["University of Lagos, Nigeria", "ETH Zurich, Switzerland"],
-    journalTitle: "Nahda Journal of Science and Technology",
-    journalSlug: "nahda-journal-of-science-and-technology",
+    journalTitle: "Omicron Journal of Science and Technology",
+    journalSlug: "omicron-journal-of-science-and-technology",
     journalId: "j-001",
     publishedAt: "2026-03-15",
     receivedAt: "2025-11-02",
@@ -629,8 +629,8 @@ export const publishedArticles: PublishedArticle[] = [
       "Kwame Nkrumah University of Science and Technology, Ghana",
       "University of Nairobi, Kenya",
     ],
-    journalTitle: "Nahda Journal of Health and Biomedical Research",
-    journalSlug: "nahda-journal-of-health-and-biomedical-research",
+    journalTitle: "Omicron Journal of Health and Biomedical Research",
+    journalSlug: "omicron-journal-of-health-and-biomedical-research",
     journalId: "j-002",
     publishedAt: "2025-11-02",
     receivedAt: "2025-04-18",
@@ -673,8 +673,8 @@ export const publishedArticles: PublishedArticle[] = [
     title: "Sparse Tensor Factorization for Multi-Sensor Climate Assimilation",
     authors: ["Chen Wei", "Sofia Almeida"],
     affiliations: ["Tsinghua University, China", "IST Lisbon, Portugal"],
-    journalTitle: "Nahda Journal of Interdisciplinary Research",
-    journalSlug: "nahda-journal-of-interdisciplinary-research",
+    journalTitle: "Omicron Journal of Interdisciplinary Research",
+    journalSlug: "omicron-journal-of-interdisciplinary-research",
     journalId: "j-003",
     publishedAt: "2026-01-20",
     receivedAt: "2025-08-01",
@@ -713,8 +713,8 @@ export const publishedArticles: PublishedArticle[] = [
     title: "Blended Learning Outcomes in First-Year STEM Courses",
     authors: ["Priya Natarajan", "Omar Hassan"],
     affiliations: ["University of Toronto, Canada", "American University in Cairo, Egypt"],
-    journalTitle: "Nahda Journal of Education, Learning and Development",
-    journalSlug: "nahda-journal-of-education-learning-and-development",
+    journalTitle: "Omicron Journal of Education, Learning and Development",
+    journalSlug: "omicron-journal-of-education-learning-and-development",
     journalId: "j-004",
     publishedAt: "2026-02-08",
     receivedAt: "2025-09-14",
@@ -753,8 +753,8 @@ export const publishedArticles: PublishedArticle[] = [
     title: "Benchmarking Lightweight CNNs for Field Malaria Microscopy",
     authors: ["James Adeyemi", "Amara Okonkwo"],
     affiliations: ["University of Lagos, Nigeria"],
-    journalTitle: "Nahda Journal of Science and Technology",
-    journalSlug: "nahda-journal-of-science-and-technology",
+    journalTitle: "Omicron Journal of Science and Technology",
+    journalSlug: "omicron-journal-of-science-and-technology",
     journalId: "j-001",
     publishedAt: "2026-03-08",
     receivedAt: "2025-10-11",

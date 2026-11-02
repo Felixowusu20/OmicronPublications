@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useAdminAuth } from "@/components/admin-auth-provider";
-import { NahdaLoader } from "@/components/nahda-loader";
+import {
+  ConfirmPaymentModal,
+  type ConfirmPaymentDetails,
+} from "@/components/confirm-payment-modal";
+import { OmicronLoader } from "@/components/omicron-loader";
 
 function proofViewPath(item: {
   proofUrl: string;
@@ -44,6 +48,7 @@ export default function AdminApcInboxPage() {
   const [error, setError] = useState("");
   const [busyId, setBusyId] = useState<string | null>(null);
   const [success, setSuccess] = useState("");
+  const [confirmItem, setConfirmItem] = useState<InboxItem | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -64,14 +69,26 @@ export default function AdminApcInboxPage() {
     if (user) void load();
   }, [user, load]);
 
+  function confirmDetailsFromItem(item: InboxItem): ConfirmPaymentDetails {
+    return {
+      manuscriptId: item.submission.manuscriptId,
+      title: item.submission.title,
+      amountLabel: item.amountLabel,
+      authorName: item.submission.author.name,
+      authorEmail: item.submission.author.email,
+      journalTitle:
+        item.submission.journal.shortTitle || item.submission.journal.title,
+      paypalReference: item.paypalReference,
+      proofUrl: item.proofUrl
+        ? proofViewPath({
+            proofUrl: item.proofUrl,
+            proofPublicId: item.proofPublicId,
+          })
+        : null,
+    };
+  }
+
   async function confirmPayment(item: InboxItem) {
-    if (
-      !window.confirm(
-        `Confirm PayPal APC (${item.amountLabel}) for ${item.submission.manuscriptId}? A receipt will be emailed to ${item.submission.author.email}.`,
-      )
-    ) {
-      return;
-    }
     setBusyId(item.submission.id);
     setSuccess("");
     setError("");
@@ -86,6 +103,7 @@ export default function AdminApcInboxPage() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not confirm");
+      setConfirmItem(null);
       setSuccess(
         `Confirmed ${item.submission.manuscriptId}. Receipt sent to ${data.receiptSentTo ?? item.submission.author.email}.`,
       );
@@ -169,7 +187,7 @@ export default function AdminApcInboxPage() {
       ) : null}
 
       {loading ? (
-        <NahdaLoader variant="panel" label="Loading APC inbox…" />
+        <OmicronLoader variant="panel" label="Loading APC inbox…" />
       ) : items.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-[var(--line)] bg-white p-8 text-center text-sm text-[var(--muted)]">
           No reported payments waiting. When authors mark PayPal as sent, they
@@ -262,7 +280,7 @@ export default function AdminApcInboxPage() {
                     <button
                       type="button"
                       disabled={busy}
-                      onClick={() => void confirmPayment(item)}
+                      onClick={() => setConfirmItem(item)}
                       className="btn-primary !px-3 !py-2 text-xs disabled:opacity-50"
                     >
                       {busy ? "Working…" : "Confirm PayPal payment"}
@@ -296,6 +314,19 @@ export default function AdminApcInboxPage() {
         </Link>
         .
       </p>
+
+      <ConfirmPaymentModal
+        open={Boolean(confirmItem)}
+        busy={Boolean(confirmItem && busyId === confirmItem.submission.id)}
+        details={confirmItem ? confirmDetailsFromItem(confirmItem) : null}
+        onCancel={() => {
+          if (busyId) return;
+          setConfirmItem(null);
+        }}
+        onConfirm={() => {
+          if (confirmItem) void confirmPayment(confirmItem);
+        }}
+      />
     </div>
   );
 }

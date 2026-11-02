@@ -93,7 +93,7 @@ export function ApcPayPanel({
           <p>
             You reported a PayPal transfer
             {amountLabel ? ` of ${amountLabel}` : ""}. Editors will confirm when
-            funds arrive; your Nahda receipt is then emailed to the submitting
+            funds arrive; your Omicron receipt is then emailed to the submitting
             author and the manuscript moves to production.
           </p>
           <p className="text-xs">

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { jsonError, unauthorized } from "@/lib/api";
 import { requireAdmin } from "@/lib/session";
-import { nahdaReceiptNumber } from "@/lib/apc-checkout";
+import { omicronReceiptNumber } from "@/lib/apc-checkout";
 import { formatCustomerUsd } from "@/lib/payment-currency";
 import { parseAuthorsJson } from "@/lib/author-contacts";
 import {
@@ -48,7 +48,7 @@ export async function GET(request: Request, { params }: Params) {
   ) {
     names.unshift(payment.submission.author.name);
   }
-  const receiptNumber = nahdaReceiptNumber(
+  const receiptNumber = omicronReceiptNumber(
     payment.submission.manuscriptId,
     paidAt,
   );

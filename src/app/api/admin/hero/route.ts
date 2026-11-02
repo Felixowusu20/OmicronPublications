@@ -1,11 +1,19 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonCreated, jsonError, jsonOk, unauthorized } from "@/lib/api";
+import { mediaUrlSchema } from "@/lib/media-url";
+import { ensureHeroSlidesSeeded } from "@/lib/home-cms-seed";
 import { requireAdmin } from "@/lib/session";
 
 export async function GET() {
   const admin = await requireAdmin();
   if (!admin) return unauthorized();
+
+  try {
+    await ensureHeroSlidesSeeded();
+  } catch (err) {
+    console.error(err);
+  }
 
   const slides = await prisma.heroSlide.findMany({
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
@@ -16,7 +24,7 @@ export async function GET() {
 const schema = z.object({
   title: z.string().min(2),
   body: z.string().min(2),
-  imageUrl: z.string().url(),
+  imageUrl: mediaUrlSchema,
   imagePublicId: z.string().optional(),
   alt: z.string().optional(),
   ctaLabel: z.string().optional(),

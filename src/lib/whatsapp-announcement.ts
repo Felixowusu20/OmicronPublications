@@ -131,7 +131,7 @@ export async function fetchOgImage(
       signal: controller.signal,
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (compatible; NahdaPublicationsBot/1.0; +https://nahda)",
+          "Mozilla/5.0 (compatible; OmicronPublicationsBot/1.0; +https://omicron)",
         Accept: "text/html,application/xhtml+xml",
       },
       redirect: "follow",

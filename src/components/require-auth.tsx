@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 
 export function RequireAuth({ children }: { children: React.ReactNode }) {
   const { user, ready } = useAuth();
@@ -17,11 +17,11 @@ export function RequireAuth({ children }: { children: React.ReactNode }) {
   }, [ready, user, router]);
 
   if (!ready) {
-    return <NahdaLoader variant="screen" label="Loading your session…" />;
+    return <OmicronLoader variant="screen" label="Loading your session…" />;
   }
 
   if (!user) {
-    return <NahdaLoader variant="screen" label="Redirecting to login…" />;
+    return <OmicronLoader variant="screen" label="Redirecting to login…" />;
   }
 
   return <>{children}</>;

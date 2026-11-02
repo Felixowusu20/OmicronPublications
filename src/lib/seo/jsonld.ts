@@ -125,7 +125,7 @@ export function scholarlyArticleJsonLd(article: ScholarlyArticleJsonLdInput) {
     ...(encoding ? { encoding, associatedMedia: encoding } : {}),
     publisher: {
       "@type": "Organization",
-      name: "Nahda Publications",
+      name: "Omicron Publications",
       url: absoluteUrl("/"),
     },
   };
@@ -159,7 +159,7 @@ export function periodicalJsonLd(journal: {
       : {}),
     publisher: {
       "@type": "Organization",
-      name: "Nahda Publications",
+      name: "Omicron Publications",
       url: absoluteUrl("/"),
     },
   };

@@ -55,7 +55,7 @@ export async function POST(request: Request) {
 
     void sendEmail({
       to: user.email,
-      subject: "Welcome to Nahda Publications",
+      subject: "Welcome to Omicron Publications",
       html: welcomeEmailHtml(user.name),
     });
 

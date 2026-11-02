@@ -5,7 +5,7 @@ import Link from "next/link";
 
 type Props = {
   citation: string;
-  /** Hosted Nahda NID path, e.g. /nid/nid/ajs.2026.0001 */
+  /** Hosted Omicron NID path, e.g. /nid/nid/ajs.2026.0001 */
   doiHref: string | null;
   doiLabel?: string | null;
 };

@@ -1,11 +1,18 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonCreated, jsonError, jsonOk, unauthorized } from "@/lib/api";
+import { optionalMediaUrlSchema } from "@/lib/media-url";
+import { ensureAnnouncementsSeeded } from "@/lib/home-cms-seed";
 import { requireAdmin } from "@/lib/session";
 
 export async function GET() {
   const admin = await requireAdmin();
   if (!admin) return unauthorized();
+  try {
+    await ensureAnnouncementsSeeded();
+  } catch (err) {
+    console.error(err);
+  }
   const announcements = await prisma.announcement.findMany({
     orderBy: { publishedAt: "desc" },
   });
@@ -16,7 +23,7 @@ const schema = z.object({
   title: z.string().min(2),
   summary: z.string().min(2),
   href: z.string().optional().nullable(),
-  imageUrl: z.string().url().optional().nullable(),
+  imageUrl: optionalMediaUrlSchema,
   imagePublicId: z.string().optional().nullable(),
   publishedAt: z.string().datetime().optional(),
   isActive: z.boolean().optional(),

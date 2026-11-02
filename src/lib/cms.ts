@@ -7,7 +7,7 @@ export function isCmsPageSlug(value: string): value is CmsPageSlug {
   return (CMS_PAGE_SLUGS as readonly string[]).includes(value);
 }
 
-const ABOUT_BODY = `Nahda Publications is a scholarly publishing house that supports researchers from first submission through peer review, production, and open publication with DOI-backed records.
+const ABOUT_BODY = `Omicron Publications is a scholarly publishing house that supports researchers from first submission through peer review, production, and open publication with DOI-backed records.
 
 We operate peer-reviewed journals across science, technology, and related fields. Our platform gives authors a clear editorial workflow, transparent status tracking, and secure handling of manuscripts and article processing charges.
 
@@ -15,18 +15,18 @@ What we stand for
 
 - Rigorous peer review and editorial standards
 - Clear fees and waiver pathways after acceptance
-- Secure payments collected via PayPal (Nahda Publications)
+- Secure payments collected via PayPal (Omicron Publications)
 - Open discovery via DOI metadata and journal sites
 - Responsive support for authors and readers
 
-Questions about Nahda Publications, payments, or editorial policy can be sent to nahdapublications@gmail.com.`;
+Questions about Omicron Publications, payments, or editorial policy can be sent to omicronpublications@gmail.com.`;
 
 const TERMS_BODY = `Last updated: 5 August 2026
 
-These Terms & Conditions (“Terms”) govern your use of the Nahda Publications website, manuscript submission system, and related services (the “Services”). By creating an account, submitting a manuscript, or making a payment, you agree to these Terms.
+These Terms & Conditions (“Terms”) govern your use of the Omicron Publications website, manuscript submission system, and related services (the “Services”). By creating an account, submitting a manuscript, or making a payment, you agree to these Terms.
 
 1. Who we are
-Nahda Publications (“we”, “us”, “our”) provides scholarly publishing services, including online manuscript submission, peer review coordination, article production, and publication. Contact: nahdapublications@gmail.com.
+Omicron Publications (“we”, “us”, “our”) provides scholarly publishing services, including online manuscript submission, peer review coordination, article production, and publication. Contact: omicronpublications@gmail.com.
 
 2. Accounts
 You must provide accurate registration details and keep your login credentials confidential. You are responsible for activity under your account. We may suspend accounts that misuse the Services or violate these Terms.
@@ -35,10 +35,10 @@ You must provide accurate registration details and keep your login credentials c
 Authors confirm that submitted work is original, that they have the right to submit it, and that it does not infringe third-party rights. Editorial decisions (including acceptance, revision, or rejection) are at the discretion of the journal and do not create a guarantee of publication.
 
 4. Article processing charges (APCs)
-Where an APC applies, the amount shown for the relevant journal in our Fees pages is due after acceptance and before production. Nahda’s payment pages, invoices, and receipts show that amount in US dollars (USD). Authors pay by PayPal to the official Nahda Publications account.
+Where an APC applies, the amount shown for the relevant journal in our Fees pages is due after acceptance and before production. Omicron’s payment pages, invoices, and receipts show that amount in US dollars (USD). Authors pay by PayPal to the official Omicron Publications account.
 
 5. Refunds
-APC payments are generally non-refundable once production has begun. If a charge was made in error, contact nahdapublications@gmail.com within 14 days with your manuscript ID and payment reference. Refund eligibility is assessed case by case.
+APC payments are generally non-refundable once production has begun. If a charge was made in error, contact omicronpublications@gmail.com within 14 days with your manuscript ID and payment reference. Refund eligibility is assessed case by case.
 
 6. Acceptable use
 You may not attempt to disrupt the Services, upload malware, scrape personal data, or use the platform for unlawful content. We may remove content or restrict access to protect authors, reviewers, and readers.
@@ -47,7 +47,7 @@ You may not attempt to disrupt the Services, upload malware, scrape personal dat
 Site design, branding, and platform software remain our property. Authors retain rights in their manuscripts subject to the journal’s publishing agreement and licence terms at acceptance/publication.
 
 8. Third-party services
-Payments are collected via PayPal to the official Nahda Publications account. File storage and delivery may use Cloudinary or similar providers. Their terms and privacy practices apply to those processing steps.
+Payments are collected via PayPal to the official Omicron Publications account. File storage and delivery may use Cloudinary or similar providers. Their terms and privacy practices apply to those processing steps.
 
 9. Disclaimer
 The Services are provided “as is”. We do not warrant uninterrupted availability. To the fullest extent permitted by law, we are not liable for indirect or consequential losses arising from use of the Services.
@@ -60,7 +60,7 @@ These Terms are governed by the laws of Ghana, without regard to conflict-of-law
 
 const PRIVACY_BODY = `Last updated: 5 August 2026
 
-This Privacy Policy explains how Nahda Publications (“we”, “us”) collects, uses, and protects personal information when you use our website and publishing platform.
+This Privacy Policy explains how Omicron Publications (“we”, “us”) collects, uses, and protects personal information when you use our website and publishing platform.
 
 1. Information we collect
 - Account details: name, email, password (stored as a hash), institution, ORCID, and research interests you provide
@@ -71,7 +71,7 @@ This Privacy Policy explains how Nahda Publications (“we”, “us”) collect
 2. How we use information
 - To operate accounts, submission, review, production, and publication workflows
 - To send transactional emails (status updates, receipts, password resets)
-- To process APCs and issue Nahda payment receipts
+- To process APCs and issue Omicron payment receipts
 - To improve site reliability and prevent abuse
 - To comply with legal or regulatory requests when required
 
@@ -80,7 +80,7 @@ We process data to perform our publishing contract with you, to pursue legitimat
 
 4. Sharing
 We share data with:
-- PayPal — APC payment collection (Nahda Publications account)
+- PayPal — APC payment collection (Omicron Publications account)
 - Cloudinary (or similar) — secure file hosting for manuscripts and images
 - Email delivery providers configured for our SMTP account
 - Reviewers and editors — only information needed for peer review
@@ -100,14 +100,14 @@ We use encrypted connections (HTTPS), hashed passwords, role-based admin access,
 Service providers may process data in other countries. We choose reputable processors and limit data to what is necessary.
 
 9. Your rights
-Depending on applicable law, you may request access, correction, or deletion of personal data, or object to certain processing. Contact nahdapublications@gmail.com. Published articles and DOIs may remain publicly available as part of the scholarly record.
+Depending on applicable law, you may request access, correction, or deletion of personal data, or object to certain processing. Contact omicronpublications@gmail.com. Published articles and DOIs may remain publicly available as part of the scholarly record.
 
 10. Children
 The Services are intended for researchers and adult users. We do not knowingly collect data from children under 16.
 
 11. Contact
-Privacy questions: nahdapublications@gmail.com
-Nahda Publications — scholarly publishing for researchers worldwide.
+Privacy questions: omicronpublications@gmail.com
+Omicron Publications — scholarly publishing for researchers worldwide.
 
 12. Changes
 We may update this Policy; the “Last updated” date will change when we do. Continued use of the Services after updates constitutes awareness of the revised Policy.`;
@@ -136,25 +136,25 @@ const DEFAULT_FAQS: { question: string; answer: string; sortOrder: number }[] =
       sortOrder: 3,
       question: "How do APCs and waivers work?",
       answer:
-        "See Fees & waivers. Article processing charges are paid after acceptance and before production via PayPal to Nahda Publications. Waiver requests can be sent to the editorial office.",
+        "See Fees & waivers. Article processing charges are paid after acceptance and before production via PayPal to Omicron Publications. Waiver requests can be sent to the editorial office.",
     },
     {
       sortOrder: 4,
       question: "How are payments secured?",
       answer:
-        "APC payments are made by PayPal to the official Nahda Publications account. You receive an official Nahda Publications receipt in USD by email after editorial confirmation of payment.",
+        "APC payments are made by PayPal to the official Omicron Publications account. You receive an official Omicron Publications receipt in USD by email after editorial confirmation of payment.",
     },
     {
       sortOrder: 5,
       question: "How are articles published and cited?",
       answer:
-        "Accepted articles receive a Nahda DOI, appear on the journal site, and include citation metadata for discovery services and Google Scholar.",
+        "Accepted articles receive an Omicron DOI, appear on the journal site, and include citation metadata for discovery services and Google Scholar.",
     },
     {
       sortOrder: 6,
       question: "How do I contact support?",
       answer:
-        "Email nahdapublications@gmail.com. Typical response within 1 to 2 business days. For payment issues, include your manuscript ID and PayPal payment reference.",
+        "Email omicronpublications@gmail.com. Typical response within 1 to 2 business days. For payment issues, include your manuscript ID and PayPal payment reference.",
     },
   ];
 
@@ -163,7 +163,7 @@ const DEFAULT_PAGES: Record<
   { title: string; subtitle: string; body: string }
 > = {
   about: {
-    title: "About Nahda Publications",
+    title: "About Omicron Publications",
     subtitle:
       "Peer-reviewed journals, transparent editorial workflow, and secure publishing for researchers worldwide.",
     body: ABOUT_BODY,
@@ -171,13 +171,13 @@ const DEFAULT_PAGES: Record<
   terms: {
     title: "Terms & Conditions",
     subtitle:
-      "The rules that govern use of Nahda Publications websites, submissions, and payments.",
+      "The rules that govern use of Omicron Publications websites, submissions, and payments.",
     body: TERMS_BODY,
   },
   privacy: {
     title: "Privacy Policy",
     subtitle:
-      "How we collect, use, and protect personal information on the Nahda platform.",
+      "How we collect, use, and protect personal information on the Omicron platform.",
     body: PRIVACY_BODY,
   },
 };

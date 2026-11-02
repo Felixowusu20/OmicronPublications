@@ -1,6 +1,6 @@
 /**
  * Client helpers for API responses + direct Cloudinary uploads.
- * Direct upload avoids production "Request Entity Too Large" on Vercel.
+ * Direct upload avoids production "Request Entity Too Large" body limits.
  */
 
 import {
@@ -60,7 +60,7 @@ function throwCloudinaryError(message: string, fileSize: number): never {
 
 /**
  * Upload a file straight to Cloudinary using a server-issued signature.
- * Large manuscripts never pass through the Next.js/Vercel request body.
+ * Large manuscripts never pass through the Next.js request body.
  * Files over 5 MB are sent in chunks (Cloudinary REST requirement for large assets).
  */
 export async function uploadFileDirect(
@@ -74,7 +74,7 @@ export async function uploadFileDirect(
 ): Promise<UploadedAsset> {
   const prepared =
     options.prepare === false ? file : await prepareUploadFile(file);
-  const folder = options.folder ?? "nahda";
+  const folder = options.folder ?? "omicron";
   const resourceType = options.resourceType ?? "auto";
 
   const signRes = await fetch("/api/upload/sign", {

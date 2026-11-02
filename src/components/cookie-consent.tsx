@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const STORAGE_KEY = "nahda_cookie_consent";
+const STORAGE_KEY = "omicron_cookie_consent";
 
 export type CookieConsentValue = "accepted" | "rejected";
 
@@ -80,7 +80,7 @@ export function CookieConsent() {
             className="mt-1.5 text-sm leading-relaxed text-[var(--muted)]"
           >
             We use essential cookies to keep you signed in and optional cookies
-            to improve your experience on Nahda Publications. You can accept all
+            to improve your experience on Omicron Publications. You can accept all
             cookies or reject non-essential ones.{" "}
             <Link
               href="/privacy"

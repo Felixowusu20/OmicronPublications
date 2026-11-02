@@ -68,7 +68,7 @@ export async function trashPublishedArticle(
             ? "Article returned to editing"
             : "Published article removed",
           body: args.forEdit
-            ? `“${submission.title}” (${submission.manuscriptId}) was unpublished so editors can revise the full manuscript. It is no longer live on Nahda.`
+            ? `“${submission.title}” (${submission.manuscriptId}) was unpublished so editors can revise the full manuscript. It is no longer live on Omicron.`
             : `“${submission.title}” (${submission.manuscriptId}) was moved to the recycle bin and is no longer available to download.`,
         },
       });

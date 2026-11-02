@@ -75,7 +75,7 @@ function isEmptyImagePlaceholder(figure: Element | null): figure is HTMLElement 
   if (!(figure instanceof HTMLElement) || figure.tagName !== "FIGURE") {
     return false;
   }
-  if (figure.querySelector("img, table, .nahda-table-wrap")) return false;
+  if (figure.querySelector("img, table, .omicron-table-wrap")) return false;
   if (figure.classList.contains("table-full")) return false;
   if (figure.classList.contains("figure-full")) return true;
   const cap = figure.querySelector("figcaption")?.textContent ?? "";
@@ -138,7 +138,7 @@ function notifyEditorChanged(el: HTMLElement) {
 
 /**
  * Formatting + image tools for in-template abstract/body editing.
- * Applies to whichever `[data-nahda-rich]` field last held the caret.
+ * Applies to whichever `[data-omicron-rich]` field last held the caret.
  */
 export function TemplateFormatToolbar({
   scopeRef,
@@ -164,7 +164,7 @@ export function TemplateFormatToolbar({
     const node = sel.anchorNode;
     const el =
       (node instanceof Element ? node : node?.parentElement)?.closest(
-        "[data-nahda-rich='true']",
+        "[data-omicron-rich='true']",
       ) ?? null;
     if (!(el instanceof HTMLElement) || !scope.contains(el)) return;
     activeEditorRef.current = el;
@@ -196,7 +196,7 @@ export function TemplateFormatToolbar({
       e.preventDefault();
       e.stopPropagation();
       targetFigureRef.current = fig;
-      const editor = fig.closest("[data-nahda-rich='true']");
+      const editor = fig.closest("[data-omicron-rich='true']");
       if (editor instanceof HTMLElement) activeEditorRef.current = editor;
       fileInputRef.current?.click();
     }
@@ -297,7 +297,7 @@ export function TemplateFormatToolbar({
         applyImagesToFigure(placeholder, uploaded);
         const editor =
           activeEditorRef.current ??
-          placeholder.closest("[data-nahda-rich='true']");
+          placeholder.closest("[data-omicron-rich='true']");
         if (editor instanceof HTMLElement) notifyEditorChanged(editor);
       } else {
         insertHtml(uploaded.map((u) => figureHtml(u.caption, u.url)).join(""));

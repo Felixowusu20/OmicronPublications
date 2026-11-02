@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { jsonCreated, jsonError, jsonOk, unauthorized } from "@/lib/api";
+import { mediaUrlSchema } from "@/lib/media-url";
 import { requireAdmin } from "@/lib/session";
 import { ensureHomeGoalTabsSeeded } from "@/lib/home-cms-seed";
 
@@ -38,7 +39,7 @@ const tabSchema = z.object({
   title: z.string().min(2),
   body: z.string().min(2),
   story: z.string().optional().nullable(),
-  imageUrl: z.string().url(),
+  imageUrl: mediaUrlSchema,
   imagePublicId: z.string().optional().nullable(),
   imageAlt: z.string().optional().nullable(),
   imageCaption: z.string().optional().nullable(),

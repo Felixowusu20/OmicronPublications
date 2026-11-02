@@ -23,7 +23,7 @@ export async function uploadToCloudinary(
     filename?: string;
   } = {},
 ): Promise<UploadResult> {
-  const folder = options.folder ?? "nahda";
+  const folder = options.folder ?? "omicron";
   // Prefer explicit type. "auto" often stores PDFs as image, and many
   // Cloudinary accounts block public image/PDF delivery (ACL 401).
   const resourceType = options.resourceType ?? "auto";

@@ -1,3 +1,4 @@
+import { BrowseBySubject } from "@/components/browse-by-subject";
 import { HeroSlider } from "@/components/hero-slider";
 import { HomeCatalog } from "@/components/home-catalog";
 import { HomeRecentArticles } from "@/components/home-recent-articles";
@@ -9,6 +10,11 @@ import { resolveArticlePreviewImage } from "@/lib/article-preview-image";
 import { prisma } from "@/lib/db";
 import { parseGoalTabLinks } from "@/lib/home-cms-defaults";
 import { resolveArticleIssue } from "@/lib/issues";
+import {
+  articlesPathForField,
+  journalMatchesField,
+  RESEARCH_FIELDS,
+} from "@/lib/research-fields";
 import { resolvePublishedPdfUrl } from "@/lib/submission-utils";
 
 export const dynamic = "force-dynamic";
@@ -85,25 +91,72 @@ async function getHomeData() {
         .catch(() => null),
     ]);
 
-    const researchCards: ResearchSpotlightCard[] = spotlights.map((item) => {
-      const articleLive =
-        item.article &&
-        item.article.isActive &&
-        item.article.deletedAt == null
-          ? item.article
-          : null;
+    // Prefer CMS spotlights only as image overrides keyed by title.
+    const spotlightByTitle = new Map(
+      spotlights.map((s) => [s.title.trim().toLowerCase(), s]),
+    );
+
+    // Bind homepage fields to journals; featured article = latest published
+    // in any journal whose subjects match that field.
+    const researchCards: ResearchSpotlightCard[] = RESEARCH_FIELDS.filter(
+      (field) =>
+        journals.some((j) =>
+          journalMatchesField(
+            {
+              slug: j.slug,
+              title: j.title,
+              description: j.description,
+              subjects: j.subjects,
+            },
+            field,
+          ),
+        ),
+    ).map((field) => {
+      const matchingJournalIds = new Set(
+        journals
+          .filter((j) =>
+            journalMatchesField(
+              {
+                slug: j.slug,
+                title: j.title,
+                description: j.description,
+                subjects: j.subjects,
+              },
+              field,
+            ),
+          )
+          .map((j) => j.id),
+      );
+      const featured = articles.find((a) =>
+        matchingJournalIds.has(a.journalId),
+      );
+      const cms = spotlightByTitle.get(field.label.toLowerCase());
+      const imageUrl =
+        cms?.imageUrl ||
+        featured?.coverImageUrl ||
+        (featured
+          ? resolveArticlePreviewImage({
+              slug: featured.slug,
+              productionFigures: featured.submission?.productionFigures,
+              productionBody: featured.submission?.productionBody,
+              coverImageUrl: featured.coverImageUrl,
+              journalCoverImageUrl: featured.journal.coverImageUrl,
+            })
+          : null) ||
+        cms?.logoUrl ||
+        null;
+
       return {
-        id: item.id,
-        title: item.title,
-        summary: item.summary,
-        logoUrl: item.logoUrl,
-        imageUrl:
-          item.imageUrl || articleLive?.coverImageUrl || item.logoUrl || null,
-        articleTitle: articleLive?.title ?? null,
-        href: articleLive
-          ? `/articles/${articleLive.slug}`
-          : item.externalHref || null,
-        ctaLabel: item.ctaLabel || (articleLive ? "Read article" : null),
+        id: field.id,
+        title: field.label,
+        summary: field.summary,
+        logoUrl: cms?.logoUrl ?? null,
+        imageUrl,
+        articleTitle: featured?.title ?? null,
+        href: featured
+          ? `/articles/${featured.slug}`
+          : articlesPathForField(field.id),
+        ctaLabel: featured ? "Read latest article" : "Browse field articles",
       };
     });
 
@@ -189,7 +242,7 @@ export default async function HomePage({
     };
   });
 
-  const recentFeatured = mappedArticles.slice(0, 3);
+  const recentFeatured = mappedArticles.slice(0, 5);
 
   const mappedGoalTabs = goalTabs.map((tab) => ({
     key: tab.key,
@@ -206,8 +259,10 @@ export default async function HomePage({
   }));
 
   return (
-    <div className="max-w-[100%] overflow-x-clip">
+    <div className="nature-home max-w-[100%] overflow-x-clip bg-[var(--paper)]">
       <HeroSlider />
+
+      <BrowseBySubject />
 
       <HomeRecentArticles
         articles={recentFeatured}

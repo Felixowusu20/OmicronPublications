@@ -10,9 +10,9 @@ type Props = {
 };
 
 /**
- * Nahda logo (transparent background).
- * Navbar / light surfaces: full green lockup.
- * Footer / dark surfaces: lightened lockup for contrast.
+ * Omicron logo (transparent background).
+ * Navbar / light surfaces: full lockup.
+ * Footer / dark surfaces: on-dark lockup for contrast.
  */
 export function BrandLogo({
   href = "/",
@@ -22,10 +22,10 @@ export function BrandLogo({
 }: Props) {
   const src =
     variant === "onDark"
-      ? "/brand/logo-nahda-on-dark.png"
+      ? "/brand/logo-omicron-on-dark.png"
       : variant === "mark"
         ? "/favicon.png"
-        : "/brand/logo-nahda.png";
+        : "/brand/logo-omicron.png";
 
   const isMark = variant === "mark";
 
@@ -33,13 +33,13 @@ export function BrandLogo({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={src}
-      alt="Nahda Publications"
-      width={isMark ? 36 : 188}
-      height={isMark ? 36 : 55}
+      alt="Omicron Publications"
+      width={isMark ? 40 : 240}
+      height={isMark ? 40 : 70}
       className={
         isMark
-          ? `h-9 w-9 rounded-lg object-cover ${className}`
-          : `h-9 w-auto max-w-[200px] object-contain object-left sm:h-10 md:max-w-[240px] ${className}`
+          ? `h-10 w-10 rounded-lg object-contain ${className}`
+          : `h-14 w-auto max-w-[240px] object-contain object-left sm:h-16 md:max-w-[300px] ${className}`
       }
       // hint cache-bust after transparent re-export
       decoding="async"
@@ -52,7 +52,7 @@ export function BrandLogo({
     <Link
       href={href}
       className="flex shrink-0 items-center"
-      aria-label="Nahda Publications home"
+      aria-label="Omicron Publications home"
     >
       {inner}
     </Link>

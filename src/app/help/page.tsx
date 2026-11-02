@@ -5,7 +5,7 @@ import { listFaqs } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Help & FAQ",
   description:
-    "Help centre and frequently asked questions for Nahda Publications authors and readers.",
+    "Help centre and frequently asked questions for Omicron Publications authors and readers.",
 };
 
 export default async function HelpPage() {
@@ -42,10 +42,10 @@ export default async function HelpPage() {
         <p className="mt-2 text-sm text-[var(--muted)]">
           Email{" "}
           <a
-            href="mailto:nahdapublications@gmail.com"
+            href="mailto:omicronpublications@gmail.com"
             className="break-all font-medium text-[var(--accent)] hover:underline"
           >
-            nahdapublications@gmail.com
+            omicronpublications@gmail.com
           </a>
           . Typical response within 1 to 2 business days.
         </p>

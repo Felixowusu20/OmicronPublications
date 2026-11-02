@@ -5,7 +5,7 @@ type Props = {
   searchParams: Promise<{ download?: string }>;
 };
 
-/** Legacy /doi/… URLs redirect to the Nahda Identifier path /nid/… */
+/** Legacy /doi/… URLs redirect to the Omicron Identifier path /nid/… */
 export default async function LegacyDoiRedirect({
   params,
   searchParams,

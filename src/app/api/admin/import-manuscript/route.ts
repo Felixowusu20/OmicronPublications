@@ -43,7 +43,7 @@ async function docxToManuscript(buffer: Buffer) {
         imageIndex += 1;
         const filename = `import-${Date.now().toString(36)}-${imageIndex}.${ext}`;
         const uploaded = await uploadToCloudinary(Buffer.from(bytes), {
-          folder: "nahda/article-figures",
+          folder: "omicron/article-figures",
           resourceType: "image",
           filename,
         });

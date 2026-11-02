@@ -7,7 +7,7 @@ import { RequireAuth } from "@/components/require-auth";
 import { RevisionFiles } from "@/components/revision-files";
 import { ResubmitPanel } from "@/components/resubmit-panel";
 import { ApcPayPanel } from "@/components/apc-pay-panel";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { FeedbackHistory } from "@/components/feedback-history";
 import { SubmissionProgressBar } from "@/components/submission-progress-bar";
 import {
@@ -95,7 +95,7 @@ function Detail({ id }: { id: string }) {
   }
 
   if (!sub) {
-    return <NahdaLoader variant="panel" label="Loading your manuscript…" />;
+    return <OmicronLoader variant="panel" label="Loading your manuscript…" />;
   }
 
   const isPublished = sub.status === "PUBLISHED";
@@ -139,7 +139,7 @@ function Detail({ id }: { id: string }) {
           </h2>
           <p className="mt-2 max-w-xl text-sm text-rose-950/80">
             Editorial tracking and resubmission are closed. Download the final
-            Nahda PDF below, or open the public article page.
+            Omicron PDF below, or open the public article page.
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             {downloadHref ? (
@@ -161,7 +161,7 @@ function Detail({ id }: { id: string }) {
                 href={`/articles/${published.slug}`}
                 className="btn-secondary !px-4 !py-2.5 text-sm"
               >
-                View on Nahda
+                View on Omicron
               </Link>
             )}
             <span

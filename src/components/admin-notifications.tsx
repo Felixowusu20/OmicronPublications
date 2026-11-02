@@ -22,8 +22,8 @@ export function AdminNotifications() {
   return (
     <RealtimeNotifications
       apiPath="/api/admin/notifications"
-      storageKey="nahda-admin-notif"
-      tagPrefix="nahda-admin"
+      storageKey="omicron-admin-notif"
+      tagPrefix="omicron-admin"
       hrefFor={adminHref}
       enableLabel="Enable alerts"
     />

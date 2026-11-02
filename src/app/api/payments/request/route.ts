@@ -5,7 +5,7 @@ import { livePendingApcCents, toCustomerPayment } from "@/lib/payment-dto";
 import { resolveApcPayLink } from "@/lib/payment-link";
 
 /**
- * Public (token) payment request — USD only, for the Nahda pay page.
+ * Public (token) payment request — USD only, for the Omicron pay page.
  */
 export async function GET(request: Request) {
   const token = new URL(request.url).searchParams.get("token") ?? "";

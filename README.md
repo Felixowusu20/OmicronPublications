@@ -1,4 +1,4 @@
-# Nahda Publications
+# Omicron Publications
 
 Academic publishing platform for multi-journal manuscript submission, peer review, APC payment, production editing, Typst PDF generation, DOI hosting, and open publication.
 
@@ -26,7 +26,7 @@ Built with **Next.js**, **Prisma**, **Neon PostgreSQL**, **Cloudinary**, **Payst
 
 ## Overview
 
-Nahda Publications is a full journal house platform:
+Omicron Publications is a full journal house platform:
 
 | Audience | What they do |
 | --- | --- |
@@ -34,7 +34,7 @@ Nahda Publications is a full journal house platform:
 | **Reviewers / editors** | Review inbox, request revisions, accept/reject, prepare full manuscripts |
 | **Super admins** | Journals CMS, hero slides, announcements, reviewers, recycle bin, analytics |
 
-Public readers browse journals, articles, search by keyword/DOI, and resolve Nahda-hosted DOIs.
+Public readers browse journals, articles, search by keyword/DOI, and resolve Omicron-hosted DOIs.
 
 ---
 
@@ -80,7 +80,7 @@ flowchart TB
     E[Admin / Reviewer]
   end
 
-  subgraph NextApp["Nahda Next.js app"]
+  subgraph NextApp["Omicron Next.js app"]
     UI[Pages & components]
     API[API routes]
     PDF[Typst PDF compiler]
@@ -321,13 +321,13 @@ flowchart TB
 
 ## DOI hosting
 
-Nahda hosts its own DOI records (prefix `10.58000/...`) — not Crossref/`doi.org` resolution.
+Omicron hosts its own DOI records (prefix `10.58000/...`) — not Crossref/`doi.org` resolution.
 
 ```mermaid
 flowchart LR
   Click[User clicks DOI] --> Path["/doi/10.58000/njafs.2026.0003"]
   Path --> Lookup{Article found?}
-  Lookup -->|Yes| Record[Nahda DOI record page]
+  Lookup -->|Yes| Record[Omicron DOI record page]
   Record --> Article[/articles/slug]
   Record --> PDF[Download PDF]
   Lookup -->|No| Err[DOI error page]
@@ -338,7 +338,7 @@ flowchart LR
 | --- | --- |
 | `/doi/{doi}` | Hosted DOI record bound to the paper |
 | `/doi/{doi}?download=1` | PDF download (increments downloads) |
-| Unknown DOI | Friendly “DOI error” page on Nahda |
+| Unknown DOI | Friendly “DOI error” page on Omicron |
 | Cite → Open DOI record | Opens **local** `/doi/...` (not doi.org) |
 
 Views increment on article page visits; downloads increment on PDF retrieval.
@@ -374,8 +374,8 @@ Views increment on article page visits; downloads increment on PDF retrieval.
 atlas-academic-publishing/
 ├── prisma/
 │   ├── schema.prisma          # Data model
-│   └── seed-nahda-journals.ts
-├── public/brand/              # Nahda logos
+│   └── seed-omicron-journals.ts
+├── public/brand/              # Omicron logos
 ├── templates/atlas-article.typ
 ├── src/
 │   ├── app/
@@ -422,7 +422,7 @@ npm run db:push
 Optional journal seed:
 
 ```bash
-npm run db:seed:nahda
+npm run db:seed:omicron
 ```
 
 ### 3. Run
@@ -478,12 +478,12 @@ Visit `/admin/register` **only when no super admin exists**, then use `/admin/lo
 | `NEXT_PUBLIC_APP_URL` | Canonical app URL (emails, Paystack redirects, DOI/article links) |
 | `PAYSTACK_SECRET_KEY` / `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | APC Checkout (secret used server-side) |
 | `PAYSTACK_CURRENCY` | Checkout currency (default `USD` for international cards) |
-| `PAYSTACK_RECEIPT_INBOX` | Optional inbox for Paystack’s own receipt (authors get Nahda’s USD receipt instead) |
+| `PAYSTACK_RECEIPT_INBOX` | Optional inbox for Paystack’s own receipt (authors get Omicron’s USD receipt instead) |
 | `DEFAULT_APC_CENTS` | Fallback APC when journal has no amount |
 
 See `.env.example` for placeholders. Never commit real secrets.
 
-**APC receipts:** After payment, the app emails authors a branded Nahda Publications receipt in USD. To stop Paystack’s own receipt email, open [Paystack → Settings → Preferences](https://dashboard.paystack.com/#/settings/preferences) and turn off **Email receipts to customers** (you can still email receipts to yourself). Also set `PAYSTACK_RECEIPT_INBOX` (or rely on `SMTP_FROM`) so any Paystack notice goes to the publisher, not the author.
+**APC receipts:** After payment, the app emails authors a branded Omicron Publications receipt in USD. To stop Paystack’s own receipt email, open [Paystack → Settings → Preferences](https://dashboard.paystack.com/#/settings/preferences) and turn off **Email receipts to customers** (you can still email receipts to yourself). Also set `PAYSTACK_RECEIPT_INBOX` (or rely on `SMTP_FROM`) so any Paystack notice goes to the publisher, not the author.
 
 ---
 
@@ -502,7 +502,7 @@ See `.env.example` for placeholders. Never commit real secrets.
 | `npm run db:migrate` | Create/run Prisma migrations (dev) |
 | `npm run db:migrate:deploy` | Apply migrations (CI/production) |
 | `npm run db:studio` | Open Prisma Studio |
-| `npm run db:seed:nahda` | Seed Nahda journals |
+| `npm run db:seed:omicron` | Seed Omicron journals |
 
 ---
 
@@ -512,13 +512,13 @@ See `.env.example` for placeholders. Never commit real secrets.
 2. Reviewer sends feedback / moves status
 3. On **Accepted**, author pays APC (or waiver / not required)
 4. Editor opens **Full manuscripts**, edits body/figures, marks ready
-5. **Publish papers**: confirm metadata → generate Nahda PDF → publish
+5. **Publish papers**: confirm metadata → generate Omicron PDF → publish
 6. System assigns DOI, creates public article, emails author, records metrics
 
 ---
 
 ## License & branding
 
-© Nahda Publications. Platform branding uses assets under `public/brand/`.
+© Omicron Publications. Platform branding uses assets under `public/brand/`.
 
 Scholarly publishing for researchers worldwide.

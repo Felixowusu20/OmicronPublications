@@ -136,11 +136,11 @@ export default function AdminHomePage() {
             Admin overview
           </p>
           <h1 className="mt-1 font-[family-name:var(--font-display)] text-2xl text-[var(--ink)] sm:text-3xl">
-            Welcome to Nahda Publications
+            Welcome to Omicron Publications
           </h1>
           <p className="mt-2 max-w-xl text-sm text-[var(--muted)]">
             {user.role === "SUPER_ADMIN"
-              ? "Manage CMS content, journals, reviewers, and track article reach."
+              ? "Manage homepage CMS, journals, reviewers, and track article reach."
               : "Review manuscripts, prepare full articles, and publish accepted papers."}
           </p>
         </div>
@@ -306,10 +306,10 @@ export default function AdminHomePage() {
                 icon={<ReviewersIcon />}
               />
               <Stat
-                label="Hero slides"
-                value="CMS"
-                href="/admin/hero"
-                hint="Homepage carousel"
+                label="Homepage CMS"
+                value="Edit"
+                href="/admin/homepage"
+                hint="Hero, paths, fields, platforms"
                 icon={<HeroIcon />}
               />
               <Stat

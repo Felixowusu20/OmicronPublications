@@ -223,17 +223,17 @@ export default function ResearchSpotlightsCmsPage() {
     <div className="grid gap-8 lg:grid-cols-[1fr_420px] lg:items-start">
       <div>
         <h1 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl">
-          Research areas CMS
+          Homepage disciplines
         </h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          Homepage advert-style cards for scientific research areas and partner
-          labs. Tie each card to a published article so the image and link stay
-          in sync.
+          Edit seeded research fields shown on the homepage. Update titles,
+          summaries, images, and links anytime.
         </p>
         <div className="mt-6 space-y-4">
           {spotlights.length === 0 && (
             <p className="rounded-2xl border border-dashed border-[var(--line)] bg-white p-6 text-sm text-[var(--muted)]">
-              No research spotlights yet. Add one with the form.
+              No disciplines yet. Open this page again to auto-load seeds, or add
+              one with the form.
             </p>
           )}
           {spotlights.map((item) => {

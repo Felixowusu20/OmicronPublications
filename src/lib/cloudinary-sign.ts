@@ -14,7 +14,7 @@ export type CloudinarySignParams = {
 
 /**
  * Signed params for browser → Cloudinary direct upload.
- * Keeps large manuscripts off the Vercel/server body limit (~4.5MB).
+ * Keeps large manuscripts off the server request body limit (~4.5MB).
  */
 export function signCloudinaryUpload(opts: {
   folder: string;
@@ -30,7 +30,7 @@ export function signCloudinaryUpload(opts: {
   }
 
   const timestamp = Math.round(Date.now() / 1000);
-  const folder = opts.folder || "nahda";
+  const folder = opts.folder || "omicron";
   const resourceType = opts.resourceType ?? "auto";
   const filename = opts.filename?.trim().slice(0, 180);
 

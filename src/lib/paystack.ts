@@ -1,5 +1,5 @@
 import { getAppBaseUrl } from "@/lib/app-url";
-import { NAHDA_MERCHANT_NAME } from "@/lib/payment-display";
+import { OMICRON_MERCHANT_NAME } from "@/lib/payment-display";
 import {
   INTERNAL_PAYSTACK_CURRENCY,
   formatCustomerUsd,
@@ -251,7 +251,7 @@ export async function initializePaystackTransaction(opts: {
         metadata: {
           ...opts.metadata,
           usdCents: String(opts.usdCents),
-          merchant: NAHDA_MERCHANT_NAME,
+          merchant: OMICRON_MERCHANT_NAME,
           cancel_action: opts.callbackUrl.replace(
             "payment=success",
             "payment=cancelled",
@@ -315,7 +315,7 @@ export async function verifyPaystackTransactionSafe(
 export function makePaystackReference(paymentId: string): string {
   const stamp = Date.now().toString(36);
   const rand = Math.random().toString(36).slice(2, 8);
-  return `nahda_${paymentId.slice(0, 12)}_${stamp}_${rand}`;
+  return `omicron_${paymentId.slice(0, 12)}_${stamp}_${rand}`;
 }
 
 /** Response shape from Paystack Charge API (card / continue auth). */
@@ -348,7 +348,7 @@ export type ChargeCardInput = {
 };
 
 /**
- * Direct card charge (custom Nahda checkout). Card data is forwarded to Paystack
+ * Direct card charge (custom Omicron checkout). Card data is forwarded to Paystack
  * only — never persisted. May return send_pin / send_otp / open_url / success.
  */
 export async function chargePaystackCard(
@@ -369,7 +369,7 @@ export async function chargePaystackCard(
   if (input.metadata) {
     body.metadata = {
       ...input.metadata,
-      merchant: input.metadata.merchant || NAHDA_MERCHANT_NAME,
+      merchant: input.metadata.merchant || OMICRON_MERCHANT_NAME,
     };
   }
 

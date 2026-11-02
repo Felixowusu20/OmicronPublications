@@ -67,8 +67,8 @@ export default function HomeGoalsCmsPage() {
   const { user } = useAdminAuth();
   const [tabs, setTabs] = useState<Tab[]>([]);
   const [section, setSection] = useState<Section>({
-    eyebrow: "Get started",
-    title: "Find the right resources for your goals",
+    eyebrow: "Authors & readers",
+    title: "Start with Omicron",
     body: "",
   });
   const [form, setForm] = useState(emptyForm);
@@ -247,10 +247,10 @@ export default function HomeGoalsCmsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl">
-          Get started CMS
+          Homepage paths
         </h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          Edit homepage goal tabs — labels, stories, images, and links.
+          Edit seeded homepage paths — labels, copy, images, and links.
         </p>
       </div>
 

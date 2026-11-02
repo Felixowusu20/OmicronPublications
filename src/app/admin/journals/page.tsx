@@ -82,7 +82,7 @@ function formFromJournal(j: Journal): FormState {
 
 async function uploadJournalLogo(file: File) {
   return uploadFileDirect(file, {
-    folder: "nahda/journal-logos",
+    folder: "omicron/journal-logos",
     resourceType: "image",
   });
 }

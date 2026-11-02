@@ -1,2 +1,2 @@
-/** @deprecated Use seed-nahda-journals.ts */
-import "./seed-nahda-journals";
+/** @deprecated Use seed-omicron-journals.ts */
+import "./seed-omicron-journals";

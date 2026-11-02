@@ -327,8 +327,8 @@ export async function ensureApcCheckout(
   };
 }
 
-export function nahdaReceiptNumber(manuscriptId: string, paidAt: Date) {
-  return `NPR-${manuscriptId.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)}-${paidAt.getTime().toString(36).toUpperCase()}`;
+export function omicronReceiptNumber(manuscriptId: string, paidAt: Date) {
+  return `OPR-${manuscriptId.replace(/[^A-Za-z0-9]/g, "").slice(0, 12)}-${paidAt.getTime().toString(36).toUpperCase()}`;
 }
 
 /** Mark APC paid and move the manuscript to IN_PRODUCTION (publish queue). */
@@ -438,13 +438,13 @@ export async function markApcPaid(opts: {
 
   const base = getAppBaseUrl();
   const paidAt = updated.payment?.paidAt ?? new Date();
-  const receiptNumber = nahdaReceiptNumber(updated.manuscriptId, paidAt);
+  const receiptNumber = omicronReceiptNumber(updated.manuscriptId, paidAt);
 
   try {
-    // Always send the official Nahda receipt to the submitting author account.
+    // Always send the official Omicron receipt to the submitting author account.
     const mail = await sendEmail({
       to: submission.author.email,
-      subject: `Nahda Publications receipt: ${updated.manuscriptId} — ${amountLabel}`,
+      subject: `Omicron Publications receipt: ${updated.manuscriptId} — ${amountLabel}`,
       html: apcReceiptEmailHtml({
         authorName: updated.author.name,
         title: updated.title,
@@ -460,14 +460,14 @@ export async function markApcPaid(opts: {
         submissionUrl: `${base}/dashboard`,
       }),
       text: [
-        `Nahda Publications — APC payment receipt`,
+        `Omicron Publications — APC payment receipt`,
         ``,
         `Receipt: ${receiptNumber}`,
         `Status: PAID`,
         `Amount paid: ${amountLabel}`,
         `Currency: USD`,
-        `Method: PayPal (Nahda Publications)`,
-        `Merchant: Nahda Publications`,
+        `Method: PayPal (Omicron Publications)`,
+        `Merchant: Omicron Publications`,
         `Journal: ${updated.journal.title}`,
         `Manuscript: ${updated.manuscriptId}`,
         `Title: ${updated.title}`,
@@ -482,13 +482,13 @@ export async function markApcPaid(opts: {
     });
     if (mail.skipped) {
       console.warn(
-        "[apc-receipt] SMTP not configured — Nahda receipt was not emailed",
+        "[apc-receipt] SMTP not configured — Omicron receipt was not emailed",
       );
     } else if (!mail.ok) {
       console.error("[apc-receipt] send failed", mail.error);
     } else {
       console.info(
-        `[apc-receipt] sent Nahda USD receipt to submitting author ${submission.author.email}`,
+        `[apc-receipt] sent Omicron USD receipt to submitting author ${submission.author.email}`,
       );
     }
   } catch (err) {

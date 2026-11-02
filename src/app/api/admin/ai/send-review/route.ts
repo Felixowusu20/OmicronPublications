@@ -92,7 +92,7 @@ export async function POST(request: Request) {
           reviewerId: admin.sub,
           status: prismaStatus,
           message,
-          privateNotes: `Generated via Nahda AI Assist (${report.id})`,
+          privateNotes: `Generated vian Omicron AI Assist (${report.id})`,
         },
       });
 

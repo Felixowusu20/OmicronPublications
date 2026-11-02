@@ -64,7 +64,7 @@ export function JournalImageCard({
         ) : (
           <div className="flex h-full items-start justify-between p-3 sm:p-4">
             <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/75 sm:text-xs">
-              Nahda
+              Omicron
             </span>
             <span className="rounded bg-black/20 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white sm:px-2 sm:text-[10px]">
               {journal.shortTitle}

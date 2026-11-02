@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { JOURNAL_SUBJECT_DEFAULTS } from "../src/lib/research-fields";
 
 const adapter = new PrismaPg(process.env.DATABASE_URL!);
 const prisma = new PrismaClient({ adapter });
@@ -31,12 +32,12 @@ type SeedJournal = {
   sortOrder: number;
 };
 
-/** Official Nahda Publications journal portfolio. */
+/** Official Omicron Publications journal portfolio. */
 const JOURNALS: SeedJournal[] = [
   {
-    slug: "nahda-journal-of-science-and-technology",
-    oldSlugs: ["nahda-journal-of-science", "atlas-journal-of-science"],
-    title: "Nahda Journal of Science and Technology",
+    slug: "omicron-journal-of-science-and-technology",
+    oldSlugs: ["omicron-journal-of-science", "atlas-journal-of-science"],
+    title: "Omicron Journal of Science and Technology",
     shortTitle: "NJST",
     issn: "2456-1120",
     eIssn: "2456-1139",
@@ -46,7 +47,8 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Original research across the natural sciences, engineering, and emerging technologies.",
     aims: "To advance rigorous scientific and technological discovery with open scholarly communication.",
-    subjects: ["Science", "Engineering", "Technology", "Applied Research"],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS["omicron-journal-of-science-and-technology"],
     impactFactor: "3.42",
     acceptanceRate: "22%",
     avgReviewDays: 28,
@@ -59,12 +61,12 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 1,
   },
   {
-    slug: "nahda-journal-of-health-and-biomedical-research",
+    slug: "omicron-journal-of-health-and-biomedical-research",
     oldSlugs: [
-      "nahda-african-health-systems-review",
+      "omicron-african-health-systems-review",
       "african-health-systems-review",
     ],
-    title: "Nahda Journal of Health and Biomedical Research",
+    title: "Omicron Journal of Health and Biomedical Research",
     shortTitle: "NJHBR",
     issn: "2789-4412",
     eIssn: "2789-4420",
@@ -74,12 +76,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Peer-reviewed work in clinical science, public health, biomedicine, and health systems.",
     aims: "To strengthen evidence-based health research and biomedical innovation.",
-    subjects: [
-      "Public Health",
-      "Biomedicine",
-      "Clinical Research",
-      "Health Systems",
-    ],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-health-and-biomedical-research"
+      ],
     impactFactor: "2.18",
     acceptanceRate: "28%",
     avgReviewDays: 32,
@@ -92,9 +92,9 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 2,
   },
   {
-    slug: "nahda-journal-of-agriculture-food-and-sustainability",
+    slug: "omicron-journal-of-agriculture-food-and-sustainability",
     oldSlugs: [],
-    title: "Nahda Journal of Agriculture, Food and Sustainability",
+    title: "Omicron Journal of Agriculture, Food and Sustainability",
     shortTitle: "NJAFS",
     issn: "2810-2201",
     eIssn: "2810-221X",
@@ -104,7 +104,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Research on agriculture, food systems, nutrition, climate-smart practice, and sustainability.",
     aims: "To publish solutions that strengthen food security and sustainable agriculture.",
-    subjects: ["Agriculture", "Food Science", "Sustainability", "Environment"],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-agriculture-food-and-sustainability"
+      ],
     impactFactor: null,
     acceptanceRate: "30%",
     avgReviewDays: 30,
@@ -117,9 +120,9 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 3,
   },
   {
-    slug: "nahda-journal-of-education-learning-and-development",
-    oldSlugs: ["nahda-education-and-society", "education-and-society"],
-    title: "Nahda Journal of Education, Learning and Development",
+    slug: "omicron-journal-of-education-learning-and-development",
+    oldSlugs: ["omicron-education-and-society", "education-and-society"],
+    title: "Omicron Journal of Education, Learning and Development",
     shortTitle: "NJELD",
     issn: "2398-0044",
     eIssn: "2398-0052",
@@ -129,7 +132,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Research on pedagogy, higher education, curriculum design, learning technologies, and human development.",
     aims: "To connect educational research with classroom practice and institutional policy.",
-    subjects: ["Education", "Pedagogy", "EdTech", "Development"],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-education-learning-and-development"
+      ],
     impactFactor: null,
     acceptanceRate: "27%",
     avgReviewDays: 30,
@@ -142,9 +148,9 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 4,
   },
   {
-    slug: "nahda-journal-of-business-economics-and-innovation",
+    slug: "omicron-journal-of-business-economics-and-innovation",
     oldSlugs: [],
-    title: "Nahda Journal of Business, Economics and Innovation",
+    title: "Omicron Journal of Business, Economics and Innovation",
     shortTitle: "NJBEI",
     issn: "2822-1104",
     eIssn: "2822-1112",
@@ -154,7 +160,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Scholarship in management, economics, entrepreneurship, finance, and innovation studies.",
     aims: "To advance research that informs markets, policy, and entrepreneurial practice.",
-    subjects: ["Business", "Economics", "Innovation", "Management"],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-business-economics-and-innovation"
+      ],
     impactFactor: "2.65",
     acceptanceRate: "24%",
     avgReviewDays: 28,
@@ -167,9 +176,9 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 5,
   },
   {
-    slug: "nahda-journal-of-social-sciences-and-humanities",
+    slug: "omicron-journal-of-social-sciences-and-humanities",
     oldSlugs: [],
-    title: "Nahda Journal of Social Sciences and Humanities",
+    title: "Omicron Journal of Social Sciences and Humanities",
     shortTitle: "NJSSH",
     issn: "2831-4408",
     eIssn: "2831-4416",
@@ -179,7 +188,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Research across sociology, anthropology, history, languages, culture, and the humanities.",
     aims: "To foster critical inquiry into society, culture, and the human experience.",
-    subjects: ["Sociology", "Humanities", "Culture", "History"],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-social-sciences-and-humanities"
+      ],
     impactFactor: null,
     acceptanceRate: "29%",
     avgReviewDays: 35,
@@ -192,12 +204,12 @@ const JOURNALS: SeedJournal[] = [
     sortOrder: 6,
   },
   {
-    slug: "nahda-journal-of-interdisciplinary-research",
+    slug: "omicron-journal-of-interdisciplinary-research",
     oldSlugs: [
-      "nahda-journal-of-computational-methods",
+      "omicron-journal-of-computational-methods",
       "journal-of-computational-methods",
     ],
-    title: "Nahda Journal of Interdisciplinary Research",
+    title: "Omicron Journal of Interdisciplinary Research",
     shortTitle: "NJIR",
     issn: "2610-8893",
     eIssn: "2610-8907",
@@ -207,12 +219,10 @@ const JOURNALS: SeedJournal[] = [
     description:
       "Cross-cutting research that bridges disciplines, methods, and applied problem spaces.",
     aims: "To publish high-quality interdisciplinary work with clear methods and societal relevance.",
-    subjects: [
-      "Interdisciplinary Studies",
-      "Methods",
-      "Applied Research",
-      "Innovation",
-    ],
+    subjects:
+      JOURNAL_SUBJECT_DEFAULTS[
+        "omicron-journal-of-interdisciplinary-research"
+      ],
     impactFactor: "3.10",
     acceptanceRate: "20%",
     avgReviewDays: 26,

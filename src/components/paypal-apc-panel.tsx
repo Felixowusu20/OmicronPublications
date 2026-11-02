@@ -88,7 +88,7 @@ export function PaypalApcPanel({
     setError("");
     try {
       const uploaded = await uploadFileDirect(proof, {
-        folder: "nahda/payment-proofs",
+        folder: "omicron/payment-proofs",
         resourceType: "image",
         prepare: false,
       });
@@ -130,10 +130,10 @@ export function PaypalApcPanel({
 
       <div className="space-y-4 px-5 py-5 sm:px-6">
         <p className="rounded-xl border border-[var(--accent)]/20 bg-[var(--accent-soft)] px-3.5 py-3 text-sm leading-relaxed text-[var(--ink)]">
-          <strong className="text-[var(--accent)]">Nahda Publications PayPal</strong>
+          <strong className="text-[var(--accent)]">Omicron Publications PayPal</strong>
           <br />
           Please send your APC to {PAYPAL_ACCOUNT.accountName} ·{" "}
-          {PAYPAL_ACCOUNT.email} — the official PayPal account used by Nahda
+          {PAYPAL_ACCOUNT.email} — the official PayPal account used by Omicron
           Publications for article processing charges.
         </p>
 

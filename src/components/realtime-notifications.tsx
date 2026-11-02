@@ -224,7 +224,7 @@ export function RealtimeNotifications({
       setPermission(result);
       setShowPermBanner(false);
       if (result === "granted") {
-        new Notification("Nahda alerts enabled", {
+        new Notification("Omicron alerts enabled", {
           body: "You’ll get a desktop or mobile alert when something new happens.",
           icon: "/favicon.png",
         });

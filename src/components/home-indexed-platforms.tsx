@@ -25,7 +25,7 @@ type Props = {
 };
 
 /**
- * Trust strip: Nahda papers are discoverable on major scholarly networks.
+ * Trust strip: Omicron papers are discoverable on major scholarly networks.
  */
 export function HomeIndexedPlatforms({
   platforms: platformsProp,
@@ -46,7 +46,7 @@ export function HomeIndexedPlatforms({
   return (
     <section
       className="border-b border-[var(--line)] bg-white"
-      aria-label="Where Nahda publications appear"
+      aria-label="Where Omicron publications appear"
     >
       <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-14">
         <div

@@ -4,11 +4,11 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createPortal } from "react-dom";
-import { NahdaArticleTemplate } from "@/components/atlas-article-template";
+import { OmicronArticleTemplate } from "@/components/atlas-article-template";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 import { type ManuscriptFigure } from "@/components/manuscript-editor";
 import { ManuscriptImportPanel } from "@/components/manuscript-import";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { AuthorOrcidLine, OrcidIdIcon } from "@/components/orcid-id";
 import { useAutosave } from "@/hooks/use-autosave";
 import { uploadFileDirect } from "@/lib/client-upload";
@@ -16,10 +16,10 @@ import {
   articleTemplateToPdf,
   beginArticlePrint,
   endArticlePrint,
-  nahdaPdfFile,
+  omicronPdfFile,
   pdfErrorMessage,
   stripChromePrintHeader,
-} from "@/lib/nahda-pdf";
+} from "@/lib/omicron-pdf";
 import {
   formatAuthorWithOrcid,
   normalizeOrcid,
@@ -518,7 +518,7 @@ export default function PublishedArticlesPage() {
     setError("");
     try {
       const data = await uploadFileDirect(file, {
-        folder: "nahda/branding",
+        folder: "omicron/branding",
         resourceType: "image",
       });
       setForm((f) => ({ ...f, logoUrl: data.url }));
@@ -595,21 +595,21 @@ export default function PublishedArticlesPage() {
       const root = pdfSourceRef.current;
       if (!root) {
         throw new Error(
-          "The Nahda template is still loading. Wait a moment and try again.",
+          "The Omicron template is still loading. Wait a moment and try again.",
         );
       }
       const blob = await articleTemplateToPdf(root);
-      const file = nahdaPdfFile(form.title || selected?.title || "article", blob);
+      const file = omicronPdfFile(form.title || selected?.title || "article", blob);
       return await uploadFileDirect(file, {
         folder: "atlas/published-pdfs",
         resourceType: "raw",
       });
     } catch (err) {
-      console.error("[nahda-pdf]", err);
+      console.error("[omicron-pdf]", err);
       throw new Error(
         pdfErrorMessage(
           err,
-          "Could not generate the Nahda-styled PDF. Stay on this page and try Publish again.",
+          "Could not generate the Omicron-styled PDF. Stay on this page and try Publish again.",
         ),
       );
     }
@@ -627,11 +627,11 @@ export default function PublishedArticlesPage() {
       setPdfKind("generated");
       setUploadedPdfName("");
       setSuccess(
-        "Nahda-styled PDF generated from the template. Open it to proof, then use Generate PDF & publish.",
+        "Omicron-styled PDF generated from the template. Open it to proof, then use Generate PDF & publish.",
       );
     } catch (err) {
       setError(
-        pdfErrorMessage(err, "Could not generate the Nahda PDF from the template."),
+        pdfErrorMessage(err, "Could not generate the Omicron PDF from the template."),
       );
     } finally {
       setUploadingPdf(false);
@@ -735,7 +735,7 @@ export default function PublishedArticlesPage() {
         setError(
           pdfErrorMessage(
             err,
-            "Could not generate the Nahda-styled PDF. Stay on this page and try Publish again.",
+            "Could not generate the Omicron-styled PDF. Stay on this page and try Publish again.",
           ),
         );
         return;
@@ -796,7 +796,7 @@ export default function PublishedArticlesPage() {
 
     setSuccess(
       data.emailSent
-        ? `Published${data.doi ? ` with NID ${data.doi}` : ""}. The ${mode === "uploaded" ? "uploaded Print PDF" : "generated Nahda PDF"} is bound to the article page. Congratulations email sent to ${selected.author.email}.`
+        ? `Published${data.doi ? ` with NID ${data.doi}` : ""}. The ${mode === "uploaded" ? "uploaded Print PDF" : "generated Omicron PDF"} is bound to the article page. Congratulations email sent to ${selected.author.email}.`
         : `Published at ${data.articleUrl}${data.doi ? ` · NID ${data.doi}` : ""}. Email was not sent — check SMTP settings.`,
     );
     setSelectedId(null);
@@ -865,14 +865,14 @@ export default function PublishedArticlesPage() {
   const generatedPublishLabel =
     publishing && publishMode === "generated"
       ? publishPhase === "pdf" || publishPhase === "upload"
-        ? "Generating Nahda PDF…"
+        ? "Generating Omicron PDF…"
         : "Publishing…"
       : "Generate PDF & publish";
 
   function renderArticleTemplate() {
     if (!selected) return null;
     return (
-      <NahdaArticleTemplate
+      <OmicronArticleTemplate
         journalTitle={selected.journal.title}
         journalShortTitle={selected.journal.shortTitle}
         journalSlug={selected.journal.slug}
@@ -975,18 +975,18 @@ export default function PublishedArticlesPage() {
             background: white !important;
           }
 
-          html.nahda-print-article .publish-workspace-overlay {
+          html.omicron-print-article .publish-workspace-overlay {
             position: static !important;
             inset: auto !important;
             height: auto !important;
             overflow: visible !important;
             background: white !important;
           }
-          html.nahda-print-article .publish-workspace-chrome {
+          html.omicron-print-article .publish-workspace-chrome {
             display: none !important;
           }
 
-          #nahda-article-template {
+          #omicron-article-template {
             position: static !important;
             width: 100% !important;
             max-width: none !important;
@@ -1014,14 +1014,14 @@ export default function PublishedArticlesPage() {
           <div className="relative flex flex-wrap items-end justify-between gap-4">
             <div className="min-w-0 max-w-2xl">
               <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
-                Nahda editorial
+                Omicron editorial
               </p>
               <h1 className="mt-1.5 font-[family-name:var(--font-display)] text-2xl text-[var(--ink)] sm:text-3xl">
                 Publish accepted papers
               </h1>
               <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
                 Click a paper to open the journal template editor. Import Word or
-                Google Docs, edit in place, then publish. Nahda generates the
+                Google Docs, edit in place, then publish. Omicron generates the
                 styled PDF — readers never get the original Word file.
               </p>
             </div>
@@ -1061,7 +1061,7 @@ export default function PublishedArticlesPage() {
             </div>
           </div>
           {loading && (
-            <NahdaLoader variant="inline" label="Loading accepted queue…" />
+            <OmicronLoader variant="inline" label="Loading accepted queue…" />
           )}
           {!loading && queue.length === 0 && (
             <p className="mt-4 rounded-2xl border border-dashed border-[var(--accent)]/30 bg-[var(--accent-soft)]/50 px-5 py-8 text-center text-sm text-[var(--muted)]">
@@ -1241,7 +1241,7 @@ export default function PublishedArticlesPage() {
                 <div className="publish-workspace-chrome flex flex-wrap items-start justify-between gap-3 border-b border-[var(--line)] bg-white px-4 py-4 sm:px-6">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-                      Nahda article template
+                      Omicron article template
                     </p>
                     <h2
                       id="publish-workspace-title"
@@ -1373,7 +1373,7 @@ export default function PublishedArticlesPage() {
                         ref={templateScopeRef}
                         className="mx-auto w-full max-w-[960px] overflow-hidden bg-white shadow-sm"
                       >
-                      <NahdaArticleTemplate
+                      <OmicronArticleTemplate
                         wide
                         editable
                         onEditableChange={(patch) => {
@@ -2095,7 +2095,7 @@ export default function PublishedArticlesPage() {
         ? createPortal(
             <div
               ref={pdfSourceRef}
-              className="nahda-pdf-source nahda-pdf-print"
+              className="omicron-pdf-source omicron-pdf-print"
               aria-hidden
             >
               {renderArticleTemplate()}

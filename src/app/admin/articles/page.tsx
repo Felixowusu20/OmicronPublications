@@ -415,7 +415,7 @@ export default function ArticlesCmsPage() {
           <p className="mt-2">
             Use <strong>Edit manuscript</strong> to unpublish and revise the
             full article, then publish again from Publish papers.{" "}
-            <strong>Delete</strong> removes it from Nahda and the author’s
+            <strong>Delete</strong> removes it from Omicron and the author’s
             published list.
           </p>
           <Link

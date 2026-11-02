@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { SubmissionProgressBar } from "@/components/submission-progress-bar";
 import { formatArticleDate } from "@/lib/article-dates";
 import { uiStatus } from "@/lib/submission-utils";
@@ -244,7 +244,7 @@ export default function AdminSubmissionsPage() {
       )}
 
       <div className="mt-6 space-y-5">
-        {loading && <NahdaLoader variant="panel" label="Loading inbox…" />}
+        {loading && <OmicronLoader variant="panel" label="Loading inbox…" />}
         {!loading && submissions.length === 0 && (
           <p className="rounded-xl border border-[var(--line)] bg-white p-8 text-center text-sm text-[var(--muted)]">
             No submissions yet.

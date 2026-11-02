@@ -6,24 +6,24 @@ import { getCmsPage, parseCmsBody } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "About",
   description:
-    "About Nahda Publications — peer-reviewed journals, editorial workflow, and scholarly publishing.",
+    "About Omicron Publications — peer-reviewed journals, editorial workflow, and scholarly publishing.",
 };
 
 const PLACEHOLDERS = [
   {
     label: "Editorial excellence",
     hint: "Peer review & production",
-    tone: "from-[#1e6847]/90 to-[#0b1f33]",
+    tone: "from-[#c84e27]/90 to-[#1a3a5a]",
   },
   {
     label: "Global authors",
     hint: "Researchers worldwide",
-    tone: "from-[#0b1f33] to-[#2a7f9e]",
+    tone: "from-[#1a3a5a] to-[#2f5478]",
   },
   {
     label: "Open discovery",
     hint: "DOI-backed articles",
-    tone: "from-[#d65c33]/90 to-[#1e6847]",
+    tone: "from-[#c84e27]/90 to-[#8f3518]",
   },
 ] as const;
 
@@ -32,7 +32,7 @@ export default async function AboutPage() {
   if (!page || !page.isActive) {
     return (
       <div className="page-wrap">
-        <h1 className="page-title">About Nahda</h1>
+        <h1 className="page-title">About Omicron</h1>
         <p className="mt-4 text-sm text-[var(--muted)]">
           This page is temporarily unavailable.
         </p>
@@ -57,7 +57,7 @@ export default async function AboutPage() {
             />
           ) : (
             <div
-              className="h-full w-full bg-[radial-gradient(ellipse_at_top_right,_#1e6847_0%,_transparent_55%),linear-gradient(135deg,#0b1f33_0%,#143d2a_55%,#0b1f33_100%)]"
+              className="h-full w-full bg-[radial-gradient(ellipse_at_top_right,_#c84e27_0%,_transparent_55%),linear-gradient(135deg,#1a3a5a_0%,#243f5c_55%,#1a3a5a_100%)]"
               aria-hidden
             />
           )}
@@ -65,8 +65,8 @@ export default async function AboutPage() {
         </div>
 
         <div className="page-wrap relative py-16 sm:py-20">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-emerald-200/90">
-            Nahda Publications
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#f3c4b0]">
+            Omicron Publications
           </p>
           <h1 className="mt-3 max-w-3xl font-[family-name:var(--font-display)] text-3xl font-semibold leading-tight sm:text-5xl">
             {page.title}
@@ -90,10 +90,10 @@ export default async function AboutPage() {
                 Questions about journals, submissions, or payments?
               </p>
               <a
-                href="mailto:nahdapublications@gmail.com"
+                href="mailto:omicronpublications@gmail.com"
                 className="mt-3 inline-block break-all text-sm font-semibold text-[var(--accent)] hover:underline"
               >
-                nahdapublications@gmail.com
+                omicronpublications@gmail.com
               </a>
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link href="/journals" className="btn-primary text-xs">
@@ -110,7 +110,7 @@ export default async function AboutPage() {
               </p>
               <p className="mt-2 text-sm text-[var(--ink)]">
                 Card payments are processed securely by Paystack. Official
-                receipts are issued by Nahda Publications in USD.
+                receipts are issued by Omicron Publications in USD.
               </p>
               <div className="mt-3 flex flex-wrap gap-3 text-xs font-semibold">
                 <Link href="/privacy" className="text-[var(--accent)] hover:underline">
@@ -126,7 +126,7 @@ export default async function AboutPage() {
 
         <div className="mt-12">
           <h2 className="font-[family-name:var(--font-display)] text-2xl font-semibold text-[var(--ink)]">
-            Life at Nahda
+            Life at Omicron
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-[var(--muted)]">
             Editorial craft, research communities, and open scholarly discovery.
@@ -144,7 +144,7 @@ export default async function AboutPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={img.imageUrl}
-                      alt={img.alt || img.caption || "Nahda Publications"}
+                      alt={img.alt || img.caption || "Omicron Publications"}
                       className="aspect-[4/3] w-full object-cover"
                     />
                     {(img.caption || img.alt) && (

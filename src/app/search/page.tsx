@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { FormEvent, Suspense, useEffect, useState } from "react";
 import { ArticleListingCard } from "@/components/article-listing-card";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 
 type SearchArticle = {
   id: string;
@@ -153,7 +153,7 @@ function SearchPageInner() {
           <h1 className="page-title mt-1">Search</h1>
           <p className="mt-2 text-sm leading-relaxed text-[var(--muted)]">
             Find papers by title, author, keyword, or NID. Use the journal
-            dropdown to read only from a specific Nahda title.
+            dropdown to read only from a specific Omicron title.
           </p>
         </div>
 
@@ -310,7 +310,7 @@ function SearchPageInner() {
               </p>
               <p className="mt-1 text-sm text-[var(--muted)]">
                 Pick a journal from the dropdown to browse its papers, or search
-                across all Nahda titles. NID lookup is also on the top navbar.
+                across all Omicron titles. NID lookup is also on the top navbar.
               </p>
             </div>
           ) : null}
@@ -326,7 +326,7 @@ export default function SearchPage() {
       fallback={
         <div className="page-wrap">
           <h1 className="page-title">Search</h1>
-          <NahdaLoader variant="panel" label="Loading search…" />
+          <OmicronLoader variant="panel" label="Loading search…" />
         </div>
       }
     >

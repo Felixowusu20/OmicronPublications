@@ -68,7 +68,7 @@ function AbstractHtml({ abstract }: { abstract: string }) {
   }
   return (
     <div
-      className="nahda-abstract-html"
+      className="omicron-abstract-html"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -80,7 +80,7 @@ function ArticleBodyHtml({ body }: { body?: string }) {
   if (!html) return null;
   return (
     <div
-      className="nahda-article-body"
+      className="omicron-article-body"
       dangerouslySetInnerHTML={{ __html: html }}
     />
   );
@@ -111,13 +111,13 @@ function RunningFooter({
   citeBits: string[];
 }) {
   return (
-    <footer className="nahda-running-footer">
+    <footer className="omicron-running-footer">
       <div className="flex flex-row items-center justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2.5">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/logo-nahda.png" alt="Nahda Publications" />
+          <img src="/brand/logo-omicron.png" alt="Omicron Publications" />
           <p className="text-[10px] leading-snug text-[#5b6b7c]">
-            © {year} The Authors. Published by Nahda Publications
+            © {year} The Authors. Published by Omicron Publications
           </p>
         </div>
         <div className="flex min-w-0 items-end justify-end gap-3 sm:max-w-[55%]">
@@ -136,7 +136,7 @@ function RunningFooter({
               {citeBits.length > 0 ? ` ${citeBits.join(", ")}` : ` ${year}`}
             </p>
           </div>
-          <span className="nahda-print-folio" aria-hidden />
+          <span className="omicron-print-folio" aria-hidden />
         </div>
       </div>
     </footer>
@@ -147,7 +147,7 @@ function RunningFooter({
  * Journal-bound article preview. Header, authors, abstract, and keywords
  * come from this journal's template; the body is imported HTML.
  */
-export function NahdaArticleTemplate({
+export function OmicronArticleTemplate({
   journalTitle,
   journalShortTitle,
   manuscriptId,
@@ -181,7 +181,7 @@ export function NahdaArticleTemplate({
 }: Props) {
   const palette = journalArticlePalette(
     coverColor,
-    journalSlug || journalShortTitle || "nahda",
+    journalSlug || journalShortTitle || "omicron",
   );
   const typeLabel =
     (articleType || "Article").replace(/\s+Article$/i, "") || "Article";
@@ -249,9 +249,9 @@ export function NahdaArticleTemplate({
 
   return (
     <article
-      id="nahda-article-template"
+      id="omicron-article-template"
       lang="en"
-      className={`nahda-article mx-auto w-full bg-white text-[#0b1f33] ${
+      className={`omicron-article mx-auto w-full bg-white text-[#0b1f33] ${
         wide ? "max-w-[960px]" : "max-w-[820px]"
       }`}
       style={
@@ -267,7 +267,7 @@ export function NahdaArticleTemplate({
         } as CSSProperties
       }
     >
-      <table className="nahda-print-frame">
+      <table className="omicron-print-frame">
         <tbody>
           <tr>
             <td>
@@ -347,9 +347,9 @@ export function NahdaArticleTemplate({
         />
       </header>
 
-      <div className="nahda-article-inner box-border w-full max-w-full overflow-hidden px-6 pb-8 pt-5 sm:px-8">
+      <div className="omicron-article-inner box-border w-full max-w-full overflow-hidden px-6 pb-8 pt-5 sm:px-8">
         <div
-          className={`nahda-article-front ${editable ? "nahda-article-front-editable" : ""}`}
+          className={`omicron-article-front ${editable ? "omicron-article-front-editable" : ""}`}
         >
         {editable ? (
           <TemplateEditable
@@ -568,7 +568,7 @@ export function NahdaArticleTemplate({
           <span className="text-[#5b6b7c]">{manuscriptId}</span>
         </p>
 
-        <section className="nahda-article-abstract">
+        <section className="omicron-article-abstract">
           <h2
             className="text-[11px] font-bold uppercase tracking-[0.14em]"
             style={{
@@ -584,14 +584,14 @@ export function NahdaArticleTemplate({
               value={abstract}
               onChange={(next) => patch({ abstract: next })}
               placeholder="Abstract — click here and type"
-              className="nahda-abstract-html min-h-[4.5rem] text-[12.5px] leading-relaxed"
+              className="omicron-abstract-html min-h-[4.5rem] text-[12.5px] leading-relaxed"
             />
           ) : (
             <AbstractHtml abstract={abstract} />
           )}
           {editable || keywords.length > 0 ? (
             <section
-              className="nahda-keywords"
+              className="omicron-keywords"
               style={{ background: "var(--j-soft)" }}
             >
               <span
@@ -622,7 +622,7 @@ export function NahdaArticleTemplate({
         </section>
         </div>
 
-        <div className="nahda-article-flow">
+        <div className="omicron-article-flow">
         {editable ? (
           <TemplateEditable
             mode="html"
@@ -630,7 +630,7 @@ export function NahdaArticleTemplate({
             onChange={(next) => patch({ body: next })}
             placeholder="Click here to place the cursor and type the article body…"
             showFocusRing={false}
-            className="nahda-article-body manuscript-wysiwyg nahda-body-inplace"
+            className="omicron-article-body manuscript-wysiwyg omicron-body-inplace"
           />
         ) : bodySlot != null ? (
           bodySlot
@@ -639,7 +639,7 @@ export function NahdaArticleTemplate({
         ) : null}
 
         {funding?.trim() || conflictOfInterest?.trim() ? (
-          <section className="nahda-end-matter nahda-span-all">
+          <section className="omicron-end-matter omicron-span-all">
             {funding?.trim() ? (
               <div>
                 <h2
@@ -674,7 +674,7 @@ export function NahdaArticleTemplate({
             ) : null}
           </section>
         ) : null}
-        <section className="nahda-end-matter nahda-span-all">
+        <section className="omicron-end-matter omicron-span-all">
           <div>
             <h2
               className="text-[11px] font-bold uppercase tracking-[0.14em]"

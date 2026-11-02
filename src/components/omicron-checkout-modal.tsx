@@ -47,7 +47,7 @@ function formatExpiry(value: string) {
   return `${digits.slice(0, 2)}/${digits.slice(2)}`;
 }
 
-export function NahdaCheckoutModal({
+export function OmicronCheckoutModal({
   open,
   onClose,
   submissionId,
@@ -478,18 +478,18 @@ export function NahdaCheckoutModal({
       ) : null}
 
       <div className="relative z-10 flex max-h-[95vh] w-full max-w-md flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl sm:rounded-3xl">
-        <header className="border-b border-[var(--surface)] bg-gradient-to-br from-[var(--accent)] to-[#164f36] px-5 py-5 text-white">
+        <header className="border-b border-[var(--surface)] bg-gradient-to-br from-[var(--accent)] to-[var(--brand-navy)] px-5 py-5 text-white">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="/brand/logo-nahda-on-dark.png"
+                src="/brand/logo-omicron-on-dark.png"
                 alt=""
                 className="h-10 w-auto object-contain"
               />
               <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-100/90">
-                  Nahda Publications
+                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-orange-100/90">
+                  Omicron Publications
                 </p>
                 <h2
                   id={titleId}
@@ -512,19 +512,19 @@ export function NahdaCheckoutModal({
           </div>
 
           <div className="mt-4 rounded-2xl bg-white/10 px-4 py-3 ring-1 ring-white/15">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-emerald-100/80">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-orange-100/80">
               {step === "success" ? "Amount paid" : "Amount due"}
             </p>
             <p className="mt-1 font-[family-name:var(--font-display)] text-3xl font-semibold tracking-tight">
               {amountLabel}
             </p>
-            <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs text-emerald-50/90">
-              <dt className="text-emerald-100/70">Currency</dt>
+            <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-xs text-orange-50/90">
+              <dt className="text-orange-100/70">Currency</dt>
               <dd className="font-semibold">USD</dd>
-              <dt className="text-emerald-100/70">Merchant</dt>
-              <dd className="font-semibold">Nahda Publications</dd>
+              <dt className="text-orange-100/70">Merchant</dt>
+              <dd className="font-semibold">Omicron Publications</dd>
             </dl>
-            <p className="mt-2 truncate text-xs text-emerald-50/85">
+            <p className="mt-2 truncate text-xs text-orange-50/85">
               Manuscript {manuscriptId}
             </p>
           </div>
@@ -545,7 +545,7 @@ export function NahdaCheckoutModal({
                 Payment received
               </h3>
               <p className="mt-2 text-sm text-[var(--muted)]">
-                {amountLabel} has been charged. A Nahda Publications receipt in
+                {amountLabel} has been charged. An Omicron Publications receipt in
                 USD has been emailed
                 {receiptEmail ? ` to ${receiptEmail}` : " to you"}.
               </p>
@@ -579,7 +579,7 @@ export function NahdaCheckoutModal({
                 <div className="flex justify-between gap-3 py-2">
                   <dt className="text-[var(--muted)]">Merchant</dt>
                   <dd className="font-semibold text-[var(--ink)]">
-                    Nahda Publications
+                    Omicron Publications
                   </dd>
                 </div>
               </dl>
@@ -832,7 +832,7 @@ export function NahdaCheckoutModal({
 
               <p className="text-center text-[11px] text-[var(--muted)]">
                 Card details are sent securely to Paystack and are never stored
-                by Nahda Publications.
+                by Omicron Publications.
               </p>
             </form>
           )}

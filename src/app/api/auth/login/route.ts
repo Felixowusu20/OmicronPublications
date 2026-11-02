@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
     void sendEmail({
       to: user.email,
-      subject: "Nahda sign-in notification",
+      subject: "Omicron sign-in notification",
       html: loginAlertEmailHtml(user.name, new Date().toUTCString()),
     });
 

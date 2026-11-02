@@ -139,8 +139,8 @@ export function TemplateEditable({
       aria-multiline={mode === "html" || multiline}
       data-placeholder={placeholder}
       data-empty={empty ? "true" : "false"}
-      data-nahda-rich={mode === "html" ? "true" : undefined}
-      className={`nahda-template-editable outline-none min-w-0 max-w-full ${
+      data-omicron-rich={mode === "html" ? "true" : undefined}
+      className={`omicron-template-editable outline-none min-w-0 max-w-full ${
         showFocusRing
           ? "rounded-sm focus:ring-1 focus:ring-[var(--j-primary)]/35"
           : ""

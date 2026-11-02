@@ -1,5 +1,5 @@
 {
-  "name": "atlas-academic-publishing",
+  "name": "omicron-publications",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -15,10 +15,11 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
-    "db:seed:jcm": "tsx prisma/seed-nahda-journals.ts",
+    "db:seed:jcm": "tsx prisma/seed-omicron-journals.ts",
     "postinstall": "prisma generate",
-    "db:seed:nahda": "tsx prisma/seed-nahda-journals.ts",
-    "db:seed:cms": "tsx scripts/seed-cms.ts"
+    "db:seed:omicron": "tsx prisma/seed-omicron-journals.ts",
+    "db:seed:cms": "tsx scripts/seed-cms.ts",
+    "db:seed:home": "tsx scripts/seed-home.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.9.0",

@@ -4,7 +4,7 @@ import { jsonError, unauthorized } from "@/lib/api";
 import { requireAdmin, requireUser } from "@/lib/session";
 
 /**
- * Server-side upload (small files only on Vercel — body limit ~4.5MB).
+ * Server-side upload (small files only — body limit ~4.5MB).
  * Prefer /api/upload/sign + browser → Cloudinary for manuscripts.
  */
 export async function POST(request: Request) {
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const folder = String(form.get("folder") ?? "nahda");
+    const folder = String(form.get("folder") ?? "omicron");
     const resourceType = (String(form.get("resourceType") ?? "auto") as
       | "image"
       | "raw"

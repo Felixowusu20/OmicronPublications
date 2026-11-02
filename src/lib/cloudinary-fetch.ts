@@ -75,7 +75,7 @@ export async function fetchRemoteBytes(target: string) {
     redirect: "follow",
     headers: {
       "User-Agent":
-        "Mozilla/5.0 (compatible; NahdaPublications/1.0; +https://nahdapublications.com)",
+        "Mozilla/5.0 (compatible; OmicronPublications/1.0; +https://omicronpublications.com)",
       Accept: "*/*",
     },
   });

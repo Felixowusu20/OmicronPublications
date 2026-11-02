@@ -5,7 +5,7 @@ const TOKEN_TTL_SEC = 90 * 24 * 60 * 60;
 function tokenSecret() {
   return (
     process.env.AUTH_SECRET ||
-    "dev-only-nahda-secret-change-me-please-32chars"
+    "dev-only-omicron-secret-change-me-please-32chars"
   );
 }
 

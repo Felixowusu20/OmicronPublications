@@ -9,7 +9,7 @@ function isJournalChrome(url: string): boolean {
   return (
     /journal-logos/i.test(url) ||
     /\/brand\//i.test(url) ||
-    /logo-nahda/i.test(url)
+    /logo-omicron/i.test(url)
   );
 }
 

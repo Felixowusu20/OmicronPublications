@@ -85,13 +85,13 @@ export function articleDownloadPath(slug: string) {
 }
 
 /**
- * Same generated Nahda PDF as the author-email download, opened in the browser.
+ * Same generated Omicron PDF as the author-email download, opened in the browser.
  */
 export function articleViewPath(slug: string) {
   return `${articleDownloadPath(slug)}?view=1`;
 }
 
-/** True when the URL is a typeset Nahda PDF, not a Word/Office upload. */
+/** True when the URL is a typeset Omicron PDF, not a Word/Office upload. */
 export function isTypesetPdfUrl(url?: string | null) {
   const value = url?.trim() ?? "";
   if (!value) return false;
@@ -103,7 +103,7 @@ export function isTypesetPdfUrl(url?: string | null) {
 }
 
 /**
- * Public download should be the Nahda-styled PDF created at publish,
+ * Public download should be the Omicron-styled PDF created at publish,
  * never the author's original Word / Google Docs file.
  */
 export function resolvePublishedPdfUrl(

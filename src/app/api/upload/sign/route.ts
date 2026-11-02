@@ -11,7 +11,7 @@ const schema = z.object({
 
 /**
  * Returns a short-lived Cloudinary upload signature.
- * The browser uploads the file directly to Cloudinary (avoids Vercel 4.5MB limit).
+ * The browser uploads the file directly to Cloudinary (avoids server body limits).
  */
 export async function POST(request: Request) {
   const admin = await requireAdmin();
@@ -21,7 +21,7 @@ export async function POST(request: Request) {
   try {
     const body = schema.parse(await request.json().catch(() => ({})));
     const signed = signCloudinaryUpload({
-      folder: body.folder ?? "nahda",
+      folder: body.folder ?? "omicron",
       resourceType: body.resourceType ?? "auto",
       filename: body.filename,
     });

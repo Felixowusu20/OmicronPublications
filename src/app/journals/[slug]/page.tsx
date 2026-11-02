@@ -64,7 +64,7 @@ export async function generateMetadata({
   } catch (err) {
     console.error("[journal-metadata]", err);
   }
-  return { title: "Journal | Nahda Publications" };
+  return { title: "Journal | Omicron Publications" };
 }
 
 export default async function JournalDetailPage({

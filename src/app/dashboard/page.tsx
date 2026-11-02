@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { RequireAuth } from "@/components/require-auth";
 import { useAuth } from "@/components/auth-provider";
 import { ResubmitPanel } from "@/components/resubmit-panel";
@@ -239,7 +239,7 @@ function DashboardInner() {
               PayPal payment reported
             </p>
             <p className="mt-1 text-sm text-[var(--ink)]">
-              Thanks — editors have been notified. After Nahda confirms your
+              Thanks — editors have been notified. After Omicron confirms your
               PayPal payment, your official receipt is emailed to the submitting
               author and the manuscript moves to production.
             </p>
@@ -249,7 +249,7 @@ function DashboardInner() {
           <StatCard label="Needs action" value={needsAction.length} hint="Deadlines and revisions" tone="amber" />
           <StatCard label="In progress" value={drafts.length + active.length} hint="Drafts and active reviews" tone="teal" />
           <StatCard label="Under review" value={active.length} hint="With editors or reviewers" tone="sky" />
-          <StatCard label="Published" value={published.length} hint="Live on Nahda journals" tone="emerald" />
+          <StatCard label="Published" value={published.length} hint="Live on Omicron journals" tone="emerald" />
         </div>
 
         {needsAction.length > 0 && (
@@ -384,7 +384,7 @@ function DashboardInner() {
 
             <div className="mt-4 space-y-3">
               {loading && (
-                <NahdaLoader variant="panel" label="Loading manuscripts…" />
+                <OmicronLoader variant="panel" label="Loading manuscripts…" />
               )}
               {!loading && filtered.length === 0 && (
                 <div className="card px-6 py-12 text-center">
@@ -515,7 +515,7 @@ function DashboardInner() {
 
                       {isPublished && published?.slug && (
                         <div className="mt-3 rounded-xl border border-emerald-100 bg-emerald-50/70 px-3 py-2.5 text-xs text-emerald-950">
-                          Live on Nahda.{" "}
+                          Live on Omicron.{" "}
                           <Link
                             href={`/articles/${published.slug}`}
                             className="font-semibold underline"

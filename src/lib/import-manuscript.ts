@@ -191,10 +191,10 @@ export function sanitizeManuscriptHtml(html: string): string {
     return `<${name}${sanitizeAttrs(name, attrs)}>`;
   });
 
-  s = s.replace(/<div class="nahda-table-wrap">([\s\S]*?)<\/div>/gi, "$1");
+  s = s.replace(/<div class="omicron-table-wrap">([\s\S]*?)<\/div>/gi, "$1");
   s = s.replace(
     /<table\b[\s\S]*?<\/table>/gi,
-    (table) => `<div class="nahda-table-wrap">${table}</div>`,
+    (table) => `<div class="omicron-table-wrap">${table}</div>`,
   );
   s = bindTableCaptions(s);
 
@@ -210,7 +210,7 @@ function bindTableCaptions(html: string): string {
   let s = html.replace(
     /<figure\b([^>]*)>([\s\S]*?)<\/figure>/gi,
     (full, attrs: string, inner: string) => {
-      if (!/<table\b/i.test(inner) && !/nahda-table-wrap/i.test(inner)) {
+      if (!/<table\b/i.test(inner) && !/omicron-table-wrap/i.test(inner)) {
         return full;
       }
       const caption = inner.match(/<figcaption\b[^>]*>[\s\S]*?<\/figcaption>/i)?.[0] ?? "";
@@ -231,7 +231,7 @@ function bindTableCaptions(html: string): string {
   );
 
   s = s.replace(
-    /(<p\b[^>]*>[\s\S]*?<\/p>)\s*(<div class="nahda-table-wrap">[\s\S]*?<\/div>)/gi,
+    /(<p\b[^>]*>[\s\S]*?<\/p>)\s*(<div class="omicron-table-wrap">[\s\S]*?<\/div>)/gi,
     (full, paragraph: string, wrap: string) => {
       if (!isTableCaptionText(paragraph)) return full;
       const inner = paragraph
@@ -242,7 +242,7 @@ function bindTableCaptions(html: string): string {
   );
 
   s = s.replace(
-    /(<div class="nahda-table-wrap">[\s\S]*?<\/div>)\s*(<p\b[^>]*>[\s\S]*?<\/p>)/gi,
+    /(<div class="omicron-table-wrap">[\s\S]*?<\/div>)\s*(<p\b[^>]*>[\s\S]*?<\/p>)/gi,
     (full, wrap: string, paragraph: string) => {
       if (!isTableCaptionText(paragraph)) return full;
       const inner = paragraph
@@ -253,7 +253,7 @@ function bindTableCaptions(html: string): string {
   );
 
   s = s.replace(
-    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="nahda-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
+    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
     (_full, cap: string, table: string) =>
       `<figure class="table-full"><figcaption>${cap}</figcaption>${table}</figure>`,
   );
@@ -349,7 +349,7 @@ function normalizeHeadingColors(html: string): string {
     (_full, tag: string, attrs = "", inner: string) => {
       const custom =
         /\bdata-custom-color\b/i.test(attrs) ||
-        /\bnahda-custom-color\b/.test(attrs);
+        /\bomicron-custom-color\b/.test(attrs);
       if (custom) {
         const nextAttrs = /\bdata-custom-color\b/i.test(attrs)
           ? attrs
@@ -439,7 +439,7 @@ function cleanManuscriptArtifacts(html: string): string {
       return `<figure class="table-full"><figcaption>Table${n}. ${escapeHtml(table[2].trim())}</figcaption></figure>`;
     }
     if (looksLikeWorkflow(text)) {
-      return `<div class="nahda-workflow">${escapeHtml(text)}</div>`;
+      return `<div class="omicron-workflow">${escapeHtml(text)}</div>`;
     }
     const stripped = inner.replace(/^\s*#{1,6}\s+/, "").replace(/^\s*\*{1,2}\s*|\s*\*{1,2}\s*$/g, "");
     if (stripped !== inner) return `<${tag}${attrs}>${stripped}</${tag}>`;
@@ -449,7 +449,7 @@ function cleanManuscriptArtifacts(html: string): string {
   s = s.replace(/<(h[1-4])\b[^>]*>\s*<\/\1>/gi, "");
   s = s.replace(/<p\b[^>]*>\s*<\/p>/gi, "");
   s = s.replace(
-    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="nahda-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
+    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
     (_full, cap: string, table: string) =>
       `<figure class="table-full"><figcaption>${cap}</figcaption>${table}</figure>`,
   );
@@ -481,21 +481,21 @@ const REFERENCES_HEADING =
 /** Keep References in the same two-column flow as the rest of the body. */
 function wrapReferencesSection(html: string): string {
   const unwrapped = html.replace(
-    /<section\b[^>]*class="[^"]*\bnahda-references\b[^"]*"[^>]*>([\s\S]*?)<\/section>/gi,
+    /<section\b[^>]*class="[^"]*\bomicron-references\b[^"]*"[^>]*>([\s\S]*?)<\/section>/gi,
     "$1",
   );
   const re = /<(h[1-4]|p)(\s[^>]*)?>([\s\S]*?)<\/\1>/gi;
   let match: RegExpExecArray | null;
   while ((match = re.exec(unwrapped))) {
     if (!REFERENCES_HEADING.test(htmlToPlainText(match[3]))) continue;
-    return `${unwrapped.slice(0, match.index)}<section class="nahda-references">${unwrapped.slice(match.index)}</section>`;
+    return `${unwrapped.slice(0, match.index)}<section class="omicron-references">${unwrapped.slice(match.index)}</section>`;
   }
   return unwrapped;
 }
 
 function beautifyReferences(html: string): string {
   return html.replace(
-    /<section class="nahda-references">([\s\S]*?)<\/section>/gi,
+    /<section class="omicron-references">([\s\S]*?)<\/section>/gi,
     (_full, inner: string) => {
       const headingMatch = inner.match(/^(\s*<(h[1-4])\b[^>]*>[\s\S]*?<\/\2>)/i);
       const heading = headingMatch?.[1] ?? "";
@@ -508,19 +508,19 @@ function beautifyReferences(html: string): string {
           .filter(Boolean);
         if (chunks.length > 1) {
           return chunks
-            .map((chunk) => `<p class="nahda-ref">${chunk}</p>`)
+            .map((chunk) => `<p class="omicron-ref">${chunk}</p>`)
             .join("");
         }
-        return `<p class="nahda-ref">${body}</p>`;
+        return `<p class="omicron-ref">${body}</p>`;
       });
-      return `<section class="nahda-references">${heading}${rest}</section>`;
+      return `<section class="omicron-references">${heading}${rest}</section>`;
     },
   );
 }
 
 /**
  * Keep Introduction → References. Title, authors, abstract, and keywords
- * stay on the Nahda journal template, not in the imported body.
+ * stay on the Omicron journal template, not in the imported body.
  */
 export function sliceHtmlFromIntroduction(html: string): {
   body: string;
@@ -705,7 +705,7 @@ export function ensureManuscriptHtml(value: string): string {
 }
 
 const FULL_WIDTH_BLOCK =
-  /<figure\b[^>]*class="[^"]*\bfigure-full\b[^"]*"[^>]*>[\s\S]*?<img\b[\s\S]*?<\/figure>|<figure\b[^>]*class="[^"]*\btable-full\b[^"]*"[^>]*>[\s\S]*?(?:<table\b|<div class="nahda-table-wrap")[\s\S]*?<\/figure>|<figure\b[^>]*>[\s\S]*?<table\b[\s\S]*?<\/figure>|<div\b[^>]*class="[^"]*\b(?:nahda-table-wrap|nahda-workflow)\b[^"]*"[^>]*>[\s\S]*?<\/div>/gi;
+  /<figure\b[^>]*class="[^"]*\bfigure-full\b[^"]*"[^>]*>[\s\S]*?<img\b[\s\S]*?<\/figure>|<figure\b[^>]*class="[^"]*\btable-full\b[^"]*"[^>]*>[\s\S]*?(?:<table\b|<div class="omicron-table-wrap")[\s\S]*?<\/figure>|<figure\b[^>]*>[\s\S]*?<table\b[\s\S]*?<\/figure>|<div\b[^>]*class="[^"]*\b(?:omicron-table-wrap|omicron-workflow)\b[^"]*"[^>]*>[\s\S]*?<\/div>/gi;
 
 /**
  * Full-width tables/figures break CSS columns for everything after them.

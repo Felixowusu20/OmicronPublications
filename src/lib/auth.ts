@@ -43,10 +43,10 @@ export const seedUsers: DemoUser[] = [
   {
     id: "u-003",
     name: "Prof. Helen Markovic",
-    email: "editor@nahdapublications.com",
+    email: "editor@omicronpublications.com",
     password: "demo1234",
     role: "editor",
-    institution: "Nahda Publications",
+    institution: "Omicron Publications",
     researchInterests: ["Editorial Policy", "Open Science"],
   },
 ];

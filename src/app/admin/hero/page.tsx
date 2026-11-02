@@ -159,10 +159,10 @@ export default function HeroCmsPage() {
     <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:items-start">
       <div>
         <h1 className="font-[family-name:var(--font-display)] text-2xl sm:text-3xl">
-          Hero CMS
+          Homepage hero
         </h1>
         <p className="mt-2 text-sm text-[var(--muted)]">
-          Edit homepage carousel slides. Changes appear on the public site after
+          Edit the seeded homepage hero image and headline. Changes appear after
           save.
         </p>
         <div className="mt-6 space-y-4">

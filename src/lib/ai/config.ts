@@ -1,5 +1,5 @@
 /**
- * Nahda AI assistant configuration.
+ * Omicron AI assistant configuration.
  * Wire real providers later via env — the admin UI and /api/admin/ai/* routes
  * already read these flags.
  */
@@ -34,7 +34,7 @@ export function getAiConfigStatus(): AiConfigStatus {
   const azureEndpoint = firstNonEmpty(process.env.AZURE_OPENAI_ENDPOINT);
 
   const providerPref = (
-    process.env.NAHDA_AI_PROVIDER || ""
+    process.env.OMICRON_AI_PROVIDER || ""
   ).trim().toLowerCase() as AiProviderId | "";
 
   let provider: AiProviderId | null = null;
@@ -49,7 +49,7 @@ export function getAiConfigStatus(): AiConfigStatus {
   else if (azureKey && azureEndpoint) provider = "azure";
 
   const model = firstNonEmpty(
-    process.env.NAHDA_AI_MODEL,
+    process.env.OMICRON_AI_MODEL,
     provider === "openai" ? process.env.OPENAI_MODEL : undefined,
     provider === "anthropic" ? process.env.ANTHROPIC_MODEL : undefined,
     provider === "google"
@@ -65,7 +65,7 @@ export function getAiConfigStatus(): AiConfigStatus {
     );
   }
   if (provider && !model) {
-    missing.push("NAHDA_AI_MODEL (or provider-specific model env)");
+    missing.push("OMICRON_AI_MODEL (or provider-specific model env)");
   }
 
   return {

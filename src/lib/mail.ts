@@ -4,12 +4,12 @@ import nodemailer from "nodemailer";
 import { getAppBaseUrl } from "@/lib/app-url";
 
 const BRAND = {
-  name: "Nahda Publications",
-  green: "#1e6847",
-  ink: "#0b1f33",
-  muted: "#5b6b7c",
-  line: "#d7dee7",
-  paper: "#f7faf8",
+  name: "Omicron Publications",
+  green: "#c84e27",
+  ink: "#1a3a5a",
+  muted: "#5a6b7c",
+  line: "#e6ddd8",
+  paper: "#ffffff",
 };
 
 function appBaseUrl() {
@@ -17,7 +17,7 @@ function appBaseUrl() {
 }
 
 function logoFilePath() {
-  return path.join(process.cwd(), "public", "brand", "logo-nahda.png");
+  return path.join(process.cwd(), "public", "brand", "logo-omicron.png");
 }
 
 function getTransporter() {
@@ -42,14 +42,14 @@ function getTransporter() {
   });
 }
 
-/** Shared document-style letterhead with Nahda logo. */
+/** Shared document-style letterhead with Omicron logo. */
 function emailDocument(opts: {
   title: string;
   bodyHtml: string;
   cta?: { href: string; label: string; openInNewTab?: boolean };
   footerNote?: string;
 }) {
-  const logoSrc = "cid:nahda-logo";
+  const logoSrc = "cid:omicron-logo";
   const newTabAttrs = opts.cta?.openInNewTab
     ? ` target="_blank" rel="noopener noreferrer"`
     : "";
@@ -76,7 +76,7 @@ function emailDocument(opts: {
         <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid ${BRAND.line}">
           <tr>
             <td style="padding:28px 36px 18px;border-bottom:1px solid ${BRAND.line}">
-              <img src="${logoSrc}" alt="Nahda Publications" width="200" style="display:block;width:200px;max-width:70%;height:auto;border:0" />
+              <img src="${logoSrc}" alt="Omicron Publications" width="200" style="display:block;width:200px;max-width:70%;height:auto;border:0" />
             </td>
           </tr>
           <tr>
@@ -129,7 +129,7 @@ export async function sendEmail(options: {
 
   const from =
     process.env.SMTP_FROM ??
-    `Nahda Publications <${process.env.SMTP_USER}>`;
+    `Omicron Publications <${process.env.SMTP_USER}>`;
 
   const attachments: {
     filename: string;
@@ -140,9 +140,9 @@ export async function sendEmail(options: {
   const logoPath = logoFilePath();
   if (fs.existsSync(logoPath)) {
     attachments.push({
-      filename: "logo-nahda.png",
+      filename: "logo-omicron.png",
       path: logoPath,
-      cid: "nahda-logo",
+      cid: "omicron-logo",
     });
   }
 
@@ -186,7 +186,7 @@ export async function sendEmailToAll(
 export function welcomeEmailHtml(name: string) {
   const loginUrl = `${appBaseUrl()}/login`;
   return emailDocument({
-    title: `Welcome to Nahda Publications`,
+    title: `Welcome to Omicron Publications`,
     bodyHtml: `
       <p style="margin:0 0 14px">Dear ${escapeHtml(name)},</p>
       <p style="margin:0 0 14px">
@@ -253,7 +253,7 @@ export function submissionAcknowledgementEmailHtml(opts: {
       </p>
       <p style="margin:0 0 14px">
         You can also monitor the status of your manuscript by logging into
-        your Nahda Publications author account.
+        your Omicron Publications author account.
       </p>
       <p style="margin:0 0 14px">
         Thank you for choosing <strong>${escapeHtml(opts.journalTitle)}</strong>.
@@ -263,7 +263,7 @@ export function submissionAcknowledgementEmailHtml(opts: {
         Kind regards,<br />
         Editorial Office<br />
         ${escapeHtml(opts.journalTitle)}<br />
-        Nahda Publications
+        Omicron Publications
       </p>
     `,
     cta: { href: opts.submissionUrl, label: "View your manuscript" },
@@ -278,7 +278,7 @@ export function loginAlertEmailHtml(name: string, when: string) {
     bodyHtml: `
       <p style="margin:0 0 14px">Dear ${escapeHtml(name)},</p>
       <p style="margin:0 0 14px">
-        We recorded a successful sign-in to your Nahda Publications account at
+        We recorded a successful sign-in to your Omicron Publications account at
         <strong>${escapeHtml(when)}</strong>.
       </p>
       <p style="margin:0 0 14px">
@@ -391,7 +391,7 @@ export function reviewerInviteEmailHtml(opts: {
     bodyHtml: `
       <p style="margin:0 0 14px">Dear ${escapeHtml(opts.name)},</p>
       <p style="margin:0 0 14px">
-        A reviewer account has been created for you on Nahda Publications.
+        A reviewer account has been created for you on Omicron Publications.
       </p>
       <p style="margin:0 0 14px"><strong>Email:</strong> ${escapeHtml(opts.email)}</p>
       <p style="margin:0 0 14px">${escapeHtml(opts.tempNote)}</p>
@@ -412,7 +412,7 @@ export function passwordResetEmailHtml(opts: {
     bodyHtml: `
       <p style="margin:0 0 14px">Dear ${escapeHtml(opts.name)},</p>
       <p style="margin:0 0 14px">
-        We received a request to reset the password for your Nahda Publications
+        We received a request to reset the password for your Omicron Publications
         author account. This link expires in one hour.
       </p>
     `,
@@ -440,7 +440,7 @@ export function articlePublishedEmailHtml(opts: {
       </p>`
     : `
       <p style="margin:0 0 14px">
-        Your article is now live on the Nahda Publications website for readers
+        Your article is now live on the Omicron Publications website for readers
         worldwide. Share the public page and cite your work with pride.
       </p>`;
 
@@ -462,13 +462,13 @@ export function articlePublishedEmailHtml(opts: {
         <em>${escapeHtml(opts.journalTitle)}</em>.
       </p>
       <p style="margin:0 0 14px">
-        Thank you for choosing Nahda Publications and for the care you put into
+        Thank you for choosing Omicron Publications and for the care you put into
         this work through peer review and production. We are proud to share it
         with the scholarly community.
       </p>
       ${links}
       ${secondary}
-      <p style="margin:18px 0 14px;padding:14px 16px;background:#f4f7f6;border-left:3px solid ${BRAND.green};border-radius:4px">
+      <p style="margin:18px 0 14px;padding:14px 16px;background:#fbeee8;border-left:3px solid ${BRAND.green};border-radius:4px">
         <strong style="display:block;margin:0 0 8px;color:${BRAND.green}">
           Help your paper appear on Google Scholar
         </strong>
@@ -533,7 +533,7 @@ export function apcPaymentEmailHtml(opts: {
         style="margin:0 0 18px;border-radius:12px;overflow:hidden;border:1px solid ${BRAND.line}">
         <tr>
           <td style="background:${BRAND.green};padding:20px 22px" align="center">
-            <p style="margin:0;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.8);font-weight:700">
+            <p style="margin:0;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.85);font-weight:700">
               Amount due
             </p>
             <p style="margin:8px 0 0;font-size:32px;line-height:1.1;color:#ffffff;font-weight:700">
@@ -543,11 +543,11 @@ export function apcPaymentEmailHtml(opts: {
         </tr>
       </table>
 
-      <p style="margin:0 0 12px;padding:12px 14px;background:#f0f7f4;border:1px solid #c5ddd1;border-radius:8px;color:${BRAND.ink};font-size:13px;line-height:1.5">
-        <strong style="color:${BRAND.green}">Nahda Publications PayPal</strong><br/>
+      <p style="margin:0 0 12px;padding:12px 14px;background:#fbeee8;border:1px solid #e8c4b4;border-radius:8px;color:${BRAND.ink};font-size:13px;line-height:1.5">
+        <strong style="color:${BRAND.green}">Omicron Publications PayPal</strong><br/>
         Please send your APC to <strong>Asare Clement</strong> ·
         <a href="mailto:Asareowusuclems2024@gmail.com" style="color:${BRAND.green};font-weight:600">Asareowusuclems2024@gmail.com</a>
-        — the official PayPal account used by Nahda Publications for article processing charges.
+        — the official PayPal account used by Omicron Publications for article processing charges.
       </p>
 
       <p style="margin:0 0 12px;padding:12px 14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:${WARN};font-size:13px;line-height:1.55">
@@ -559,7 +559,7 @@ export function apcPaymentEmailHtml(opts: {
       <p style="margin:0 0 8px;font-size:14px;color:${BRAND.ink};line-height:1.55">
         1. Open PayPal and send
         <strong>${escapeHtml(opts.amountLabel)}</strong> to the account above.<br/>
-        2. Return to your <strong>Nahda author dashboard</strong>.<br/>
+        2. Return to your <strong>Omicron author dashboard</strong>.<br/>
         3. Click <strong>Pay APC</strong>, upload a screenshot of the payment,
         then click <strong>I’ve sent the PayPal payment</strong>.
       </p>
@@ -575,11 +575,11 @@ export function apcPaymentEmailHtml(opts: {
       openInNewTab: false,
     },
     footerNote:
-      "Your official Nahda receipt is emailed to the submitting author after we confirm payment.",
+      "Your official Omicron receipt is emailed to the submitting author after we confirm payment.",
   });
 }
 
-/** Official Nahda APC receipt in USD — the only receipt authors should keep. */
+/** Official Omicron APC receipt in USD — the only receipt authors should keep. */
 export function apcReceiptEmailHtml(opts: {
   authorName: string;
   title: string;
@@ -621,7 +621,7 @@ export function apcReceiptEmailHtml(opts: {
       <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 8px;border:1px solid ${BRAND.line};border-radius:12px;overflow:hidden">
         <tr>
           <td style="background:${BRAND.green};padding:22px 24px" align="center">
-            <p style="margin:0;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.75);font-weight:700">
+            <p style="margin:0;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(255,255,255,0.85);font-weight:700">
               Amount paid
             </p>
             <p style="margin:8px 0 0;font-size:38px;line-height:1;color:#ffffff;font-weight:700;letter-spacing:-0.5px">
@@ -637,7 +637,7 @@ export function apcReceiptEmailHtml(opts: {
         <tr>
           <td style="padding:6px 24px 20px;background:#ffffff">
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-family:Georgia,'Times New Roman',serif">
-              ${row("Merchant", escapeHtml("Nahda Publications"))}
+              ${row("Merchant", escapeHtml("Omicron Publications"))}
               ${row("Method", "PayPal")}
               ${row("Currency", "USD")}
               ${row("Amount", escapeHtml(opts.amountLabel))}

@@ -20,7 +20,7 @@ export default function AdminRegisterPage() {
     email: "",
     password: "",
     confirm: "",
-    institution: "Nahda Publications",
+    institution: "Omicron Publications",
   });
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [error, setError] = useState("");
@@ -65,8 +65,8 @@ export default function AdminRegisterPage() {
     <AuthSplitLayout
       imageSrc={AUTH_IMAGES.adminRegister}
       imageAlt="Focused workspace with laptop"
-      brand="Nahda Admin"
-      headline="Bootstrap the Nahda publishing control panel."
+      brand="Omicron Admin"
+      headline="Bootstrap the Omicron publishing control panel."
       subhead="Create the first super admin, then add reviewers."
     >
       <div className="auth-card shadow-xl">

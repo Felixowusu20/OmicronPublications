@@ -62,7 +62,7 @@ export function tableModelToHtml(model: WordTableModel): string {
   const classes = [
     model.fullWidth ? "table-full" : "",
     model.orientation !== "normal" ? `table-${model.orientation}` : "",
-    model.supplementary ? "nahda-supplementary" : "",
+    model.supplementary ? "omicron-supplementary" : "",
   ].filter(Boolean).join(" ");
   return `<figure class="${classes}">${caption}<table><thead><tr>${headers.map((h) => `<th>${h}</th>`).join("")}</tr></thead><tbody>${body}</tbody></table></figure>`;
 }
@@ -125,7 +125,7 @@ export function htmlToTableModel(
       : figure?.classList.contains("table-rotated")
         ? "rotated"
         : "normal",
-    supplementary: figure?.classList.contains("nahda-supplementary") ?? false,
+    supplementary: figure?.classList.contains("omicron-supplementary") ?? false,
   };
 }
 

@@ -17,7 +17,7 @@ export function getAuthSecret() {
   const secret = process.env.AUTH_SECRET;
   if (!secret || secret === "replace-with-a-long-random-secret") {
     return new TextEncoder().encode(
-      secret || "dev-only-nahda-secret-change-me-please-32chars",
+      secret || "dev-only-omicron-secret-change-me-please-32chars",
     );
   }
   return new TextEncoder().encode(secret);

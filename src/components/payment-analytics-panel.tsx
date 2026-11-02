@@ -1,17 +1,17 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 
 const PALETTE = [
-  "#1e6847",
-  "#2a7f9e",
-  "#d65c33",
-  "#6b5b95",
-  "#c4a35a",
-  "#3d6f8f",
-  "#8b4513",
-  "#4a7c59",
+  "#c84e27",
+  "#1a3a5a",
+  "#e07a4d",
+  "#2f5478",
+  "#a83f1f",
+  "#5a7a98",
+  "#8f3518",
+  "#3d5a3d",
 ];
 
 type RangePreset = "daily" | "weekly" | "monthly" | "annual" | "custom";
@@ -333,7 +333,7 @@ export function PaymentAnalyticsPanel() {
 
         <div className="p-4 sm:p-5">
           {loading && !data ? (
-            <NahdaLoader variant="panel" label="Loading payment analytics…" />
+            <OmicronLoader variant="panel" label="Loading payment analytics…" />
           ) : error ? (
             <p className="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
               {error}

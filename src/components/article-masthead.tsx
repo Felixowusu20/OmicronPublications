@@ -46,7 +46,7 @@ type Props = {
   issueHref?: string | null;
 };
 
-function NahdaMark() {
+function OmicronMark() {
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
@@ -133,7 +133,7 @@ export function ArticleMasthead({
 
   return (
     <header className="bg-white">
-      {/* Top: Nahda logo + OA / license */}
+      {/* Top: Omicron logo + OA / license */}
       <div
         className={`mx-auto flex max-w-6xl items-start justify-between gap-4 pt-6 ${
           embedded ? "px-5 sm:px-8" : "px-4 sm:px-6"
@@ -144,15 +144,15 @@ export function ArticleMasthead({
             // eslint-disable-next-line @next/next/no-img-element
             <img
               src={logoUrl}
-              alt="Nahda Publications"
+              alt="Omicron Publications"
               className="h-12 w-auto max-w-[140px] object-contain"
             />
           ) : (
-            <NahdaMark />
+            <OmicronMark />
           )}
           <div className="min-w-0">
             <p className="font-[family-name:var(--font-display)] text-[1.15rem] leading-tight tracking-tight text-[var(--ink)] sm:text-[1.35rem]">
-              <span className="font-bold text-[var(--accent)]">Nahda</span>{" "}
+              <span className="font-bold text-[var(--accent)]">Omicron</span>{" "}
               <span className="font-semibold">
                 {journalShortTitle || journalTitle}
               </span>
@@ -203,7 +203,7 @@ export function ArticleMasthead({
             href={journalPath}
             className="flex flex-1 items-center px-3 py-2 text-[11px] font-medium tracking-wide text-white/95 transition hover:bg-black/10 sm:text-xs"
           >
-            nahda/{journalSlug}
+            omicron/{journalSlug}
           </Link>
           <span className="flex items-center bg-[var(--ink)] px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-white sm:px-4 sm:text-[11px]">
             {typeBadgeLabel(articleType)}

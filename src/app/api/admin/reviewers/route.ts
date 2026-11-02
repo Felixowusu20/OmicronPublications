@@ -48,7 +48,7 @@ export async function POST(request: Request) {
 
     void sendEmail({
       to: reviewer.email,
-      subject: "Nahda reviewer account",
+      subject: "Omicron reviewer account",
       html: reviewerInviteEmailHtml({
         name: reviewer.name,
         email: reviewer.email,

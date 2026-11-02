@@ -310,14 +310,14 @@ export async function POST(request: Request, { params }: Params) {
           text: [
             `Your manuscript ${submission.manuscriptId} was accepted. APC due: ${apcAmountLabel}.`,
             ``,
-            `Pay to Nahda Publications via PayPal: Asare Clement <Asareowusuclems2024@gmail.com>`,
+            `Pay to Omicron Publications via PayPal: Asare Clement <Asareowusuclems2024@gmail.com>`,
             `PayPal note (required): ${reference}`,
             `Paper: ${submission.manuscriptId} · ${alias}`,
             ``,
             `1. Pay on PayPal: https://www.paypal.com/signin`,
             `2. Return to your author dashboard: ${base}/dashboard`,
             `3. Click Pay APC, upload a screenshot of the payment, then “I’ve sent the PayPal payment”.`,
-            `Your Nahda receipt will be emailed to ${submission.author.email} after we confirm.`,
+            `Your Omicron receipt will be emailed to ${submission.author.email} after we confirm.`,
             ...(reviewFile ? ["", `Review file: ${reviewFile.href}`] : []),
           ].join("\n"),
         });
@@ -361,14 +361,14 @@ export async function POST(request: Request, { params }: Params) {
           text: [
             `Your manuscript ${submission.manuscriptId} was accepted. APC due: ${amount}.`,
             ``,
-            `Pay to Nahda Publications via PayPal: Asare Clement <Asareowusuclems2024@gmail.com>`,
+            `Pay to Omicron Publications via PayPal: Asare Clement <Asareowusuclems2024@gmail.com>`,
             `PayPal note (required): ${reference}`,
             `Paper: ${submission.manuscriptId} · ${alias}`,
             ``,
             `1. Pay on PayPal: https://www.paypal.com/signin`,
             `2. Return to your author dashboard: ${base}/dashboard`,
             `3. Click Pay APC, upload a screenshot of the payment, then “I’ve sent the PayPal payment”.`,
-            `Your Nahda receipt will be emailed to ${submission.author.email} after we confirm.`,
+            `Your Omicron receipt will be emailed to ${submission.author.email} after we confirm.`,
             ...(reviewFile ? ["", `Review file: ${reviewFile.href}`] : []),
           ].join("\n"),
         });

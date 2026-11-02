@@ -8,7 +8,7 @@ import {
   AUTH_IMAGES,
   AuthSplitLayout,
 } from "@/components/auth-split-layout";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { PasswordField } from "@/components/password-field";
 import { TurnstileField } from "@/components/turnstile-field";
 import { turnstileEnabled } from "@/lib/turnstile-public";
@@ -53,7 +53,7 @@ function LoginForm() {
     <AuthSplitLayout
       imageSrc={AUTH_IMAGES.authorLogin}
       imageAlt="Sunlit university library reading room"
-      brand="Nahda Publications"
+      brand="Omicron Publications"
       headline="Manuscripts tracked from submission to publication."
       subhead="Manage revisions, feedback, and editorial progress."
     >
@@ -122,7 +122,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="grid h-dvh place-items-center">
-          <NahdaLoader variant="panel" label="Loading sign in…" />
+          <OmicronLoader variant="panel" label="Loading sign in…" />
         </div>
       }
     >

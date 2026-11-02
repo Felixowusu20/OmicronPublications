@@ -158,7 +158,7 @@ function isPlaceholderTable(figure: Element | null): figure is HTMLElement {
   if (!(figure instanceof HTMLElement) || figure.tagName !== "FIGURE") {
     return false;
   }
-  if (figure.querySelector("img, table, .nahda-table-wrap")) return false;
+  if (figure.querySelector("img, table, .omicron-table-wrap")) return false;
   if (figure.classList.contains("table-full")) return true;
   const cap = figure.querySelector("figcaption")?.textContent ?? "";
   return /^\s*table\b/i.test(cap);
@@ -168,7 +168,7 @@ function isEditableFigure(figure: Element | null): figure is HTMLElement {
   if (!(figure instanceof HTMLElement) || figure.tagName !== "FIGURE") {
     return false;
   }
-  if (figure.querySelector("table, .nahda-table-wrap") || isPlaceholderTable(figure)) {
+  if (figure.querySelector("table, .omicron-table-wrap") || isPlaceholderTable(figure)) {
     return false;
   }
   return true;
@@ -184,11 +184,11 @@ function closestTableTarget(
   if (
     fig &&
     root.contains(fig) &&
-    (fig.querySelector("table, .nahda-table-wrap") || isPlaceholderTable(fig))
+    (fig.querySelector("table, .omicron-table-wrap") || isPlaceholderTable(fig))
   ) {
     return fig;
   }
-  const wrap = el.closest(".nahda-table-wrap");
+  const wrap = el.closest(".omicron-table-wrap");
   if (wrap && root.contains(wrap)) return wrap as HTMLElement;
   const table = el.closest("table");
   if (table && root.contains(table)) return table;
@@ -206,9 +206,9 @@ function replaceTableTarget(target: HTMLElement, html: string): boolean {
     figure.replaceWith(next);
     return true;
   }
-  const wrap = target.classList.contains("nahda-table-wrap")
+  const wrap = target.classList.contains("omicron-table-wrap")
     ? target
-    : ((target.closest(".nahda-table-wrap") as HTMLElement | null) ?? target);
+    : ((target.closest(".omicron-table-wrap") as HTMLElement | null) ?? target);
   const prev = wrap.previousElementSibling;
   if (
     prev &&
@@ -231,25 +231,25 @@ type FigureHandle = (typeof FIGURE_HANDLES)[number];
 
 function clearFigureSelection(root: HTMLElement | null) {
   root
-    ?.querySelectorAll("figure.nahda-fig-selected")
+    ?.querySelectorAll("figure.omicron-fig-selected")
     .forEach((fig) => {
-      fig.classList.remove("nahda-fig-selected");
-      fig.querySelectorAll(".nahda-fig-chrome").forEach((n) => n.remove());
+      fig.classList.remove("omicron-fig-selected");
+      fig.querySelectorAll(".omicron-fig-chrome").forEach((n) => n.remove());
     });
 }
 
 function selectFigure(figure: HTMLElement, root: HTMLElement) {
   clearFigureSelection(root);
-  figure.classList.add("nahda-fig-selected");
-  if (figure.querySelector(":scope > .nahda-fig-chrome")) return;
+  figure.classList.add("omicron-fig-selected");
+  if (figure.querySelector(":scope > .omicron-fig-chrome")) return;
 
   const chrome = document.createElement("div");
-  chrome.className = "nahda-fig-chrome";
+  chrome.className = "omicron-fig-chrome";
   chrome.contentEditable = "false";
-  chrome.setAttribute("data-nahda-ui", "1");
+  chrome.setAttribute("data-omicron-ui", "1");
 
   const bar = document.createElement("div");
-  bar.className = "nahda-fig-toolbar";
+  bar.className = "omicron-fig-toolbar";
   bar.innerHTML =
     '<button type="button" data-fig-action="replace">Replace</button>' +
     '<button type="button" data-fig-action="full">Full / column</button>' +
@@ -264,7 +264,7 @@ function selectFigure(figure: HTMLElement, root: HTMLElement) {
 
   for (const pos of FIGURE_HANDLES) {
     const handle = document.createElement("span");
-    handle.className = `nahda-fig-handle nahda-fig-handle-${pos}`;
+    handle.className = `omicron-fig-handle omicron-fig-handle-${pos}`;
     handle.dataset.handle = pos;
     chrome.appendChild(handle);
   }
@@ -381,10 +381,10 @@ export function ManuscriptEditor({
     // Don't persist selection chrome into the manuscript HTML.
     const clone = root.cloneNode(true) as HTMLElement;
     clone
-      .querySelectorAll(".nahda-fig-chrome, .nahda-fig-selected")
+      .querySelectorAll(".omicron-fig-chrome, .omicron-fig-selected")
       .forEach((n) => {
-        if (n.classList.contains("nahda-fig-chrome")) n.remove();
-        else n.classList.remove("nahda-fig-selected");
+        if (n.classList.contains("omicron-fig-chrome")) n.remove();
+        else n.classList.remove("omicron-fig-selected");
       });
     const html = clone.innerHTML;
     lastEmitted.current = html;
@@ -419,7 +419,7 @@ export function ManuscriptEditor({
       const root = editorRef.current;
       if (!root || resizingRef.current) return;
       const t = e.target as Node | null;
-      if (t && root.contains(t) && (t as HTMLElement).closest?.("figure.nahda-fig-selected")) {
+      if (t && root.contains(t) && (t as HTMLElement).closest?.("figure.omicron-fig-selected")) {
         return;
       }
       if (t && root.contains(t) && (t as HTMLElement).closest?.("figure")) return;
@@ -762,7 +762,7 @@ export function ManuscriptEditor({
     const root = editorRef.current;
     if (!root) return;
 
-    if (target.closest(".nahda-fig-chrome")) {
+    if (target.closest(".omicron-fig-chrome")) {
       const action = target.closest("[data-fig-action]")?.getAttribute("data-fig-action");
       const fig = target.closest("figure");
       if (!fig || !root.contains(fig)) return;
@@ -776,7 +776,7 @@ export function ManuscriptEditor({
         setFigureWidthPct(fig, nextFull ? 100 : 62);
         emit();
       } else if (action === "supplementary") {
-        fig.classList.toggle("nahda-supplementary");
+        fig.classList.toggle("omicron-supplementary");
         emit();
       }
       return;
@@ -814,7 +814,7 @@ export function ManuscriptEditor({
     const target = e.target as HTMLElement;
     const root = editorRef.current;
     if (!root) return;
-    if (target.closest("figcaption, .nahda-fig-chrome")) return;
+    if (target.closest("figcaption, .omicron-fig-chrome")) return;
     const fig = target.closest("figure");
     if (!isEditableFigure(fig) || !root.contains(fig)) return;
     e.preventDefault();
@@ -826,7 +826,7 @@ export function ManuscriptEditor({
     const target = e.target as HTMLElement;
     const root = editorRef.current;
     if (!root) return;
-    const handle = target.closest(".nahda-fig-handle") as HTMLElement | null;
+    const handle = target.closest(".omicron-fig-handle") as HTMLElement | null;
     if (!handle) return;
     const fig = handle.closest("figure");
     if (!fig || !root.contains(fig)) return;
@@ -1326,7 +1326,7 @@ export function ManuscriptEditor({
           role="textbox"
           aria-multiline="true"
           data-placeholder="Click here to place the cursor and type — or import a Word / Google Doc"
-          className={`manuscript-wysiwyg nahda-article-body block w-full overflow-auto bg-white text-[15px] leading-[1.7] text-[var(--ink)] outline-none ${
+          className={`manuscript-wysiwyg omicron-article-body block w-full overflow-auto bg-white text-[15px] leading-[1.7] text-[var(--ink)] outline-none ${
             isTemplate ? "min-h-[28rem] px-0 py-3" : "resize-y px-4 py-4"
           }`}
           style={{

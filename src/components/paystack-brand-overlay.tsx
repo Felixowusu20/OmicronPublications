@@ -7,7 +7,7 @@ type Props = {
 };
 
 /**
- * Full-screen Nahda brand shell shown while Paystack popup loads / payment confirms.
+ * Full-screen Omicron brand shell shown while Paystack popup loads / payment confirms.
  * Logo + name sit above the Paystack iframe area.
  */
 export function PaystackBrandOverlay({ open, status, amountLabel }: Props) {
@@ -36,13 +36,13 @@ export function PaystackBrandOverlay({ open, status, amountLabel }: Props) {
       <header className="pointer-events-auto relative z-[210] flex items-center justify-center gap-3 border-b border-white/10 bg-[var(--ink)] px-4 py-4 shadow-lg sm:py-5">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/brand/logo-nahda-on-dark.png"
-          alt="Nahda Publications"
+          src="/brand/logo-omicron-on-dark.png"
+          alt="Omicron Publications"
           className="h-10 w-auto object-contain sm:h-12"
         />
         <div className="min-w-0 text-left">
           <p className="font-[family-name:var(--font-display)] text-lg font-semibold tracking-tight text-white sm:text-xl">
-            Nahda Publications
+            Omicron Publications
           </p>
           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--brand-orange)]">
             Secure APC checkout
@@ -65,12 +65,12 @@ export function PaystackBrandOverlay({ open, status, amountLabel }: Props) {
               <img
                 src="/favicon.png"
                 alt=""
-                className="nahda-favicon-pump relative h-16 w-16 rounded-2xl object-cover shadow-xl ring-2 ring-white/30"
+                className="omicron-favicon-pump relative h-16 w-16 rounded-2xl object-cover shadow-xl ring-2 ring-white/30"
               />
             </div>
 
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-emerald-200/90">
-              Nahda Publications
+              Omicron Publications
             </p>
             <h2 className="mt-2 max-w-sm font-[family-name:var(--font-display)] text-2xl text-white sm:text-3xl">
               {message}
@@ -86,7 +86,7 @@ export function PaystackBrandOverlay({ open, status, amountLabel }: Props) {
             </p>
 
             <div className="mt-8 h-1.5 w-48 overflow-hidden rounded-full bg-white/10">
-              <div className="nahda-load-bar h-full w-1/2 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--brand-orange)]" />
+              <div className="omicron-load-bar h-full w-1/2 rounded-full bg-gradient-to-r from-[var(--accent)] to-[var(--brand-orange)]" />
             </div>
           </div>
         </div>

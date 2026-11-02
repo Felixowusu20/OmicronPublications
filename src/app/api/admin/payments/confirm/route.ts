@@ -6,7 +6,7 @@ import { markApcPaid } from "@/lib/apc-checkout";
 import { toAdminPayment } from "@/lib/payment-dto";
 
 /**
- * Admin: confirm a PayPal APC payment received for Nahda Publications.
+ * Admin: confirm a PayPal APC payment received for Omicron Publications.
  * Marks PAID, moves to IN_PRODUCTION, emails the submitting author a receipt.
  */
 export async function POST(request: Request) {

@@ -28,7 +28,7 @@ export default async function JournalsPage() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-                Nahda Publications
+                Omicron Publications
               </p>
               <h1 className="mt-1 font-[family-name:var(--font-display)] text-3xl text-[var(--ink)] sm:text-4xl">
                 Journals

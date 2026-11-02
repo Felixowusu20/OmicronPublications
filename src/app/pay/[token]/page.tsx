@@ -2,8 +2,8 @@
 
 import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { NahdaCheckoutModal } from "@/components/nahda-checkout-modal";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronCheckoutModal } from "@/components/omicron-checkout-modal";
+import { OmicronLoader } from "@/components/omicron-loader";
 
 type PayInfo = {
   submissionId: string;
@@ -58,18 +58,18 @@ export default function PayPage({
   }
 
   if (!info) {
-    return <NahdaLoader variant="screen" label="Opening secure payment…" />;
+    return <OmicronLoader variant="screen" label="Opening secure payment…" />;
   }
 
   if (paid || info.alreadyCleared) {
     return (
-      <NahdaLoader variant="screen" label="Payment successful. Opening your dashboard…" />
+      <OmicronLoader variant="screen" label="Payment successful. Opening your dashboard…" />
     );
   }
 
   return (
     <div className="min-h-[80vh] bg-[var(--paper)]">
-      <NahdaCheckoutModal
+      <OmicronCheckoutModal
         open
         closable={false}
         onClose={() => undefined}

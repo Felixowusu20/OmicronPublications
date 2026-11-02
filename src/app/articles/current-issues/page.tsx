@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Current issues",
   description:
-    "The latest issue of each Nahda journal, grouped from articles as they are published.",
+    "The latest issue of each Omicron journal, grouped from articles as they are published.",
 };
 
 export default async function CurrentIssuesPage() {

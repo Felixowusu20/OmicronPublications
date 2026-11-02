@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { FormEvent, useEffect, useState, use } from "react";
+import { ConfirmPaymentModal } from "@/components/confirm-payment-modal";
 import { RevisionFiles } from "@/components/revision-files";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { FeedbackHistory } from "@/components/feedback-history";
 import { SubmissionProgressBar } from "@/components/submission-progress-bar";
 import { readApiJson, uploadFileDirect } from "@/lib/client-upload";
@@ -91,6 +92,7 @@ export default function AdminSubmissionDetailPage({
 
   const [waiving, setWaiving] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   async function load() {
     const res = await fetch(`/api/admin/submissions/${id}`);
@@ -136,13 +138,6 @@ export default function AdminSubmissionDetailPage({
 
   async function confirmPaypalApc() {
     if (!submission) return;
-    if (
-      !confirm(
-        "Confirm that PayPal APC payment was received for this manuscript? The submitting author will be emailed a Nahda receipt.",
-      )
-    ) {
-      return;
-    }
     setConfirming(true);
     setError("");
     setSuccess("");
@@ -157,6 +152,7 @@ export default function AdminSubmissionDetailPage({
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Could not confirm payment");
+      setConfirmOpen(false);
       if (data.submission) setSubmission(data.submission);
       else await load();
       setSuccess(
@@ -257,7 +253,7 @@ export default function AdminSubmissionDetailPage({
   }
 
   if (!submission) {
-    return <NahdaLoader variant="panel" label="Loading submission…" />;
+    return <OmicronLoader variant="panel" label="Loading submission…" />;
   }
 
   return (
@@ -529,7 +525,7 @@ export default function AdminSubmissionDetailPage({
                   <button
                     type="button"
                     disabled={confirming}
-                    onClick={() => void confirmPaypalApc()}
+                    onClick={() => setConfirmOpen(true)}
                     className="text-xs font-semibold text-[var(--accent)] underline disabled:opacity-50"
                   >
                     {confirming ? "Confirming…" : "Confirm PayPal payment"}
@@ -572,6 +568,42 @@ export default function AdminSubmissionDetailPage({
           </button>
         </form>
       </div>
+
+      <ConfirmPaymentModal
+        open={confirmOpen && Boolean(submission)}
+        busy={confirming}
+        details={
+          submission
+            ? {
+                manuscriptId: submission.manuscriptId,
+                title: submission.title,
+                amountLabel:
+                  submission.payment?.amountLabel ||
+                  submission.journal.apc ||
+                  "APC",
+                authorName: submission.author.name,
+                authorEmail: submission.author.email,
+                journalTitle: submission.journal.title,
+                paypalReference:
+                  submission.payment?.paystackReference ?? null,
+                proofUrl: submission.paymentProof?.url
+                  ? `/api/files/view?${new URLSearchParams({
+                      url: submission.paymentProof.url,
+                      resourceType: "image",
+                      ...(submission.paymentProof.publicId
+                        ? { publicId: submission.paymentProof.publicId }
+                        : {}),
+                    }).toString()}`
+                  : null,
+              }
+            : null
+        }
+        onCancel={() => {
+          if (confirming) return;
+          setConfirmOpen(false);
+        }}
+        onConfirm={() => void confirmPaypalApc()}
+      />
     </div>
   );
 }

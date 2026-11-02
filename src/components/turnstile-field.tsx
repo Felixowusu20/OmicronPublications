@@ -70,7 +70,7 @@ export function TurnstileFieldEnabled({ onToken }: Props) {
     }
 
     const existing = document.querySelector(
-      'script[data-nahda-turnstile="1"]',
+      'script[data-omicron-turnstile="1"]',
     ) as HTMLScriptElement | null;
 
     if (window.turnstile) {
@@ -84,7 +84,7 @@ export function TurnstileFieldEnabled({ onToken }: Props) {
       script.src =
         "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
       script.async = true;
-      script.dataset.nahdaTurnstile = "1";
+      script.dataset.omicronTurnstile = "1";
       loadHandler = () => {
         script.dataset.loaded = "1";
         mount();

@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import { useAdminAuth } from "@/components/admin-auth-provider";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { uploadFileDirect } from "@/lib/client-upload";
 
 type PageSlug = "about" | "terms" | "privacy";
@@ -244,7 +244,7 @@ export default function CmsAdminPage() {
   }
 
   if (!pages.length && tab === "pages") {
-    return <NahdaLoader variant="panel" label="Loading site CMS…" />;
+    return <OmicronLoader variant="panel" label="Loading site CMS…" />;
   }
 
   return (

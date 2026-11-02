@@ -122,7 +122,7 @@ export function journalColorFromKey(
 /** Derive ACS-style article chrome colors from a journal cover color. */
 export function journalArticlePalette(
   coverColor?: string | null,
-  fallbackKey = "nahda",
+  fallbackKey = "omicron",
 ): JournalArticlePalette {
   const primary = journalColorFromKey(fallbackKey, coverColor);
   return {
@@ -133,7 +133,7 @@ export function journalArticlePalette(
     wordmark: lightenHex(primary, 0.22),
     cite: CITE_ACCENT,
     openAccess: OPEN_ACCESS_GOLD,
-    ink: "#0b1f33",
+    ink: "#1a3a5a",
     muted: "#5b6b7c",
     rule: "#c5ced8",
   };

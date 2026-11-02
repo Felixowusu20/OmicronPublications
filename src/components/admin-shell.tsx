@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState, type ReactNode } from "react";
 import { useAdminAuth } from "@/components/admin-auth-provider";
 import { AdminNotifications } from "@/components/admin-notifications";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { initials } from "@/lib/session-client";
 
 type NavIcon =
@@ -84,37 +84,44 @@ const nav: {
     roles: ["SUPER_ADMIN"],
   },
   {
+    href: "/admin/homepage",
+    label: "Homepage CMS",
+    short: "Home",
+    icon: "hero",
+    roles: ["SUPER_ADMIN"],
+  },
+  {
     href: "/admin/hero",
-    label: "Hero CMS",
+    label: "Homepage hero",
     short: "Hero",
     icon: "hero",
     roles: ["SUPER_ADMIN"],
   },
   {
     href: "/admin/home-goals",
-    label: "Get started CMS",
-    short: "Goals",
+    label: "Homepage paths",
+    short: "Paths",
     icon: "cms",
     roles: ["SUPER_ADMIN"],
   },
   {
     href: "/admin/indexed-platforms",
-    label: "Indexed platforms",
-    short: "Indexed",
+    label: "Homepage platforms",
+    short: "Platforms",
     icon: "research",
     roles: ["SUPER_ADMIN"],
   },
   {
     href: "/admin/research-spotlights",
-    label: "Research areas",
-    short: "Research",
+    label: "Homepage disciplines",
+    short: "Fields",
     icon: "research",
     roles: ["SUPER_ADMIN"],
   },
   {
     href: "/admin/nids",
-    label: "NID registry",
-    short: "NIDs",
+    label: "OID registry",
+    short: "OIDs",
     icon: "doi",
     roles: ["SUPER_ADMIN", "REVIEWER"],
   },
@@ -441,8 +448,8 @@ export function AdminShell({ children }: { children: ReactNode }) {
 
   if (!ready || !user) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#0b1f33] text-white">
-        <NahdaLoader variant="dark" label="Loading admin…" />
+      <div className="flex min-h-screen items-center justify-center bg-[#1a3a5a] text-white">
+        <OmicronLoader variant="dark" label="Loading admin…" />
       </div>
     );
   }
@@ -455,43 +462,44 @@ export function AdminShell({ children }: { children: ReactNode }) {
       className="admin-theme-root flex h-dvh max-h-dvh overflow-hidden bg-[var(--admin-soft-bg,#f3f6f9)] text-[var(--ink)] print:block print:h-auto print:max-h-none print:min-h-0 print:overflow-visible print:bg-white"
     >
       <aside
-        className={`hidden shrink-0 border-r border-[var(--line)] bg-[#0b1f33] text-white transition-[width] duration-200 print:hidden lg:flex lg:flex-col ${
+        className={`hidden shrink-0 border-r border-black/10 bg-[var(--brand-orange,#c84e27)] text-white transition-[width] duration-200 print:hidden lg:flex lg:flex-col ${
           collapsed ? "w-[72px]" : "w-64"
         }`}
       >
         <div
-          className={`border-b border-white/10 ${collapsed ? "px-3 py-4" : "px-5 py-5"}`}
+          className={`border-b border-white/20 ${collapsed ? "px-2.5 py-4" : "px-4 py-4"}`}
         >
           {collapsed ? (
-            <Image
-              src="/favicon.png"
-              alt="Nahda"
-              width={32}
-              height={32}
-              className="mx-auto h-8 w-8 rounded-md"
-            />
-          ) : (
-            <div className="flex items-center gap-2.5">
+            <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-xl bg-white p-1.5 shadow-sm">
               <Image
-                src="/favicon.png"
-                alt=""
-                width={32}
-                height={32}
-                className="h-8 w-8 rounded-md"
+                src="/brand/mark-omicron.png"
+                alt="Omicron"
+                width={36}
+                height={36}
+                className="h-8 w-8 object-contain"
+                priority
               />
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-emerald-300">
-                  Nahda Admin
-                </p>
-                <p className="font-[family-name:var(--font-display)] text-lg leading-tight">
-                  Control panel
-                </p>
-              </div>
             </div>
+          ) : (
+            <div className="rounded-xl bg-white px-3 py-3 shadow-sm">
+              <Image
+                src="/brand/logo-omicron.png"
+                alt="Omicron Publications"
+                width={188}
+                height={55}
+                className="mx-auto h-12 w-auto object-contain"
+                priority
+              />
+            </div>
+          )}
+          {!collapsed && (
+            <p className="mt-3 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-white">
+              Admin
+            </p>
           )}
         </div>
 
-        <nav className={`flex-1 space-y-0.5 ${collapsed ? "p-2" : "p-3"}`}>
+        <nav className={`flex-1 space-y-0.5 overflow-y-auto ${collapsed ? "p-2" : "p-3"}`}>
           {links.map((item) => {
             const active =
               item.href === "/admin"
@@ -503,14 +511,14 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 href={item.href}
                 title={item.label}
                 aria-label={item.label}
-                className={`flex items-center rounded-lg text-sm transition ${
+                className={`flex items-center rounded-lg text-sm font-medium transition ${
                   collapsed
                     ? "justify-center px-2 py-2.5"
                     : "gap-3 px-3 py-2.5"
                 } ${
                   active
-                    ? "bg-white/15 font-semibold text-white"
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
+                    ? "bg-white font-semibold text-[var(--brand-orange,#c84e27)]"
+                    : "text-white hover:bg-white/15"
                 }`}
               >
                 <NavGlyph name={item.icon} className="h-[18px] w-[18px] shrink-0" />
@@ -520,13 +528,13 @@ export function AdminShell({ children }: { children: ReactNode }) {
           })}
         </nav>
 
-        <div className={`border-t border-white/10 ${collapsed ? "p-2" : "p-4"}`}>
+        <div className={`border-t border-white/20 ${collapsed ? "p-2" : "p-4"}`}>
           <button
             type="button"
             onClick={toggleSidebar}
             title={collapsed ? "Expand sidebar" : "Collapse sidebar"}
             aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-            className="mb-3 flex w-full items-center justify-center rounded-lg border border-white/15 px-2 py-2 text-white/80 transition hover:bg-white/10 hover:text-white"
+            className="mb-3 flex w-full items-center justify-center rounded-lg border border-white/30 px-2 py-2 text-white transition hover:bg-white/15"
           >
             <CollapseGlyph collapsed={collapsed} />
           </button>
@@ -534,7 +542,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           {collapsed ? (
             <div className="flex flex-col items-center gap-2">
               <div
-                className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-600 text-xs font-semibold"
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-xs font-semibold text-[var(--brand-orange,#c84e27)]"
                 title={user.name}
               >
                 {initials(user.name)}
@@ -544,7 +552,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
                 title="Sign out"
                 aria-label="Sign out"
                 onClick={() => void logout().then(() => router.push("/admin/login"))}
-                className="rounded-lg border border-white/15 px-2 py-1.5 text-[10px] font-semibold text-white/80 hover:bg-white/10"
+                className="rounded-lg border border-white/30 px-2 py-1.5 text-[10px] font-semibold text-white hover:bg-white/15"
               >
                 Out
               </button>
@@ -552,12 +560,12 @@ export function AdminShell({ children }: { children: ReactNode }) {
           ) : (
             <>
               <div className="flex items-center gap-3">
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-600 text-xs font-semibold">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-white text-xs font-semibold text-[var(--brand-orange,#c84e27)]">
                   {initials(user.name)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium">{user.name}</p>
-                  <p className="truncate text-[11px] text-white/50">
+                  <p className="truncate text-sm font-semibold text-white">{user.name}</p>
+                  <p className="truncate text-[11px] text-white/85">
                     {user.role === "SUPER_ADMIN" ? "Super admin" : "Reviewer"}
                   </p>
                 </div>
@@ -565,7 +573,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 onClick={() => void logout().then(() => router.push("/admin/login"))}
-                className="mt-3 w-full rounded-lg border border-white/15 px-3 py-2 text-xs font-semibold text-white/80 hover:bg-white/10"
+                className="mt-3 w-full rounded-lg border border-white/30 px-3 py-2 text-xs font-semibold text-white hover:bg-white/15"
               >
                 Sign out
               </button>
@@ -588,7 +596,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
             </button>
             <div className="lg:hidden">
               <p className="text-xs font-semibold uppercase tracking-wider text-[var(--accent)]">
-                Nahda Admin
+                Omicron Admin
               </p>
             </div>
           </div>

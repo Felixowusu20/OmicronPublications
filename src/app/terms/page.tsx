@@ -6,7 +6,7 @@ import { getCmsPage, parseCmsBody } from "@/lib/cms";
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:
-    "Terms & Conditions for Nahda Publications websites, manuscript submissions, and payments.",
+    "Terms & Conditions for Omicron Publications websites, manuscript submissions, and payments.",
 };
 
 export default async function TermsPage() {

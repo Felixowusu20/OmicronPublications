@@ -30,8 +30,8 @@ export function AuthorNotifications() {
   return (
     <RealtimeNotifications
       apiPath="/api/notifications"
-      storageKey="nahda-author-notif"
-      tagPrefix="nahda-author"
+      storageKey="omicron-author-notif"
+      tagPrefix="omicron-author"
       hrefFor={authorHref}
       enableLabel="Enable alerts"
       allLink="/notifications"

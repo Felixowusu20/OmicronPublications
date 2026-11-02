@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const article = await findArticleByNid(prisma, nid || raw);
     if (!article) {
       return {
-        title: "NID not found | Nahda Publications",
+        title: "NID not found | Omicron Publications",
         robots: { index: false, follow: true },
       };
     }
@@ -65,12 +65,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
   } catch (err) {
     console.error("[nid-metadata]", err);
-    return { title: "NID | Nahda Publications" };
+    return { title: "NID | Omicron Publications" };
   }
 }
 
 /**
- * Hosted Nahda Identifier (NID) record.
+ * Hosted Omicron Identifier (OID) record.
  * /nid/nid/ajs.2026.0001 → article / PDF
  */
 export default async function NidRecordPage({ params, searchParams }: Props) {
@@ -142,7 +142,7 @@ export default async function NidRecordPage({ params, searchParams }: Props) {
         })}
       />
       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[var(--accent)]">
-        Nahda Identifier (NID)
+        Omicron Identifier (OID)
       </p>
       <h1 className="page-title mt-1">{label} record</h1>
       <p className="mt-2 break-all font-mono text-sm text-[var(--accent)]">
@@ -258,7 +258,7 @@ export default async function NidRecordPage({ params, searchParams }: Props) {
       </div>
 
       <p className="mt-8 text-xs leading-relaxed text-[var(--muted)]">
-        This {label} is a free Nahda Identifier hosted by Nahda Publications. It
+        This {label} is a free Omicron Identifier hosted by Omicron Publications. It
         is not a Crossref DOI. Resolving{" "}
         <code className="rounded bg-[var(--surface)] px-1.5 py-0.5">
           {nidNorm}
@@ -296,7 +296,7 @@ function NidNotFound({ nid }: { nid: string }) {
         {nid || "(empty)"}
       </p>
       <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-[var(--muted)]">
-        Nahda issues free Nahda Identifiers (NIDs) for published papers. This
+        Omicron issues free Omicron Identifiers (NIDs) for published papers. This
         identifier is not linked to a live article in our catalogue. Check the
         spelling, or search by title or author.
       </p>

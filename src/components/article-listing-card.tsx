@@ -130,7 +130,7 @@ export function ArticleListingCard({
                 target="_blank"
                 rel="noreferrer"
                 className="min-w-0 max-w-full break-all font-semibold text-[var(--accent)] hover:underline"
-                title="Open the Nahda Identifier record"
+                title="Open the Omicron Identifier record"
               >
                 NID {doi}
               </Link>

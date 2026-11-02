@@ -1,5 +1,5 @@
 /**
- * Editorial AI tools mapped to Nahda’s publishing house workflow.
+ * Editorial AI tools mapped to Omicron’s publishing house workflow.
  * Providers are plugged in later; tools + API contracts are stable now.
  */
 
@@ -113,7 +113,7 @@ export const AI_TOOLS: AiToolDef[] = [
     hrefLabel: "Open inbox",
     sampleFindings: [
       "Funding acknowledgement present; COI statement missing.",
-      "Title similarity to a prior Nahda submission — verify distinct manuscript ID.",
+      "Title similarity to a prior Omicron submission — verify distinct manuscript ID.",
       "Figure captions reference “unpublished data” without ethics note.",
     ],
   },

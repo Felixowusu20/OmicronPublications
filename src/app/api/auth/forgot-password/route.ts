@@ -41,7 +41,7 @@ export async function POST(request: Request) {
 
       void sendEmail({
         to: user.email,
-        subject: "Reset your Nahda password",
+        subject: "Reset your Omicron password",
         html: passwordResetEmailHtml({
           name: user.name,
           resetUrl,

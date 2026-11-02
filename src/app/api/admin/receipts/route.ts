@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { jsonError, jsonOk, unauthorized } from "@/lib/api";
 import { requireAdmin } from "@/lib/session";
-import { nahdaReceiptNumber } from "@/lib/apc-checkout";
+import { omicronReceiptNumber } from "@/lib/apc-checkout";
 import { formatCustomerUsd } from "@/lib/payment-currency";
 import { parseAuthorsJson } from "@/lib/author-contacts";
 
@@ -86,7 +86,7 @@ export async function GET(request: Request) {
         emails.push(payment.customerEmail);
       }
 
-      const receiptNumber = nahdaReceiptNumber(
+      const receiptNumber = omicronReceiptNumber(
         payment.submission.manuscriptId,
         paidAtDate,
       );

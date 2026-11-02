@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { ConfirmDialog } from "@/components/confirm-dialog";
-import { NahdaLoader } from "@/components/nahda-loader";
+import { OmicronLoader } from "@/components/omicron-loader";
 import { useAdminAuth } from "@/components/admin-auth-provider";
 
 type BinArticle = {
@@ -283,7 +283,7 @@ export default function RecycleBinPage() {
       )}
 
       {loading && (
-        <NahdaLoader variant="panel" label="Loading recycle bin…" />
+        <OmicronLoader variant="panel" label="Loading recycle bin…" />
       )}
 
       {empty && (

@@ -221,6 +221,7 @@ export default async function HomePage({
       publishedAt: article.publishedAt.toISOString().slice(0, 10),
       journalTitle: article.journal.title,
       journalSlug: article.journal.slug,
+      coverColor: article.journal.coverColor,
       volume: numbered.volume,
       issue: numbered.issue,
       views: article.views,
@@ -319,6 +320,8 @@ export default async function HomePage({
           coverImageUrl: journal.coverImageUrl,
           description: journal.description,
           subjects: journal.subjects,
+          issn: journal.issn,
+          eIssn: journal.eIssn,
         }))}
       />
     </div>

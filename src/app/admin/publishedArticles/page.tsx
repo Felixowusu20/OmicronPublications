@@ -72,6 +72,7 @@ type QueueItem = {
     coverColor: string;
     coverImageUrl?: string | null;
     issn?: string | null;
+    eIssn?: string | null;
     frequency?: string | null;
     foundedYear?: number | null;
   };
@@ -117,6 +118,9 @@ type TemplateForm = {
   receivedAt: string;
   acceptedAt: string;
   publishedAt: string;
+  correspondingEmail: string;
+  funding: string;
+  conflictOfInterest: string;
   license: string;
   openAccess: boolean;
   isFeatured: boolean;
@@ -182,6 +186,10 @@ function emptyForm(): TemplateForm {
     receivedAt: "",
     acceptedAt: "",
     publishedAt: "",
+    correspondingEmail: "",
+    funding: "",
+    conflictOfInterest:
+      "The authors declare that there is no conflict of interest regarding the publication of this paper.",
     license: "CC BY 4.0",
     openAccess: true,
     isFeatured: true,
@@ -409,6 +417,11 @@ export default function PublishedArticlesPage() {
       receivedAt: toDateInputValue(sub.submittedAt),
       acceptedAt: "",
       publishedAt,
+      correspondingEmail: sub.author.email || "",
+      funding: sub.funding?.trim() || "",
+      conflictOfInterest:
+        sub.conflictOfInterest?.trim() ||
+        "The authors declare that there is no conflict of interest regarding the publication of this paper.",
       license: "CC BY 4.0",
       openAccess: true,
       isFeatured: true,
@@ -877,6 +890,8 @@ export default function PublishedArticlesPage() {
         journalShortTitle={selected.journal.shortTitle}
         journalSlug={selected.journal.slug}
         coverColor={selected.journal.coverColor}
+        issn={selected.journal.issn}
+        eIssn={selected.journal.eIssn}
         journalUrl={`/journals/${selected.journal.slug}`}
         articleUrl={`/articles/${slugify(form.title)}`}
         manuscriptId={selected.manuscriptId}
@@ -893,11 +908,14 @@ export default function PublishedArticlesPage() {
         receivedAt={previewDates.receivedAt}
         acceptedAt={previewDates.acceptedAt}
         publishedAt={previewDates.publishedAt}
+        correspondingEmail={form.correspondingEmail || selected.author.email}
         license={form.license}
         openAccess={form.openAccess}
         logoUrl={form.logoUrl || selected.journal.coverImageUrl || null}
-        funding={selected.funding}
-        conflictOfInterest={selected.conflictOfInterest}
+        funding={form.funding || selected.funding}
+        conflictOfInterest={
+          form.conflictOfInterest || selected.conflictOfInterest
+        }
         body={form.body}
       />
     );
@@ -1409,6 +1427,15 @@ export default function PublishedArticlesPage() {
                                 orcid: f.authorEntries[i]?.orcid ?? "",
                               }));
                             }
+                            if (patch.funding != null) {
+                              next.funding = patch.funding;
+                            }
+                            if (patch.conflictOfInterest != null) {
+                              next.conflictOfInterest = patch.conflictOfInterest;
+                            }
+                            if (patch.correspondingEmail != null) {
+                              next.correspondingEmail = patch.correspondingEmail;
+                            }
                             return next;
                           });
                         }}
@@ -1416,6 +1443,8 @@ export default function PublishedArticlesPage() {
                         journalShortTitle={selected.journal.shortTitle}
                         journalSlug={selected.journal.slug}
                         coverColor={selected.journal.coverColor}
+                        issn={selected.journal.issn}
+                        eIssn={selected.journal.eIssn}
                         journalUrl={`/journals/${selected.journal.slug}`}
                         articleUrl={`/articles/${slugify(form.title)}`}
                         manuscriptId={selected.manuscriptId}
@@ -1433,6 +1462,9 @@ export default function PublishedArticlesPage() {
                         receivedAt={previewDates.receivedAt}
                         acceptedAt={previewDates.acceptedAt}
                         publishedAt={previewDates.publishedAt}
+                        correspondingEmail={
+                          form.correspondingEmail || selected.author.email
+                        }
                         license={form.license}
                         openAccess={form.openAccess}
                         logoUrl={
@@ -1440,8 +1472,10 @@ export default function PublishedArticlesPage() {
                           selected.journal.coverImageUrl ||
                           null
                         }
-                        funding={selected.funding}
-                        conflictOfInterest={selected.conflictOfInterest}
+                        funding={form.funding ?? selected.funding}
+                        conflictOfInterest={
+                          form.conflictOfInterest ?? selected.conflictOfInterest
+                        }
                       />
                       </div>
                     </div>

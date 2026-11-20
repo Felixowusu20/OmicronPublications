@@ -147,6 +147,7 @@ export default async function JournalIssuePage({
               publishedAt: a.publishedAt.toISOString().slice(0, 10),
               journalTitle: journal.title,
               journalSlug: journal.slug,
+              coverColor: journal.coverColor,
               volume: resolvedOf(a).volume,
               issue: resolvedOf(a).issue,
               views: a.views,

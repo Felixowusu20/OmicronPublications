@@ -24,6 +24,10 @@ import {
   htmlToPlainText,
   sanitizeManuscriptHtml,
 } from "@/lib/import-manuscript";
+import {
+  clearFigureSelection,
+  selectFigure,
+} from "@/lib/figure-chrome";
 
 export type ManuscriptFigure = {
   id: string;
@@ -129,13 +133,26 @@ const FONT_OPTIONS = [
 
 const SIZE_OPTIONS = [
   { value: "", label: "Size" },
+  { value: "0", label: "Default (0)" },
+  { value: "4", label: "4" },
+  { value: "5", label: "5" },
+  { value: "6", label: "6" },
+  { value: "7", label: "7" },
+  { value: "8", label: "8" },
+  { value: "9", label: "9" },
   { value: "10", label: "10" },
   { value: "11", label: "11" },
   { value: "12", label: "12" },
+  { value: "13", label: "13" },
   { value: "14", label: "14" },
+  { value: "15", label: "15" },
   { value: "16", label: "16" },
   { value: "18", label: "18" },
+  { value: "20", label: "20" },
+  { value: "22", label: "22" },
   { value: "24", label: "24" },
+  { value: "28", label: "28" },
+  { value: "32", label: "32" },
 ];
 
 const selectClass =
@@ -229,46 +246,22 @@ function closestFigure(node: Node | null, root: HTMLElement): HTMLElement | null
 const FIGURE_HANDLES = ["nw", "ne", "sw", "se", "e", "w"] as const;
 type FigureHandle = (typeof FIGURE_HANDLES)[number];
 
-function clearFigureSelection(root: HTMLElement | null) {
-  root
-    ?.querySelectorAll("figure.omicron-fig-selected")
-    .forEach((fig) => {
-      fig.classList.remove("omicron-fig-selected");
-      fig.querySelectorAll(".omicron-fig-chrome").forEach((n) => n.remove());
-    });
-}
-
-function selectFigure(figure: HTMLElement, root: HTMLElement) {
-  clearFigureSelection(root);
-  figure.classList.add("omicron-fig-selected");
-  if (figure.querySelector(":scope > .omicron-fig-chrome")) return;
-
-  const chrome = document.createElement("div");
-  chrome.className = "omicron-fig-chrome";
-  chrome.contentEditable = "false";
-  chrome.setAttribute("data-omicron-ui", "1");
-
-  const bar = document.createElement("div");
-  bar.className = "omicron-fig-toolbar";
-  bar.innerHTML =
-    '<button type="button" data-fig-action="replace">Replace</button>' +
-    '<button type="button" data-fig-action="full">Full / column</button>' +
-    '<span className="hint">Drag corners to stretch</span>';
-  // fix: use text in span properly without className attribute in HTML
-  bar.innerHTML =
-    '<button type="button" data-fig-action="replace">Replace image</button>' +
-    '<button type="button" data-fig-action="full">Full / column</button>' +
-    '<button type="button" data-fig-action="supplementary">Supplementary</button>' +
-    '<span data-fig-hint="1">Drag corners to stretch</span>';
-  chrome.appendChild(bar);
-
+function selectFigureWithHandles(figure: HTMLElement, root: HTMLElement) {
+  selectFigure(figure, root, {
+    extraActionsHtml:
+      '<button type="button" data-fig-action="full">Full / column</button>' +
+      '<button type="button" data-fig-action="supplementary">Supplementary</button>' +
+      '<span data-fig-hint="1">Drag corners to stretch</span>',
+  });
+  const chrome = figure.querySelector(":scope > .omicron-fig-chrome");
+  if (!(chrome instanceof HTMLElement)) return;
+  if (chrome.querySelector(".omicron-fig-handle")) return;
   for (const pos of FIGURE_HANDLES) {
     const handle = document.createElement("span");
     handle.className = `omicron-fig-handle omicron-fig-handle-${pos}`;
     handle.dataset.handle = pos;
     chrome.appendChild(handle);
   }
-  figure.appendChild(chrome);
 }
 
 function setFigureWidthPct(figure: HTMLElement, pct: number) {
@@ -530,26 +523,84 @@ export function ManuscriptEditor({
   function applySize(size: string) {
     const heading = colorTargetFromSelection();
     const root = editorRef.current;
-    if (heading && root?.contains(heading)) {
-      heading.style.fontSize = `${size}pt`;
+    if (!root) return;
+
+    // "0" / empty resets to the default article size.
+    if (!size || size === "0") {
+      if (heading && root.contains(heading)) {
+        heading.style.removeProperty("font-size");
+        heading.style.removeProperty("letter-spacing");
+        emit();
+        return;
+      }
+      root.focus();
+      document.execCommand("removeFormat", false);
+      const sel = window.getSelection();
+      const node = sel?.anchorNode;
+      const painted =
+        (node instanceof HTMLElement ? node : node?.parentElement)?.closest(
+          "span[style*='font-size'], font",
+        ) ?? null;
+      if (painted instanceof HTMLElement && root.contains(painted)) {
+        painted.style.removeProperty("font-size");
+        if (!painted.getAttribute("style")?.trim()) {
+          painted.replaceWith(...Array.from(painted.childNodes));
+        }
+      }
+      emit();
+      return;
+    }
+
+    const parsed = Number(size);
+    const pt = Number.isFinite(parsed)
+      ? String(Math.max(4, Math.min(72, Math.round(parsed))))
+      : size;
+
+    if (heading && root.contains(heading)) {
+      heading.style.fontSize = `${pt}pt`;
       heading.style.letterSpacing = "normal";
       emit();
       return;
     }
-    const el = editorRef.current;
-    if (!el) return;
-    el.focus();
+    root.focus();
     document.execCommand("styleWithCSS", false, "true");
     document.execCommand("fontSize", false, "7");
-    el.querySelectorAll('font[size="7"], span[style*="xxx-large"]').forEach(
+    root.querySelectorAll('font[size="7"], span[style*="xxx-large"]').forEach(
       (node) => {
         const span = document.createElement("span");
-        span.style.fontSize = `${size}pt`;
+        span.style.fontSize = `${pt}pt`;
         span.innerHTML = (node as HTMLElement).innerHTML;
         node.replaceWith(span);
       },
     );
     emit();
+  }
+
+  function bumpSize(delta: number) {
+    const root = editorRef.current;
+    if (!root) return;
+    const heading = colorTargetFromSelection();
+    const sel = window.getSelection();
+    const node = sel?.anchorNode;
+    const target =
+      (heading && root.contains(heading) ? heading : null) ||
+      ((node instanceof HTMLElement ? node : node?.parentElement)?.closest(
+        "span, p, li, h1, h2, h3, h4, td, th",
+      ) as HTMLElement | null);
+
+    const raw =
+      target && root.contains(target)
+        ? target.style.fontSize || window.getComputedStyle(target).fontSize
+        : "15.5px";
+    const match = String(raw).trim().match(/^([\d.]+)\s*(px|pt)?$/i);
+    let current = 15;
+    if (match) {
+      const n = Number(match[1]);
+      current =
+        (match[2] || "px").toLowerCase() === "pt" ? n : n * 0.75;
+    }
+    const next = Math.max(4, Math.min(72, Math.round(current + delta)));
+    applySize(String(next));
   }
 
   function colorTargetFromSelection(): HTMLElement | null {
@@ -766,11 +817,22 @@ export function ManuscriptEditor({
       const action = target.closest("[data-fig-action]")?.getAttribute("data-fig-action");
       const fig = target.closest("figure");
       if (!fig || !root.contains(fig)) return;
-      e.preventDefault();
-      e.stopPropagation();
       if (action === "replace") {
+        // Open picker before preventDefault so the browser allows the dialog.
         targetFigureRef.current = fig;
         fileInputRef.current?.click();
+        e.preventDefault();
+        e.stopPropagation();
+        return;
+      }
+      e.preventDefault();
+      e.stopPropagation();
+      if (action === "cancel") {
+        clearFigureSelection(root);
+      } else if (action === "delete") {
+        clearFigureSelection(root);
+        fig.remove();
+        emit();
       } else if (action === "full") {
         const nextFull = !fig.classList.contains("figure-full");
         setFigureWidthPct(fig, nextFull ? 100 : 62);
@@ -796,14 +858,15 @@ export function ManuscriptEditor({
 
     const fig = target.closest("figure");
     if (isEditableFigure(fig) && root.contains(fig)) {
-      e.preventDefault();
       targetFigureRef.current = fig;
       // Empty “Select image to insert” slot → open the OS file picker.
       if (!fig.querySelector("img")) {
         fileInputRef.current?.click();
+        e.preventDefault();
         return;
       }
-      selectFigure(fig, root);
+      e.preventDefault();
+      selectFigureWithHandles(fig, root);
       return;
     }
 
@@ -1016,8 +1079,20 @@ export function ManuscriptEditor({
                   </option>
                 ))}
               </select>
+              <ToolBtn title="Decrease font size" onClick={() => bumpSize(-1)}>
+                A−
+              </ToolBtn>
+              <ToolBtn title="Increase font size" onClick={() => bumpSize(1)}>
+                A+
+              </ToolBtn>
+              <ToolBtn
+                title="Reset font size to default (0)"
+                onClick={() => applySize("0")}
+              >
+                A0
+              </ToolBtn>
               <select
-                className={`${selectClass} max-w-[4.5rem]`}
+                className={`${selectClass} max-w-[5.5rem]`}
                 defaultValue=""
                 title="Font size"
                 aria-label="Font size"
@@ -1033,6 +1108,39 @@ export function ManuscriptEditor({
                   </option>
                 ))}
               </select>
+              <label
+                className="flex h-7 items-center gap-1 rounded-md border border-[var(--line)] bg-white px-1.5 text-[11px] font-semibold text-[var(--ink)]"
+                title="Custom font size in points (4–72)"
+              >
+                <span className="text-[var(--muted)]">pt</span>
+                <input
+                  type="number"
+                  min={4}
+                  max={72}
+                  step={1}
+                  defaultValue={15}
+                  className="w-10 border-0 bg-transparent p-0 text-[11px] font-semibold outline-none"
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter") return;
+                    e.preventDefault();
+                    const value = (e.target as HTMLInputElement).value.trim();
+                    applySize(value || "0");
+                  }}
+                />
+                <button
+                  type="button"
+                  className="rounded px-1 text-[10px] text-[var(--accent)] hover:bg-[var(--surface)]"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={(e) => {
+                    const input = (
+                      e.currentTarget.previousElementSibling as HTMLInputElement
+                    );
+                    applySize(input?.value?.trim() || "0");
+                  }}
+                >
+                  Set
+                </button>
+              </label>
             </ToolGroup>
             <Divider />
             <ToolGroup label="Style">

@@ -1,8 +1,10 @@
 import Link from "next/link";
+import type { CSSProperties } from "react";
 import { ArticleMetrics } from "@/components/article-metrics";
 import { authorDisplayName } from "@/lib/orcid";
 import { articleViewPath } from "@/lib/submission-utils";
 import { htmlToPlainText } from "@/lib/import-manuscript";
+import { journalArticlePalette } from "@/lib/journal-colors";
 
 export type ArticleCardData = {
   slug: string;
@@ -15,6 +17,7 @@ export type ArticleCardData = {
   publishedAt: string;
   journalTitle: string;
   journalSlug: string;
+  coverColor?: string | null;
   volume?: string;
   issue?: string;
   views?: number;
@@ -46,16 +49,29 @@ export function ArticleListingCard({
   const doi =
     article.doi && article.doi !== "Pending" ? article.doi : null;
   const href = `/articles/${article.slug}`;
+  const palette = journalArticlePalette(
+    article.coverColor,
+    article.journalSlug,
+  );
 
   return (
     <article
-      className="group flex h-full w-full min-w-0 max-w-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[var(--line)] transition hover:-translate-y-0.5 hover:shadow-md hover:ring-[var(--accent)]/25"
+      className="group flex h-full w-full min-w-0 max-w-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[var(--line)] transition hover:-translate-y-0.5 hover:shadow-md"
+      style={
+        {
+          "--j-primary": palette.primary,
+          "--j-link": palette.link,
+        } as CSSProperties
+      }
       data-aos="fade-up"
       data-aos-delay={aosDelay || undefined}
       data-aos-duration="900"
     >
-      {/* Accent strip — mirrors article page masthead bar */}
-      <div className="flex min-w-0 items-stretch bg-[var(--accent)] text-white">
+      {/* Accent strip — journal color */}
+      <div
+        className="flex min-w-0 items-stretch text-white"
+        style={{ background: palette.primary }}
+      >
         <Link
           href={`/journals/${article.journalSlug}`}
           className="min-w-0 flex-1 truncate px-3 py-2 text-[11px] font-medium leading-snug tracking-wide text-white/95 transition hover:bg-black/10 sm:px-3.5 sm:text-xs"
@@ -98,7 +114,9 @@ export function ArticleListingCard({
         </div>
 
         <Link href={href} className="block min-w-0">
-          <h3 className="mt-2.5 break-words text-pretty font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--ink)] transition group-hover:text-[var(--accent)] sm:text-lg">
+          <h3
+            className="mt-2.5 break-words text-pretty font-[family-name:var(--font-display)] text-base font-semibold leading-snug text-[var(--ink)] transition group-hover:text-[var(--j-link)] sm:text-lg"
+          >
             {article.title}
           </h3>
         </Link>
@@ -114,7 +132,10 @@ export function ArticleListingCard({
           </p>
         ) : null}
 
-        <p className="mt-3 min-h-[2.4rem] break-words text-justify text-xs font-medium leading-relaxed text-[var(--accent)] line-clamp-2 sm:text-[13px]">
+        <p
+          className="mt-3 min-h-[2.4rem] break-words text-justify text-xs font-medium leading-relaxed line-clamp-2 sm:text-[13px]"
+          style={{ color: palette.link }}
+        >
           {article.keywords && article.keywords.length > 0
             ? `${article.keywords.slice(0, 5).join(", ")}${
                 article.keywords.length > 5 ? "…" : ""
@@ -129,7 +150,7 @@ export function ArticleListingCard({
                 href={`/nid/${doi}`}
                 target="_blank"
                 rel="noreferrer"
-                className="min-w-0 max-w-full break-all font-semibold text-[var(--accent)] hover:underline"
+                className="min-w-0 max-w-full break-all font-semibold text-[var(--j-link)] hover:underline"
                 title="Open the Omicron Identifier record"
               >
                 NID {doi}

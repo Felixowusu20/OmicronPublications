@@ -19,9 +19,21 @@ export async function POST(request: Request) {
       })
       .parse(await request.json());
 
+    const submissionInclude = {
+      journal: true,
+      author: {
+        select: { id: true, name: true, email: true, institution: true },
+      },
+      payment: true,
+      feedback: {
+        include: { reviewer: { select: { name: true } } },
+        orderBy: { createdAt: "desc" as const },
+      },
+    };
+
     const submission = await prisma.submission.findUnique({
       where: { id: body.submissionId },
-      include: { payment: true, author: true, journal: true },
+      include: submissionInclude,
     });
     if (!submission) return jsonError("Submission not found", 404);
 
@@ -45,13 +57,7 @@ export async function POST(request: Request) {
             progress: progressForStatus("IN_PRODUCTION"),
             actionRequired: null,
           },
-          include: {
-            journal: true,
-            author: {
-              select: { id: true, name: true, email: true, institution: true },
-            },
-            payment: true,
-          },
+          include: submissionInclude,
         });
         return jsonOk({
           submission: withAdminPayment(moved),
@@ -93,13 +99,7 @@ export async function POST(request: Request) {
           progress: progressForStatus("IN_PRODUCTION"),
           actionRequired: null,
         },
-        include: {
-          journal: true,
-          author: {
-            select: { id: true, name: true, email: true, institution: true },
-          },
-          payment: true,
-        },
+        include: submissionInclude,
       });
 
       await tx.notification.create({

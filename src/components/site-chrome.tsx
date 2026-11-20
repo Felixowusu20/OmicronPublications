@@ -195,44 +195,56 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50">
       {/* ACS-style utility bar — Omicron navy */}
       <div className="bg-[var(--brand-navy)] text-white">
-        <div className="mx-auto flex h-9 max-w-6xl items-center justify-between gap-3 px-4 text-[12px] sm:px-6">
-          <nav className="flex min-w-0 items-center gap-3 overflow-x-auto whitespace-nowrap sm:gap-4">
-            <Link href="/" className="font-semibold text-white">
-              Omicron
-            </Link>
-            <span className="text-white/35" aria-hidden>
-              |
-            </span>
-            <Link href="/journals" className="text-white/90 hover:text-white">
+        <div className="mx-auto flex h-11 max-w-6xl items-center justify-between gap-4 px-4 text-[15px] leading-none sm:h-12 sm:px-6 sm:text-[16px]">
+          <nav className="flex min-w-0 items-center gap-4 overflow-x-auto whitespace-nowrap sm:gap-5">
+            <Link
+              href="/journals"
+              className="font-[family-name:var(--font-body)] text-white/90 transition hover:text-white"
+            >
               Journals
             </Link>
-            <Link href="/articles" className="text-white/90 hover:text-white">
+            <Link
+              href="/articles"
+              className="font-[family-name:var(--font-body)] text-white/90 transition hover:text-white"
+            >
               Articles
             </Link>
-            <Link href="/about" className="hidden text-white/90 hover:text-white sm:inline">
+            <Link
+              href="/about"
+              className="hidden font-[family-name:var(--font-body)] text-white/90 transition hover:text-white sm:inline"
+            >
               About
             </Link>
           </nav>
-          <div className="flex shrink-0 items-center gap-3">
+          <div className="flex shrink-0 items-center gap-4 sm:gap-5">
             {ready && user ? (
               <>
-                <Link href="/dashboard" className="hidden text-white/90 hover:text-white sm:inline">
+                <Link
+                  href="/dashboard"
+                  className="hidden font-[family-name:var(--font-body)] text-white/90 transition hover:text-white sm:inline"
+                >
                   Dashboard
                 </Link>
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="text-white/90 hover:text-white"
+                  className="font-[family-name:var(--font-body)] text-white/90 transition hover:text-white"
                 >
                   Sign out
                 </button>
               </>
             ) : (
               <>
-                <Link href="/login" className="text-white/90 hover:text-white">
+                <Link
+                  href="/login"
+                  className="font-[family-name:var(--font-body)] text-white/90 transition hover:text-white"
+                >
                   Sign in
                 </Link>
-                <Link href="/register" className="font-semibold text-white hover:underline">
+                <Link
+                  href="/register"
+                  className="font-[family-name:var(--font-display)] font-semibold tracking-wide text-white transition hover:underline"
+                >
                   Register
                 </Link>
               </>
@@ -276,7 +288,7 @@ export function SiteHeader() {
                   <div className="flex items-center">
                     <Link
                       href={item.href}
-                      className={`px-3 py-2 text-[15px] font-medium transition ${
+                      className={`px-3.5 py-2 font-[family-name:var(--font-display)] text-[17px] font-normal tracking-wide transition sm:text-[18px] ${
                         active
                           ? "text-[var(--accent)]"
                           : "text-[var(--ink)] hover:text-[var(--accent)]"

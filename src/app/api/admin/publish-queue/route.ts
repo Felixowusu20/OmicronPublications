@@ -23,6 +23,7 @@ import {
   jointAuthorGreeting,
   notifyAuthorContacts,
 } from "@/lib/author-contacts";
+import { resolveSupplementaryHtml } from "@/lib/supplementary";
 
 /** Accepted manuscripts waiting to be published into the journal template. */
 export async function GET() {
@@ -114,6 +115,8 @@ const publishSchema = z.object({
   isFeatured: z.boolean().optional(),
   coverImageUrl: z.string().optional(),
   body: z.string().optional(),
+  supplementary: z.string().optional(),
+  supplementaryUrl: z.string().url().optional().or(z.literal("")),
   figures: z
     .array(
       z.object({
@@ -258,6 +261,22 @@ export async function POST(request: Request) {
       ? placement.issue
       : body.issue!.trim();
 
+    const supplementaryHtml = ensureManuscriptHtml(
+      resolveSupplementaryHtml({
+        supplementary:
+          body.supplementary ??
+          (submission as { productionSupplementary?: string | null })
+            .productionSupplementary,
+        body: body.body ?? submission.productionBody,
+      }),
+    );
+    const supplementaryUrl =
+      (body.supplementaryUrl?.trim() ||
+        (submission as { productionSupplementaryUrl?: string | null })
+          .productionSupplementaryUrl ||
+        "") ||
+      null;
+
     const articleData = {
       title: body.title,
       slug,
@@ -278,6 +297,8 @@ export async function POST(request: Request) {
       abstract,
       keywords: body.keywords ?? submission.keywords,
       manuscriptUrl: publishedPdfUrl,
+      supplementaryHtml: supplementaryHtml || null,
+      supplementaryUrl: supplementaryUrl || null,
       coverImageUrl:
         body.coverImageUrl || submission.journal.coverImageUrl || undefined,
       isFeatured: body.isFeatured ?? true,
@@ -313,6 +334,11 @@ export async function POST(request: Request) {
             status: "PUBLISHED",
             progress: progressForStatus("PUBLISHED"),
             actionRequired: null,
+            ...(body.body != null
+              ? { productionBody: ensureManuscriptHtml(body.body) }
+              : {}),
+            productionSupplementary: supplementaryHtml || null,
+            productionSupplementaryUrl: supplementaryUrl || null,
           },
         });
 
@@ -353,6 +379,7 @@ export async function POST(request: Request) {
     // Refresh SEO surfaces so Google/Scholar discover the new article promptly.
     try {
       revalidatePath(`/articles/${result.slug}`);
+    revalidatePath(`/articles/${result.slug}/supplementary`);
       revalidatePath(`/journals/${result.journal.slug}`);
       revalidatePath(
         `/journals/${result.journal.slug}/issues/${issueKey(result.volume, result.issue)}`,

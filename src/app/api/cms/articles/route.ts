@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { prisma, withDbRetry } from "@/lib/db";
 import { jsonOk } from "@/lib/api";
 
 export async function GET(request: Request) {
@@ -7,19 +7,22 @@ export async function GET(request: Request) {
     const featured = searchParams.get("featured") === "1";
     const limit = Math.min(Number(searchParams.get("limit") ?? "12") || 12, 50);
 
-    const articles = await prisma.publishedArticle.findMany({
-      where: {
-        isActive: true,
-        ...(featured ? { isFeatured: true } : {}),
-      },
-      include: { journal: true },
-      orderBy: { publishedAt: "desc" },
-      take: limit,
-    });
+    const articles = await withDbRetry(() =>
+      prisma.publishedArticle.findMany({
+        where: {
+          isActive: true,
+          ...(featured ? { isFeatured: true } : {}),
+        },
+        include: { journal: true },
+        orderBy: { publishedAt: "desc" },
+        take: limit,
+      }),
+    );
 
     return jsonOk({ articles });
   } catch (err) {
-    console.error(err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[cms/articles] unavailable:", message.split("\n")[0]);
     return jsonOk({ articles: [] });
   }
 }

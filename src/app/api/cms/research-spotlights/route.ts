@@ -1,23 +1,25 @@
-import { prisma } from "@/lib/db";
+import { prisma, withDbRetry } from "@/lib/db";
 import { jsonOk } from "@/lib/api";
 
 export async function GET() {
   try {
-    const spotlights = await prisma.researchSpotlight.findMany({
-      where: { isActive: true },
-      include: {
-        article: {
-          select: {
-            slug: true,
-            title: true,
-            coverImageUrl: true,
-            isActive: true,
-            deletedAt: true,
+    const spotlights = await withDbRetry(() =>
+      prisma.researchSpotlight.findMany({
+        where: { isActive: true },
+        include: {
+          article: {
+            select: {
+              slug: true,
+              title: true,
+              coverImageUrl: true,
+              isActive: true,
+              deletedAt: true,
+            },
           },
         },
-      },
-      orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
-    });
+        orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+      }),
+    );
 
     const items = spotlights.map((item) => {
       const articleLive =
@@ -45,7 +47,8 @@ export async function GET() {
 
     return jsonOk({ spotlights: items });
   } catch (err) {
-    console.error(err);
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[cms/research-spotlights] unavailable:", message.split("\n")[0]);
     return jsonOk({ spotlights: [] });
   }
 }

@@ -34,6 +34,8 @@ export async function GET(request: Request) {
             slug: true,
             coverColor: true,
             coverImageUrl: true,
+            issn: true,
+            eIssn: true,
           },
         },
         author: {
@@ -69,6 +71,8 @@ export async function GET(request: Request) {
               slug: true,
               coverColor: true,
               coverImageUrl: true,
+              issn: true,
+              eIssn: true,
             },
           },
           author: {
@@ -99,6 +103,8 @@ export async function GET(request: Request) {
 const saveSchema = z.object({
   submissionId: z.string().min(1),
   body: z.string(),
+  supplementary: z.string().optional(),
+  supplementaryUrl: z.string().url().optional().or(z.literal("")),
   title: z.string().min(2).optional(),
   abstract: z.string().min(10).optional(),
   keywords: z.array(z.string()).optional(),
@@ -123,6 +129,8 @@ type SavedRow = {
   abstract: string;
   keywords: string[];
   productionBody: string | null;
+  productionSupplementary: string | null;
+  productionSupplementaryUrl: string | null;
   productionFigures: unknown;
   manuscriptReadyAt: Date | null;
   status: string;
@@ -137,6 +145,8 @@ type SavedRow = {
 async function saveProductionFields(args: {
   id: string;
   body: string;
+  supplementary?: string;
+  supplementaryUrl?: string | null;
   figures: unknown;
   done: boolean;
   existingReadyAt: Date | null;
@@ -152,6 +162,8 @@ async function saveProductionFields(args: {
     ...(args.abstract ? { abstract: args.abstract } : {}),
     ...(args.keywords ? { keywords: args.keywords } : {}),
   };
+  const supplementary = args.supplementary ?? "";
+  const supplementaryUrl = args.supplementaryUrl?.trim() || null;
 
   try {
     return await prisma.submission.update({
@@ -159,6 +171,8 @@ async function saveProductionFields(args: {
       data: {
         ...meta,
         productionBody: args.body,
+        productionSupplementary: supplementary,
+        productionSupplementaryUrl: supplementaryUrl,
         productionFigures: args.figures as Prisma.InputJsonValue,
         manuscriptReadyAt: readyAt,
         ...(nextStatus
@@ -175,6 +189,8 @@ async function saveProductionFields(args: {
         abstract: true,
         keywords: true,
         productionBody: true,
+        productionSupplementary: true,
+        productionSupplementaryUrl: true,
         productionFigures: true,
         manuscriptReadyAt: true,
         status: true,
@@ -183,7 +199,9 @@ async function saveProductionFields(args: {
     });
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    if (!/productionBody|Unknown argument/i.test(msg)) throw err;
+    if (!/productionBody|productionSupplementary|Unknown argument/i.test(msg)) {
+      throw err;
+    }
 
     console.warn(
       "[manuscripts] Prisma client missing production fields — using SQL fallback. Restart Next.js after prisma generate.",
@@ -194,6 +212,8 @@ async function saveProductionFields(args: {
         UPDATE "Submission"
         SET
           "productionBody" = ${args.body},
+          "productionSupplementary" = ${supplementary},
+          "productionSupplementaryUrl" = ${supplementaryUrl},
           "productionFigures" = ${JSON.stringify(args.figures)}::jsonb,
           "manuscriptReadyAt" = ${readyAt},
           "status" = 'IN_PRODUCTION'::"SubmissionStatus",
@@ -208,6 +228,8 @@ async function saveProductionFields(args: {
         UPDATE "Submission"
         SET
           "productionBody" = ${args.body},
+          "productionSupplementary" = ${supplementary},
+          "productionSupplementaryUrl" = ${supplementaryUrl},
           "productionFigures" = ${JSON.stringify(args.figures)}::jsonb,
           "title" = COALESCE(${args.title ?? null}, "title"),
           "abstract" = COALESCE(${args.abstract ?? null}, "abstract"),
@@ -224,6 +246,8 @@ async function saveProductionFields(args: {
         abstract,
         keywords,
         "productionBody",
+        "productionSupplementary",
+        "productionSupplementaryUrl",
         "productionFigures",
         "manuscriptReadyAt",
         status::text as status,
@@ -285,6 +309,11 @@ export async function PATCH(request: Request) {
     const updated = await saveProductionFields({
       id: data.submissionId,
       body: ensureManuscriptHtml(data.body),
+      supplementary:
+        data.supplementary != null
+          ? ensureManuscriptHtml(data.supplementary)
+          : undefined,
+      supplementaryUrl: data.supplementaryUrl,
       figures: data.figures ?? [],
       done: Boolean(data.done),
       existingReadyAt,

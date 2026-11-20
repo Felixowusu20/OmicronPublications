@@ -146,6 +146,13 @@ function sanitizeAttrs(tag: string, raw: string): string {
       if (style) out.push(`style="${escapeAttr(style)}"`);
       continue;
     }
+    // Drop fixed widths on tables/cells — they blow out the print column.
+    if (
+      key === "width" &&
+      /^(table|td|th|col|colgroup)$/i.test(tag)
+    ) {
+      continue;
+    }
     if (
       ["alt", "title", "colspan", "rowspan", "width", "height", "class"].includes(
         key,
@@ -205,12 +212,19 @@ function isTableCaptionText(html: string): boolean {
   return /^table(?:\s+\d+)?(?:[.:]|\s|$)/i.test(htmlToPlainText(html));
 }
 
+const EMPTY_GAP =
+  "(?:\\s|<p\\b[^>]*>\\s*(?:&nbsp;|\\u00a0|\\s|<br\\s*/?>)*</p>|<br\\s*/?>)*";
+
+function figureHasTable(inner: string): boolean {
+  return /<table\b/i.test(inner) || /omicron-table-wrap/i.test(inner);
+}
+
 /** Keep table + caption together at full article width, caption above the grid. */
 function bindTableCaptions(html: string): string {
   let s = html.replace(
     /<figure\b([^>]*)>([\s\S]*?)<\/figure>/gi,
     (full, attrs: string, inner: string) => {
-      if (!/<table\b/i.test(inner) && !/omicron-table-wrap/i.test(inner)) {
+      if (!figureHasTable(inner)) {
         return full;
       }
       const caption = inner.match(/<figcaption\b[^>]*>[\s\S]*?<\/figcaption>/i)?.[0] ?? "";
@@ -252,13 +266,115 @@ function bindTableCaptions(html: string): string {
     },
   );
 
+  // Caption-only figure → next table (allow empty paragraphs between).
   s = s.replace(
-    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
-    (_full, cap: string, table: string) =>
-      `<figure class="table-full"><figcaption>${cap}</figcaption>${table}</figure>`,
+    new RegExp(
+      `<figure\\b([^>]*)>\\s*(<figcaption\\b[^>]*>[\\s\\S]*?<\\/figcaption>)\\s*<\\/figure>${EMPTY_GAP}(<div class="omicron-table-wrap">[\\s\\S]*?<\\/div>|<table\\b[\\s\\S]*?<\\/table>)`,
+      "gi",
+    ),
+    (full, attrs: string, cap: string, table: string) => {
+      if (/\bfigure-full\b/i.test(attrs) && !/\btable-full\b/i.test(attrs)) {
+        return full;
+      }
+      if (!/\btable-full\b/i.test(attrs) && !isTableCaptionText(cap)) {
+        return full;
+      }
+      return `<figure class="table-full">${cap}${table}</figure>`;
+    },
   );
 
+  // Table → following caption-only figure.
+  s = s.replace(
+    new RegExp(
+      `(<div class="omicron-table-wrap">[\\s\\S]*?<\\/div>|<table\\b[\\s\\S]*?<\\/table>)${EMPTY_GAP}<figure\\b([^>]*)>\\s*(<figcaption\\b[^>]*>[\\s\\S]*?<\\/figcaption>)\\s*<\\/figure>`,
+      "gi",
+    ),
+    (full, table: string, attrs: string, cap: string) => {
+      if (/\bfigure-full\b/i.test(attrs) && !/\btable-full\b/i.test(attrs)) {
+        return full;
+      }
+      if (!/\btable-full\b/i.test(attrs) && !isTableCaptionText(cap)) {
+        return full;
+      }
+      return `<figure class="table-full">${cap}${table}</figure>`;
+    },
+  );
+
+  // Caption and table separated by a short stretch of body text.
+  s = mergeDistantTableCaptions(s);
+
+  // Drop leftover empty table slots so preview/PDF don't show a blank gap.
+  s = collapseEmptyTableFigures(s);
+
   return s;
+}
+
+/**
+ * Pair a caption-only table figure with the next uncaptioned table within
+ * a short window (avoids blank "Table 2" slots when import left them apart).
+ */
+function mergeDistantTableCaptions(html: string): string {
+  const orphanRe =
+    /<figure\b([^>]*\btable-full\b[^>]*)>\s*(<figcaption\b[^>]*>[\s\S]*?<\/figcaption>)\s*<\/figure>/gi;
+  let result = "";
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = orphanRe.exec(html))) {
+    const attrs = match[1] ?? "";
+    const cap = match[2] ?? "";
+    const start = match.index;
+    const end = start + match[0].length;
+    // Skip figures that already wrap a table (false positive from class only).
+    if (/<table\b|omicron-table-wrap/i.test(match[0])) {
+      continue;
+    }
+    const after = html.slice(end);
+    const nextTable = after.match(
+      /^([\s\S]{0,1200}?)(<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>|<figure\b[^>]*>\s*(?:<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)\s*<\/figure>)/i,
+    );
+    if (!nextTable) {
+      continue;
+    }
+    const between = nextTable[1] ?? "";
+    // Don't cross another table caption / full table figure.
+    if (
+      /<figure\b[^>]*\btable-full\b/i.test(between) ||
+      /<figcaption\b[^>]*>\s*table\b/i.test(between)
+    ) {
+      continue;
+    }
+    const tableBlock = nextTable[2] ?? "";
+    // Prefer bare wraps; if it's a figure, unwrap the table contents.
+    let tableHtml = tableBlock;
+    const nested = tableBlock.match(
+      /<figure\b[^>]*>([\s\S]*?)<\/figure>/i,
+    );
+    if (nested) {
+      if (/<figcaption\b/i.test(nested[1])) {
+        continue; // already captioned
+      }
+      tableHtml = nested[1];
+    }
+    result += html.slice(last, start);
+    result += `<figure class="table-full">${cap}${tableHtml}</figure>`;
+    last = end + (nextTable[0]?.length ?? 0);
+    orphanRe.lastIndex = last;
+  }
+  result += html.slice(last);
+  return result || html;
+}
+
+/** Remove caption-only table figures that never received a real table. */
+function collapseEmptyTableFigures(html: string): string {
+  return html.replace(
+    /<figure\b([^>]*)>([\s\S]*?)<\/figure>/gi,
+    (full, attrs: string, inner: string) => {
+      if (!/\btable-full\b/i.test(attrs)) return full;
+      if (figureHasTable(inner)) return full;
+      // No grid — drop the empty placeholder (and its orphan caption shell).
+      return "";
+    },
+  );
 }
 
 function sectionHeadingLevel(text: string): "h1" | "h2" | "h3" | null {
@@ -448,11 +564,7 @@ function cleanManuscriptArtifacts(html: string): string {
 
   s = s.replace(/<(h[1-4])\b[^>]*>\s*<\/\1>/gi, "");
   s = s.replace(/<p\b[^>]*>\s*<\/p>/gi, "");
-  s = s.replace(
-    /<figure class="table-full"><figcaption>([\s\S]*?)<\/figcaption><\/figure>\s*(<div class="omicron-table-wrap">[\s\S]*?<\/div>|<table\b[\s\S]*?<\/table>)/gi,
-    (_full, cap: string, table: string) =>
-      `<figure class="table-full"><figcaption>${cap}</figcaption>${table}</figure>`,
-  );
+  s = bindTableCaptions(s);
   s = s.replace(/(<\/(?:p|h[1-4]|figure|div)>)\s*(<(?:p|h[1-4]|figure|div)\b)/gi, "$1\n$2");
   return s.trim();
 }

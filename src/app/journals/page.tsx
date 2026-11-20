@@ -83,6 +83,8 @@ export default async function JournalsPage() {
                   coverImageUrl: journal.coverImageUrl,
                   coverColor: journal.coverColor,
                   subjects: journal.subjects,
+                  issn: journal.issn,
+                  eIssn: journal.eIssn,
                 }}
                 index={index}
                 aosDelay={Math.min(index * 80, 400)}

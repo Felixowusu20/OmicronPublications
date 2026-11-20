@@ -197,6 +197,10 @@ model PublishedArticle {
   coverImageUrl String?
   coverImagePublicId String?
   manuscriptUrl String?
+  /// HTML for this article’s supplementary materials page (/articles/[slug]/supplementary).
+  supplementaryHtml String?
+  /// Optional uploaded supplementary PDF/ZIP bound to this published article.
+  supplementaryUrl  String?
   citations     Int      @default(0)
   downloads     Int      @default(0)
   views         Int      @default(0)
@@ -247,6 +251,10 @@ model Submission {
   productionBody     String?
   /// Uploaded figures for the production body: [{ id, url, filename, caption }]
   productionFigures  Json?
+  /// HTML excerpt for the article-bound supplementary materials page.
+  productionSupplementary String?
+  /// Optional supplementary file URL (PDF/ZIP) for this manuscript.
+  productionSupplementaryUrl String?
   /// Set when the reviewer marks the full manuscript as ready for publish.
   manuscriptReadyAt  DateTime?
   actionRequired     String?

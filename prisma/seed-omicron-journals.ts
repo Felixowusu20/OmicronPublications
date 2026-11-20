@@ -3,7 +3,29 @@ import { PrismaClient } from "../src/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { JOURNAL_SUBJECT_DEFAULTS } from "../src/lib/research-fields";
 
-const adapter = new PrismaPg(process.env.DATABASE_URL!);
+function normalizeDatabaseUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const mode = (parsed.searchParams.get("sslmode") || "").toLowerCase();
+    if (
+      !mode ||
+      mode === "prefer" ||
+      mode === "require" ||
+      mode === "verify-ca"
+    ) {
+      parsed.searchParams.set("sslmode", "verify-full");
+    }
+    parsed.searchParams.delete("uselibpqcompat");
+    return parsed.toString();
+  } catch {
+    return url.replace(
+      /([?&])sslmode=(prefer|require|verify-ca)\b/i,
+      "$1sslmode=verify-full",
+    );
+  }
+}
+
+const adapter = new PrismaPg(normalizeDatabaseUrl(process.env.DATABASE_URL!));
 const prisma = new PrismaClient({ adapter });
 
 type SeedJournal = {
@@ -38,14 +60,14 @@ const JOURNALS: SeedJournal[] = [
     slug: "omicron-journal-of-science-and-technology",
     oldSlugs: ["omicron-journal-of-science", "atlas-journal-of-science"],
     title: "Omicron Journal of Science and Technology",
-    shortTitle: "NJST",
+    shortTitle: "OJST",
     issn: "2456-1120",
     eIssn: "2456-1139",
-    doiPrefix: "10.58000/njst",
+    doiPrefix: "10.58000/ojst",
     frequency: "Monthly",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Original research across the natural sciences, engineering, and emerging technologies.",
+      "Chemistry, physics, engineering, and natural sciences.",
     aims: "To advance rigorous scientific and technological discovery with open scholarly communication.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS["omicron-journal-of-science-and-technology"],
@@ -55,7 +77,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$1,200",
     editorInChief: "Prof. Helen Markovic",
-    coverColor: "#1E6847",
+    coverColor: "#1D4E89", // royal blue — science & technology
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef", "OpenAlex"],
     foundedYear: 2014,
     sortOrder: 1,
@@ -67,14 +89,14 @@ const JOURNALS: SeedJournal[] = [
       "african-health-systems-review",
     ],
     title: "Omicron Journal of Health and Biomedical Research",
-    shortTitle: "NJHBR",
+    shortTitle: "OJHBR",
     issn: "2789-4412",
     eIssn: "2789-4420",
-    doiPrefix: "10.58000/njhbr",
+    doiPrefix: "10.58000/ojhbr",
     frequency: "Quarterly",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Peer-reviewed work in clinical science, public health, biomedicine, and health systems.",
+      "Clinical science, medicine, biology, public health, biomedicine, and health systems.",
     aims: "To strengthen evidence-based health research and biomedical innovation.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -86,7 +108,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$1,000",
     editorInChief: "Prof. Kwame Mensah",
-    coverColor: "#1A5F4A",
+    coverColor: "#1B4D3E", // forest green — health & biomedicine (brand mark)
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef", "BASE"],
     foundedYear: 2018,
     sortOrder: 2,
@@ -95,14 +117,14 @@ const JOURNALS: SeedJournal[] = [
     slug: "omicron-journal-of-agriculture-food-and-sustainability",
     oldSlugs: [],
     title: "Omicron Journal of Agriculture, Food and Sustainability",
-    shortTitle: "NJAFS",
+    shortTitle: "OJAFS",
     issn: "2810-2201",
     eIssn: "2810-221X",
-    doiPrefix: "10.58000/njafs",
+    doiPrefix: "10.58000/ojafs",
     frequency: "Quarterly",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Research on agriculture, food systems, nutrition, climate-smart practice, and sustainability.",
+      "Biology, earth science, agriculture, food systems, and sustainability.",
     aims: "To publish solutions that strengthen food security and sustainable agriculture.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -114,7 +136,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$900",
     editorInChief: "Prof. Amina Diallo",
-    coverColor: "#3D6B3A",
+    coverColor: "#3D6B3A", // olive green — agriculture
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef"],
     foundedYear: 2020,
     sortOrder: 3,
@@ -123,14 +145,14 @@ const JOURNALS: SeedJournal[] = [
     slug: "omicron-journal-of-education-learning-and-development",
     oldSlugs: ["omicron-education-and-society", "education-and-society"],
     title: "Omicron Journal of Education, Learning and Development",
-    shortTitle: "NJELD",
+    shortTitle: "OJELD",
     issn: "2398-0044",
     eIssn: "2398-0052",
-    doiPrefix: "10.58000/njeld",
+    doiPrefix: "10.58000/ojeld",
     frequency: "Continuous",
     reviewType: "OPEN_REVIEW",
     description:
-      "Research on pedagogy, higher education, curriculum design, learning technologies, and human development.",
+      "Pedagogy, higher education, curriculum design, learning technologies, and human development.",
     aims: "To connect educational research with classroom practice and institutional policy.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -142,7 +164,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$600",
     editorInChief: "Dr. Priya Natarajan",
-    coverColor: "#4A3728",
+    coverColor: "#7C3AED", // violet — education
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef", "ERIC"],
     foundedYear: 2021,
     sortOrder: 4,
@@ -151,14 +173,14 @@ const JOURNALS: SeedJournal[] = [
     slug: "omicron-journal-of-business-economics-and-innovation",
     oldSlugs: [],
     title: "Omicron Journal of Business, Economics and Innovation",
-    shortTitle: "NJBEI",
+    shortTitle: "OJBEI",
     issn: "2822-1104",
     eIssn: "2822-1112",
-    doiPrefix: "10.58000/njbei",
+    doiPrefix: "10.58000/ojbei",
     frequency: "Bimonthly",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Scholarship in management, economics, entrepreneurship, finance, and innovation studies.",
+      "Business, economics, management, and innovation studies.",
     aims: "To advance research that informs markets, policy, and entrepreneurial practice.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -170,7 +192,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$1,100",
     editorInChief: "Prof. Elena Vargas",
-    coverColor: "#0B3A53",
+    coverColor: "#0B3A53", // deep navy — business
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef", "Dimensions"],
     foundedYear: 2016,
     sortOrder: 5,
@@ -179,14 +201,14 @@ const JOURNALS: SeedJournal[] = [
     slug: "omicron-journal-of-social-sciences-and-humanities",
     oldSlugs: [],
     title: "Omicron Journal of Social Sciences and Humanities",
-    shortTitle: "NJSSH",
+    shortTitle: "OJSSH",
     issn: "2831-4408",
     eIssn: "2831-4416",
-    doiPrefix: "10.58000/njssh",
+    doiPrefix: "10.58000/ojssh",
     frequency: "Quarterly",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Research across sociology, anthropology, history, languages, culture, and the humanities.",
+      "Sociology, anthropology, history, languages, culture, and humanities.",
     aims: "To foster critical inquiry into society, culture, and the human experience.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -198,7 +220,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$800",
     editorInChief: "Prof. Samuel Okeke",
-    coverColor: "#5C3D2E",
+    coverColor: "#9A3412", // terracotta — humanities
     indexedIn: ["DOAJ", "Google Scholar", "CrossRef"],
     foundedYear: 2019,
     sortOrder: 6,
@@ -210,14 +232,14 @@ const JOURNALS: SeedJournal[] = [
       "journal-of-computational-methods",
     ],
     title: "Omicron Journal of Interdisciplinary Research",
-    shortTitle: "NJIR",
+    shortTitle: "OJIR",
     issn: "2610-8893",
     eIssn: "2610-8907",
-    doiPrefix: "10.58000/njir",
+    doiPrefix: "10.58000/ojir",
     frequency: "Continuous",
     reviewType: "DOUBLE_BLIND",
     description:
-      "Cross-cutting research that bridges disciplines, methods, and applied problem spaces.",
+      "Engineering, science, interdisciplinary studies, methods, and applied innovation.",
     aims: "To publish high-quality interdisciplinary work with clear methods and societal relevance.",
     subjects:
       JOURNAL_SUBJECT_DEFAULTS[
@@ -229,7 +251,7 @@ const JOURNALS: SeedJournal[] = [
     openAccess: true,
     apc: "$1,200",
     editorInChief: "Prof. Sofia Almeida",
-    coverColor: "#1E3A5F",
+    coverColor: "#0E7490", // cyan teal — interdisciplinary
     indexedIn: ["Scopus", "Google Scholar", "CrossRef", "Dimensions"],
     foundedYear: 2007,
     sortOrder: 7,

@@ -57,6 +57,7 @@ type QueueItem = {
     coverColor?: string;
     coverImageUrl?: string | null;
     issn?: string | null;
+    eIssn?: string | null;
   };
   author: {
     id: string;
@@ -435,6 +436,8 @@ function ManuscriptsPageInner() {
                   journalShortTitle={selected.journal.shortTitle}
                   journalSlug={selected.journal.slug}
                   coverColor={selected.journal.coverColor}
+                  issn={selected.journal.issn}
+                  eIssn={selected.journal.eIssn}
                   logoUrl={selected.journal.coverImageUrl || null}
                   journalUrl={
                     selected.journal.slug
@@ -452,6 +455,7 @@ function ManuscriptsPageInner() {
                     .filter(Boolean)}
                   articleType={selected.articleType}
                   receivedAt={formatArticleDate(selected.submittedAt) || undefined}
+                  correspondingEmail={selected.author.email}
                   funding={selected.funding}
                   conflictOfInterest={selected.conflictOfInterest}
                 />

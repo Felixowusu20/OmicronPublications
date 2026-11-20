@@ -9,12 +9,17 @@ const globalForPrisma = globalThis as unknown as {
 };
 
 /** Bump when schema fields change so a stale HMR client is discarded. */
-const PRISMA_SCHEMA_VERSION = 7;
+const PRISMA_SCHEMA_VERSION = 8;
 
 function isTransientDbError(err: unknown): boolean {
   const message = err instanceof Error ? err.message : String(err);
+  const code =
+    err && typeof err === "object" && "code" in err
+      ? String((err as { code?: string }).code)
+      : "";
   if (
-    /timeout|terminated|ECONNRESET|ECONNREFUSED|EPIPE|Can't reach database|Connection terminated|too many clients|Client has encountered a connection error|Connection ended unexpectedly/i.test(
+    code === "P1001" ||
+    /timeout|terminated|ECONNRESET|ECONNREFUSED|EPIPE|Can't reach database|DatabaseNotReachable|Connection terminated|too many clients|Client has encountered a connection error|Connection ended unexpectedly|Neon|server closed the connection/i.test(
       message,
     )
   ) {
@@ -29,15 +34,15 @@ function isTransientDbError(err: unknown): boolean {
 }
 
 /**
- * Retry once or twice when Neon / the pooler drops an idle connection.
- * Prefer this for poll endpoints so a single blip does not empty the UI.
+ * Retry when Neon / the pooler drops an idle connection or the compute is
+ * cold-starting (common P1001 / DatabaseNotReachable).
  */
 export async function withDbRetry<T>(
   fn: () => Promise<T>,
   opts?: { retries?: number; delayMs?: number },
 ): Promise<T> {
-  const retries = opts?.retries ?? 2;
-  const delayMs = opts?.delayMs ?? 500;
+  const retries = opts?.retries ?? 4;
+  const delayMs = opts?.delayMs ?? 900;
   let last: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
     try {
@@ -45,20 +50,49 @@ export async function withDbRetry<T>(
     } catch (err) {
       last = err;
       if (!isTransientDbError(err) || attempt === retries) throw err;
-      await new Promise((r) => setTimeout(r, delayMs * (attempt + 1)));
+      // Exponential-ish backoff so Neon has time to wake.
+      await new Promise((r) =>
+        setTimeout(r, delayMs * Math.min(attempt + 1, 4)),
+      );
     }
   }
   throw last;
 }
 
+/**
+ * pg v9 will treat sslmode=require as weaker than today's alias-to-verify-full.
+ * Pin verify-full so Neon keeps the current secure behavior without the warning.
+ */
+function normalizeDatabaseUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    const mode = (parsed.searchParams.get("sslmode") || "").toLowerCase();
+    if (
+      !mode ||
+      mode === "prefer" ||
+      mode === "require" ||
+      mode === "verify-ca"
+    ) {
+      parsed.searchParams.set("sslmode", "verify-full");
+    }
+    parsed.searchParams.delete("uselibpqcompat");
+    return parsed.toString();
+  } catch {
+    return url
+      .replace(/([?&])sslmode=(prefer|require|verify-ca)\b/i, "$1sslmode=verify-full")
+      .replace(/([?&])uselibpqcompat=[^&]*&?/i, "$1")
+      .replace(/[?&]$/, "");
+  }
+}
+
 function createPool(connectionString: string) {
   // Keep the client pool small: Neon already pools via the `-pooler` host.
-  // Short idle timeout avoids handing out sockets Neon already closed.
+  // Longer connect timeout helps when the Neon compute is waking from sleep.
   const pool = new pg.Pool({
-    connectionString,
+    connectionString: normalizeDatabaseUrl(connectionString),
     max: 3,
-    connectionTimeoutMillis: 12_000,
-    idleTimeoutMillis: 10_000,
+    connectionTimeoutMillis: 20_000,
+    idleTimeoutMillis: 8_000,
     allowExitOnIdle: true,
     keepAlive: true,
   });

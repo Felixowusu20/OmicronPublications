@@ -61,6 +61,18 @@ const PAGED_CSS = `
   color: #1a3a5a;
 }
 
+.omicron-paged-article .omicron-article-cover {
+  column-span: all;
+  width: 100%;
+  min-height: 273mm;
+  break-after: page;
+  page-break-after: always;
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
 .omicron-paged-article .omicron-article-inner,
 .omicron-paged-article .omicron-article-flow,
 .omicron-paged-article .omicron-article-body {
@@ -71,19 +83,17 @@ const PAGED_CSS = `
 .omicron-paged-article .omicron-article-front,
 .omicron-paged-article .omicron-article-abstract,
 .omicron-paged-article .omicron-keywords,
-.omicron-paged-article figure,
+.omicron-paged-article figure:not(:has(table)):not(.table-full),
 .omicron-paged-article .omicron-end-matter,
 .omicron-paged-article .omicron-span-all,
-.omicron-paged-article .omicron-workflow,
-.omicron-paged-article .omicron-table-wrap {
+.omicron-paged-article .omicron-workflow {
   column-span: all;
   break-inside: avoid;
   page-break-inside: avoid;
   -webkit-column-break-inside: avoid;
 }
 
-.omicron-paged-article .omicron-article-body > figure,
-.omicron-paged-article .omicron-article-body > .omicron-table-wrap,
+.omicron-paged-article .omicron-article-body > figure:not(:has(table)):not(.table-full),
 .omicron-paged-article .omicron-article-body > .omicron-workflow,
 .omicron-paged-article .omicron-article-body > .omicron-supplementary {
   column-span: all;
@@ -93,15 +103,96 @@ const PAGED_CSS = `
   page-break-inside: avoid;
 }
 
+/* Tables stay in flow; tall ones split — no blank page before them. */
+.omicron-paged-article figure.table-full,
+.omicron-paged-article figure:has(table),
+.omicron-paged-article .omicron-table-wrap,
+.omicron-paged-article .omicron-article-body > figure.table-full,
+.omicron-paged-article .omicron-article-body > figure:has(table),
+.omicron-paged-article .omicron-article-body > .omicron-table-wrap {
+  column-span: all;
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+  break-before: auto;
+  page-break-before: auto;
+  break-after: auto;
+  page-break-after: auto;
+  break-inside: auto;
+  page-break-inside: auto;
+  -webkit-column-break-inside: auto;
+  overflow: visible;
+}
+
+.omicron-paged-article figure:has(table) > figcaption,
+.omicron-paged-article figure.table-full > figcaption {
+  break-after: avoid;
+  page-break-after: avoid;
+}
+
+.omicron-paged-article figure.table-full:not(:has(table)):not(:has(.omicron-table-wrap)) {
+  display: none !important;
+}
+
+.omicron-paged-article table {
+  box-sizing: border-box;
+  break-inside: auto;
+  page-break-inside: auto;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  table-layout: fixed !important;
+  font-size: 8.5px;
+}
+
+.omicron-paged-article th,
+.omicron-paged-article td {
+  min-width: 0 !important;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  white-space: normal !important;
+  padding: 0.28em 0.32em;
+}
+
+.omicron-paged-article figure:has(table),
+.omicron-paged-article figure.table-full,
+.omicron-paged-article .omicron-table-wrap {
+  box-sizing: border-box;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+.omicron-paged-article thead {
+  display: table-header-group;
+}
+
+.omicron-paged-article tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
 .omicron-paged-article .omicron-references ~ figure:has(img),
-.omicron-paged-article .omicron-references ~ figure:has(table),
-.omicron-paged-article .omicron-references ~ .omicron-table-wrap,
 .omicron-paged-article .omicron-references ~ .omicron-workflow {
   column-span: all;
   break-inside: avoid;
   page-break-inside: avoid;
   width: 100%;
   max-width: 100%;
+}
+
+.omicron-paged-article .omicron-references ~ figure:has(table),
+.omicron-paged-article .omicron-references ~ .omicron-table-wrap {
+  column-span: all;
+  width: 100%;
+  max-width: 100%;
+  max-height: none;
+  break-before: auto;
+  page-break-before: auto;
+  break-after: auto;
+  page-break-after: auto;
+  break-inside: auto;
+  page-break-inside: auto;
 }
 
 .omicron-paged-article .omicron-supplementary {
@@ -116,9 +207,14 @@ const PAGED_CSS = `
 .omicron-paged-article h1,
 .omicron-paged-article h2,
 .omicron-paged-article h3,
-.omicron-paged-article h4 {
+.omicron-paged-article h4,
+.omicron-paged-article h5,
+.omicron-paged-article h6,
+.omicron-paged-article .omicron-template-section-label,
+.omicron-paged-article .omicron-article-info-label {
   break-after: avoid;
   page-break-after: avoid;
+  color: var(--j-primary, #0b3a53) !important;
 }
 
 .omicron-paged-article img {
@@ -130,9 +226,15 @@ const PAGED_CSS = `
   object-fit: contain;
 }
 
-.omicron-paged-article figure,
+.omicron-paged-article figure:not(:has(table)):not(.table-full),
 .omicron-paged-article .omicron-workflow {
   max-height: 230mm;
+  margin: 0.7em 0 0.85em;
+}
+
+.omicron-paged-article figure.table-full,
+.omicron-paged-article figure:has(table) {
+  max-height: none;
   margin: 0.7em 0 0.85em;
 }
 

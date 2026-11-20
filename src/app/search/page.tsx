@@ -15,6 +15,7 @@ type SearchArticle = {
   keywords: string[];
   journalTitle: string;
   journalSlug: string;
+  coverColor?: string | null;
   publishedAt: string;
   hasPdf: boolean;
   abstract?: string;
@@ -275,6 +276,7 @@ function SearchPageInner() {
                         publishedAt: a.publishedAt,
                         journalTitle: a.journalTitle,
                         journalSlug: a.journalSlug,
+                        coverColor: a.coverColor,
                         volume: a.volume,
                         issue: a.issue,
                         views: a.views,

@@ -25,6 +25,8 @@ export default function AdminRegisterPage() {
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [bootstrapAvailable, setBootstrapAvailable] = useState(false);
   const needsTurnstile = turnstileEnabled();
   const onToken = useCallback((token: string | null) => {
     setTurnstileToken(token);
@@ -33,6 +35,14 @@ export default function AdminRegisterPage() {
   useEffect(() => {
     if (ready && user) router.replace("/admin");
   }, [ready, user, router]);
+
+  useEffect(() => {
+    void fetch("/api/admin/auth/bootstrap")
+      .then((res) => res.json())
+      .then((data) => setBootstrapAvailable(Boolean(data.available)))
+      .catch(() => setBootstrapAvailable(false))
+      .finally(() => setChecking(false));
+  }, []);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -74,81 +84,119 @@ export default function AdminRegisterPage() {
           Bootstrap
         </p>
         <h1 className="mt-1 font-[family-name:var(--font-display)] text-xl text-[var(--ink)]">
-          Create super admin
+          {bootstrapAvailable ? "Create super admin" : "Admin already set up"}
         </h1>
 
-        <form onSubmit={onSubmit} className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-          <label className="field sm:col-span-2">
-            <span>Full name</span>
-            <input
-              required
-              value={form.name}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, name: e.target.value }))
-              }
-            />
-          </label>
-          <label className="field sm:col-span-2">
-            <span>Email</span>
-            <input
-              type="email"
-              required
-              value={form.email}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, email: e.target.value }))
-              }
-            />
-          </label>
-          <label className="field sm:col-span-2">
-            <span>Institution</span>
-            <input
-              required
-              value={form.institution}
-              onChange={(e) =>
-                setForm((prev) => ({ ...prev, institution: e.target.value }))
-              }
-            />
-          </label>
-          <PasswordField
-            label="Password"
-            required
-            value={form.password}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, password: e.target.value }))
-            }
-            autoComplete="new-password"
-          />
-          <PasswordField
-            label="Confirm password"
-            required
-            value={form.confirm}
-            onChange={(e) =>
-              setForm((prev) => ({ ...prev, confirm: e.target.value }))
-            }
-            autoComplete="new-password"
-          />
-          <div className="sm:col-span-2">
-            <TurnstileField onToken={onToken} />
-          </div>
-          {error && (
-            <p className="rounded-lg bg-rose-50 px-3 py-1.5 text-xs text-rose-700 sm:col-span-2">
-              {error}
+        {checking ? (
+          <p className="mt-4 text-sm text-[var(--muted)]">Checking setup…</p>
+        ) : !bootstrapAvailable ? (
+          <div className="mt-4 space-y-3">
+            <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm leading-relaxed text-amber-950">
+              A super admin account already exists, so this bootstrap form is
+              closed. Sign in with that admin email, or ask the super admin to
+              create a reviewer account for you.
             </p>
-          )}
-          <button
-            type="submit"
-            className="btn-primary w-full sm:col-span-2"
-            disabled={loading}
-          >
-            {loading ? "Creating…" : "Create super admin"}
-          </button>
-        </form>
-        <p className="mt-3 text-center text-xs text-[var(--muted)]">
-          Already have access?{" "}
-          <Link href="/admin/login" className="font-semibold text-[var(--accent)]">
-            Sign in
-          </Link>
-        </p>
+            <Link
+              href="/admin/login"
+              className="btn-primary inline-flex w-full justify-center"
+            >
+              Go to admin sign in
+            </Link>
+            <p className="text-center text-xs text-[var(--muted)]">
+              Need an author account instead?{" "}
+              <Link
+                href="/register"
+                className="font-semibold text-[var(--accent)]"
+              >
+                Register as author
+              </Link>
+            </p>
+          </div>
+        ) : (
+          <>
+            <form
+              onSubmit={onSubmit}
+              className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2"
+            >
+              <label className="field sm:col-span-2">
+                <span>Full name</span>
+                <input
+                  required
+                  value={form.name}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                />
+              </label>
+              <label className="field sm:col-span-2">
+                <span>Email</span>
+                <input
+                  type="email"
+                  required
+                  value={form.email}
+                  onChange={(e) =>
+                    setForm((prev) => ({ ...prev, email: e.target.value }))
+                  }
+                />
+              </label>
+              <label className="field sm:col-span-2">
+                <span>Institution</span>
+                <input
+                  required
+                  value={form.institution}
+                  onChange={(e) =>
+                    setForm((prev) => ({
+                      ...prev,
+                      institution: e.target.value,
+                    }))
+                  }
+                />
+              </label>
+              <PasswordField
+                label="Password"
+                required
+                value={form.password}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, password: e.target.value }))
+                }
+                autoComplete="new-password"
+              />
+              <PasswordField
+                label="Confirm password"
+                required
+                value={form.confirm}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, confirm: e.target.value }))
+                }
+                autoComplete="new-password"
+              />
+              <div className="sm:col-span-2">
+                <TurnstileField onToken={onToken} />
+              </div>
+              {error && (
+                <p className="rounded-lg bg-rose-50 px-3 py-1.5 text-xs text-rose-700 sm:col-span-2">
+                  {error}
+                </p>
+              )}
+              <button
+                type="submit"
+                className="btn-primary w-full sm:col-span-2"
+                disabled={loading}
+              >
+                {loading ? "Creating…" : "Create super admin"}
+              </button>
+            </form>
+            <p className="mt-3 text-center text-xs text-[var(--muted)]">
+              Already have access?{" "}
+              <Link
+                href="/admin/login"
+                className="font-semibold text-[var(--accent)]"
+              >
+                Sign in
+              </Link>
+            </p>
+          </>
+        )}
       </div>
     </AuthSplitLayout>
   );

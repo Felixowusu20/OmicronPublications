@@ -1,7 +1,9 @@
 import Link from "next/link";
 import type { Metadata } from "next";
+import type { CSSProperties } from "react";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
+import { journalArticlePalette } from "@/lib/journal-colors";
 import {
   articleViewPath,
   resolvePublishedPdfUrl,
@@ -36,6 +38,10 @@ import {
 } from "@/lib/seo/article-seo";
 import { buildArticleMetadata } from "@/lib/seo/scholar";
 import { scholarlyArticleJsonLd } from "@/lib/seo/jsonld";
+import {
+  hasSupplementaryContent,
+  resolveSupplementaryHtml,
+} from "@/lib/supplementary";
 
 export const dynamic = "force-dynamic";
 
@@ -79,7 +85,14 @@ export default async function ArticleDetailPage({
     where: { slug, isActive: true, deletedAt: null },
     include: {
       journal: true,
-      submission: { select: { manuscriptUrl: true } },
+      submission: {
+        select: {
+          manuscriptUrl: true,
+          productionBody: true,
+          productionSupplementary: true,
+          productionSupplementaryUrl: true,
+        },
+      },
     },
   });
 
@@ -166,6 +179,21 @@ export default async function ArticleDetailPage({
       dbArticle.submission?.manuscriptUrl,
     );
 
+    const supplementaryHtml = resolveSupplementaryHtml({
+      supplementary:
+        dbArticle.supplementaryHtml ??
+        dbArticle.submission?.productionSupplementary,
+      body: dbArticle.submission?.productionBody,
+    });
+    const supplementaryUrl =
+      dbArticle.supplementaryUrl?.trim() ||
+      dbArticle.submission?.productionSupplementaryUrl?.trim() ||
+      null;
+    const hasSupplementary = hasSupplementaryContent({
+      html: supplementaryHtml,
+      url: supplementaryUrl,
+    });
+
     const article = {
       title: dbArticle.title,
       articleType: dbArticle.articleType,
@@ -178,6 +206,7 @@ export default async function ArticleDetailPage({
       journalTitle: dbArticle.journal.title,
       journalShortTitle: dbArticle.journal.shortTitle,
       journalId: dbArticle.journalId,
+      coverColor: dbArticle.journal.coverColor,
       logoUrl: dbArticle.coverImageUrl ?? dbArticle.journal.coverImageUrl,
       volume: numbered.volume,
       pages: dbArticle.pages ?? "—",
@@ -197,6 +226,9 @@ export default async function ArticleDetailPage({
       citations: dbArticle.citations,
       manuscriptUrl,
       slug: dbArticle.slug,
+      supplementaryHref: hasSupplementary
+        ? `/articles/${dbArticle.slug}/supplementary`
+        : null,
       recommendations,
       relatedCards,
     };
@@ -253,6 +285,7 @@ type ViewArticle = {
   journalTitle: string;
   journalShortTitle?: string;
   journalId: string;
+  coverColor?: string | null;
   logoUrl?: string | null;
   volume: string;
   pages: string;
@@ -272,6 +305,7 @@ type ViewArticle = {
   citations: number;
   manuscriptUrl?: string | null;
   slug: string;
+  supplementaryHref?: string | null;
   sections?: { heading: string; body: string }[];
   recommendations?: MastheadRecommendation[];
   relatedCards?: RelatedCard[];
@@ -300,12 +334,29 @@ function ArticleView({
   });
   const related = article.relatedCards ?? [];
   const hasSections = Boolean(article.sections && article.sections.length > 0);
+  const palette = journalArticlePalette(
+    article.coverColor,
+    article.journalSlug,
+  );
 
   return (
-    <div className="relative min-h-screen bg-white">
+    <div
+      className="relative min-h-screen bg-white"
+      style={
+        {
+          "--accent": palette.primary,
+          "--accent-soft": palette.soft,
+          "--j-primary": palette.primary,
+          "--j-link": palette.link,
+        } as CSSProperties
+      }
+    >
       {jsonLd ? <JsonLd data={jsonLd} /> : null}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[420px] bg-[radial-gradient(ellipse_at_top,_rgba(15,107,106,0.08),_transparent_55%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-[420px]"
+        style={{
+          background: `radial-gradient(ellipse at top, ${palette.primary}14, transparent 55%)`,
+        }}
         aria-hidden
       />
 
@@ -332,6 +383,7 @@ function ArticleView({
             journalTitle={article.journalTitle}
             journalSlug={article.journalSlug}
             journalShortTitle={article.journalShortTitle}
+            coverColor={article.coverColor}
             logoUrl={article.logoUrl}
             articleType={article.articleType}
             openAccess={article.openAccess}
@@ -412,7 +464,12 @@ function ArticleView({
               </section>
 
               {article.keywords.length > 0 ? (
-                <ArticleKeywords keywords={article.keywords} className="mt-7" />
+                <ArticleKeywords
+                  keywords={article.keywords}
+                  className="mt-7"
+                  coverColor={article.coverColor}
+                  journalSlug={article.journalSlug}
+                />
               ) : null}
 
               {article.affiliations.length > 0 ? (
@@ -437,7 +494,7 @@ function ArticleView({
                     const id = sectionAnchor(section.heading);
                     return (
                       <section key={section.heading} id={id} className="scroll-mt-24">
-                        <h2 className="font-[family-name:var(--font-display)] text-[1.35rem] font-semibold tracking-tight text-[var(--ink)] sm:text-[1.5rem]">
+                        <h2 className="font-[family-name:var(--font-display)] text-[1.35rem] font-semibold tracking-tight text-[var(--accent)] sm:text-[1.5rem]">
                           {section.heading}
                         </h2>
                         <p className="mt-3 text-justify text-[15px] leading-[1.85] text-[var(--ink)]/85 [text-align-last:left] [hyphens:none]">
@@ -465,21 +522,31 @@ function ArticleView({
                       Open the Omicron-formatted PDF for figures, tables,
                       methods, and the full reference list.
                     </p>
-                    {viewHref ? (
-                      <a
-                        href={viewHref}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="btn-primary mt-5 inline-flex gap-2 text-sm"
-                      >
-                        <PdfIcon />
-                        Open full article (PDF)
-                      </a>
-                    ) : (
-                      <p className="mt-4 inline-flex rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900 ring-1 ring-amber-200">
-                        The PDF is being prepared and will appear here shortly.
-                      </p>
-                    )}
+                    <div className="mt-5 flex flex-wrap gap-3">
+                      {viewHref ? (
+                        <a
+                          href={viewHref}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="btn-primary inline-flex gap-2 text-sm"
+                        >
+                          <PdfIcon />
+                          Open full article (PDF)
+                        </a>
+                      ) : (
+                        <p className="inline-flex rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900 ring-1 ring-amber-200">
+                          The PDF is being prepared and will appear here shortly.
+                        </p>
+                      )}
+                      {article.supplementaryHref ? (
+                        <Link
+                          href={article.supplementaryHref}
+                          className="btn-secondary inline-flex text-sm"
+                        >
+                          Read supplementary materials
+                        </Link>
+                      ) : null}
+                    </div>
                   </div>
                 </section>
               )}

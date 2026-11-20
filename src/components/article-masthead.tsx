@@ -1,12 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useId, useRef, useState } from "react";
+import {
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { ArticleMetricsPanel } from "@/components/article-metrics";
 import { AuthorOrcidLine } from "@/components/orcid-id";
 import { nidPath, normalizeDoi } from "@/lib/doi";
 import { displayIssn } from "@/lib/issn";
 import { authorDisplayName } from "@/lib/orcid";
+import { JournalAbbrMark } from "@/components/journal-abbr-mark";
+import { journalArticlePalette } from "@/lib/journal-colors";
 
 export type MastheadRecommendation = {
   slug: string;
@@ -20,6 +28,8 @@ type Props = {
   journalSlug: string;
   journalShortTitle?: string;
   logoUrl?: string | null;
+  /** Journal cover / topic color — drives the whole article header chrome. */
+  coverColor?: string | null;
   articleType: string;
   openAccess: boolean;
   license: string;
@@ -46,18 +56,6 @@ type Props = {
   issueHref?: string | null;
 };
 
-function OmicronMark() {
-  return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src="/favicon.png"
-      alt=""
-      className="h-12 w-12 shrink-0 rounded-xl object-cover"
-      aria-hidden
-    />
-  );
-}
-
 function doiLink(doi: string) {
   if (!doi || doi === "Pending") return null;
   return nidPath(normalizeDoi(doi));
@@ -73,6 +71,7 @@ export function ArticleMasthead({
   journalSlug,
   journalShortTitle,
   logoUrl,
+  coverColor,
   articleType,
   openAccess,
   license,
@@ -104,6 +103,7 @@ export function ArticleMasthead({
 
   const link = doiLink(doi);
   const journalPath = `/journals/${journalSlug}`;
+  const palette = journalArticlePalette(coverColor, journalSlug);
 
   useEffect(() => {
     function onDocClick(e: MouseEvent) {
@@ -131,93 +131,106 @@ export function ArticleMasthead({
 
   const readMoreTarget = readMoreHref ?? "#article-content";
 
+  void logoUrl;
+
   return (
-    <header className="bg-white">
-      {/* Top: Omicron logo + OA / license */}
+    <header
+      className="bg-white"
+      style={
+        {
+          "--j-primary": palette.primary,
+          "--j-link": palette.link,
+          "--j-soft": palette.soft,
+          "--j-soft-link": palette.softLink,
+        } as CSSProperties
+      }
+    >
+      {/* Template-style brand row: abbr | journal title | Omicron logo */}
       <div
-        className={`mx-auto flex max-w-6xl items-start justify-between gap-4 pt-6 ${
+        className={`mx-auto grid max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 pt-6 sm:gap-5 ${
           embedded ? "px-5 sm:px-8" : "px-4 sm:px-6"
         }`}
       >
-        <div className="flex min-w-0 items-center gap-3">
-          {logoUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={logoUrl}
-              alt="Omicron Publications"
-              className="h-12 w-auto max-w-[140px] object-contain"
-            />
-          ) : (
-            <OmicronMark />
-          )}
-          <div className="min-w-0">
-            <p className="font-[family-name:var(--font-display)] text-[1.15rem] leading-tight tracking-tight text-[var(--ink)] sm:text-[1.35rem]">
-              <span className="font-bold text-[var(--accent)]">Omicron</span>{" "}
-              <span className="font-semibold">
-                {journalShortTitle || journalTitle}
-              </span>
-            </p>
-            {journalShortTitle ? (
-              <p className="mt-0.5 truncate text-[11px] text-[var(--muted)]">
-                {journalTitle}
-              </p>
-            ) : null}
-            <p className="mt-1 text-[10px] tracking-wide text-[var(--muted)]">
-              ISSN {displayIssn(issn)}
-            </p>
-          </div>
+        <JournalAbbrMark
+          abbr={(journalShortTitle || "OJ").slice(0, 6)}
+          color={palette.primary}
+          soft={palette.soft}
+          size="md"
+          label={journalShortTitle || journalTitle}
+          className="!h-14 !w-14 sm:!h-16 sm:!w-16"
+        />
+
+        <div className="min-w-0 text-center">
+          <p
+            className="font-[family-name:var(--font-display)] text-[12px] font-bold uppercase leading-snug tracking-[0.05em] sm:text-[14px]"
+            style={{ color: palette.primary }}
+          >
+            {journalTitle}
+          </p>
+          <Link
+            href={journalPath}
+            className="mt-1 inline-block text-[11px] font-medium hover:underline"
+            style={{ color: palette.link }}
+          >
+            /journals/{journalSlug}
+          </Link>
+          <p className="mt-1 text-[10px] tracking-wide text-[var(--muted)]">
+            ISSN {displayIssn(issn)}
+          </p>
         </div>
 
-        <div className="shrink-0 text-right">
+        <div className="flex shrink-0 flex-col items-end gap-1.5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/brand/logo-omicron.png"
+            alt="Omicron Publications"
+            className="h-10 w-auto max-w-[140px] object-contain object-right sm:h-11"
+          />
           {openAccess ? (
-            <span className="inline-flex items-center gap-1.5 rounded bg-amber-500 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-              <svg
-                viewBox="0 0 16 16"
-                className="h-3 w-3"
-                fill="currentColor"
-                aria-hidden
-              >
-                <path d="M8 1a3.5 3.5 0 0 0-3.5 3.5V7H3.5A1.5 1.5 0 0 0 2 8.5v5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5v-5A1.5 1.5 0 0 0 12.5 7H11.5V4.5A3.5 3.5 0 0 0 8 1Zm1.5 6V4.5a1.5 1.5 0 1 0-3 0V7h3Z" />
-              </svg>
+            <span className="inline-flex items-center gap-1 rounded bg-amber-500 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white">
               Open Access
             </span>
-          ) : (
-            <span className="inline-flex rounded bg-[var(--muted)] px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-white">
-              Access
-            </span>
-          )}
-          <p className="mt-1.5 max-w-[220px] text-[10px] leading-snug text-[var(--muted)] sm:max-w-none">
-            This article is licensed under {license}
+          ) : null}
+          <p className="max-w-[160px] text-right text-[9px] leading-snug text-[var(--muted)] sm:max-w-[200px]">
+            Licensed under {license}
           </p>
         </div>
       </div>
 
-      {/* Accent bar — single bar, no extra rules */}
       <div
-        className={`mx-auto mt-5 max-w-6xl ${
+        className={`mx-auto mt-4 flex max-w-6xl items-center gap-3 ${
           embedded ? "px-5 sm:px-8" : "px-4 sm:px-6"
         }`}
       >
-        <div className="flex items-stretch bg-[var(--accent)] text-white">
-          <Link
-            href={journalPath}
-            className="flex flex-1 items-center px-3 py-2 text-[11px] font-medium tracking-wide text-white/95 transition hover:bg-black/10 sm:text-xs"
-          >
-            omicron/{journalSlug}
-          </Link>
-          <span className="flex items-center bg-[var(--ink)] px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-white sm:px-4 sm:text-[11px]">
-            {typeBadgeLabel(articleType)}
-          </span>
-        </div>
+        <span
+          className="h-px min-w-0 flex-1"
+          style={{ background: palette.primary }}
+          aria-hidden
+        />
+        <span
+          className="shrink-0 font-[family-name:var(--font-display)] text-[11px] font-bold uppercase tracking-[0.14em] sm:text-[12px]"
+          style={{ color: palette.primary }}
+        >
+          {typeBadgeLabel(articleType)}
+          {!/article/i.test(typeBadgeLabel(articleType)) ? " Article" : ""}
+        </span>
+        <span
+          className="h-px min-w-0 flex-1"
+          style={{ background: palette.primary }}
+          aria-hidden
+        />
       </div>
 
       <div
-        className={`mx-auto max-w-6xl pt-6 pb-6 ${
+        className={`mx-auto max-w-6xl pt-5 pb-6 ${
           embedded ? "px-5 sm:px-8" : "px-4 sm:px-6"
         }`}
       >
         <div className="max-w-3xl">
-          <h1 className="font-[family-name:var(--font-display)] text-[1.35rem] font-bold leading-snug tracking-tight text-[var(--ink)] sm:text-[1.75rem] sm:leading-[1.2] lg:text-[2.25rem]">
+          <h1
+            className="font-[family-name:var(--font-display)] text-[1.35rem] font-bold leading-snug tracking-tight sm:text-[1.75rem] sm:leading-[1.2] lg:text-[2.1rem]"
+            style={{ color: palette.primary }}
+          >
             {title}
           </h1>
 
@@ -226,6 +239,7 @@ export function ArticleMasthead({
               authors={authors}
               affiliations={affiliations}
               correspondingLast={false}
+              correspondingColor={palette.link}
             />
           </p>
 
@@ -233,7 +247,10 @@ export function ArticleMasthead({
             <ul className="mt-2 space-y-0.5 text-[12px] leading-snug text-[var(--muted)] sm:text-[13px]">
               {affiliations.map((aff, i) => (
                 <li key={`${aff}-${i}`}>
-                  <sup className="mr-1 text-[10px] font-semibold text-[var(--accent)]">
+                  <sup
+                    className="mr-1 text-[10px] font-semibold"
+                    style={{ color: palette.primary }}
+                  >
                     {i + 1}
                   </sup>
                   {aff}
@@ -270,7 +287,8 @@ export function ArticleMasthead({
 
             <a
               href={readMoreTarget}
-              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-sm bg-[var(--accent)] px-5 py-2.5 text-[13px] font-bold text-white shadow-sm transition hover:bg-[#0c5756]"
+              className="inline-flex shrink-0 items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-[13px] font-bold text-white shadow-sm transition hover:opacity-90"
+              style={{ background: palette.primary }}
               {...(readMoreHref
                 ? { target: "_blank", rel: "noreferrer" }
                 : { "aria-label": "Read more — jump to article content" })}
@@ -285,7 +303,10 @@ export function ArticleMasthead({
             aria-label="Article tools"
             className="mt-5 flex flex-wrap items-center gap-x-0 gap-y-2 text-[12px] text-[var(--ink)] sm:text-[13px]"
           >
-            <span className="mr-3 text-[15px] font-bold uppercase tracking-[0.08em] text-[var(--accent)]/70 sm:text-base">
+            <span
+              className="mr-3 text-[15px] font-bold uppercase tracking-[0.08em] sm:text-base"
+              style={{ color: palette.softLink }}
+            >
               Access
             </span>
 

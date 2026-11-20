@@ -33,6 +33,7 @@ export type HomeArticle = {
   publishedAt: string;
   journalTitle: string;
   journalSlug: string;
+  coverColor?: string | null;
   volume?: string;
   issue?: string;
   views: number;
@@ -61,6 +62,8 @@ export type HomeJournal = {
   coverColor: string;
   description: string;
   subjects: string[];
+  issn?: string | null;
+  eIssn?: string | null;
 };
 
 type RemoteArticle = HomeArticle;
@@ -444,6 +447,7 @@ function HomeCatalogInner({
                         publishedAt: article.publishedAt,
                         journalTitle: article.journalTitle,
                         journalSlug: article.journalSlug,
+                        coverColor: article.coverColor,
                         volume: article.volume,
                         issue: article.issue,
                         views: article.views,

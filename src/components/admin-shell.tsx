@@ -462,7 +462,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
       className="admin-theme-root flex h-dvh max-h-dvh overflow-hidden bg-[var(--admin-soft-bg,#f3f6f9)] text-[var(--ink)] print:block print:h-auto print:max-h-none print:min-h-0 print:overflow-visible print:bg-white"
     >
       <aside
-        className={`hidden shrink-0 border-r border-black/10 bg-[var(--brand-orange,#c84e27)] text-white transition-[width] duration-200 print:hidden lg:flex lg:flex-col ${
+        className={`hidden min-h-0 shrink-0 border-r border-black/10 bg-[var(--brand-orange,#c84e27)] text-white transition-[width] duration-200 print:hidden lg:flex lg:flex-col ${
           collapsed ? "w-[72px]" : "w-64"
         }`}
       >
@@ -499,7 +499,7 @@ export function AdminShell({ children }: { children: ReactNode }) {
           )}
         </div>
 
-        <nav className={`flex-1 space-y-0.5 overflow-y-auto ${collapsed ? "p-2" : "p-3"}`}>
+        <nav className={`min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain ${collapsed ? "p-2" : "p-3"}`}>
           {links.map((item) => {
             const active =
               item.href === "/admin"

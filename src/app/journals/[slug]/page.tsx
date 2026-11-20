@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticleListingCard } from "@/components/article-listing-card";
+import { JournalAbbrMark } from "@/components/journal-abbr-mark";
 import { JsonLd } from "@/components/json-ld";
 import { getBoardByJournal } from "@/data/mock";
 import { prisma } from "@/lib/db";
@@ -167,7 +168,16 @@ export default async function JournalDetailPage({
                     className="h-full w-full object-contain"
                   />
                 </div>
-              ) : null}
+              ) : (
+                <JournalAbbrMark
+                  abbr={journal.shortTitle}
+                  color="#ffffff"
+                  soft="rgba(255,255,255,0.14)"
+                  size="lg"
+                  label={journal.shortTitle}
+                  className="!border-white/90"
+                />
+              )}
               <div className="min-w-0">
                 <p className="text-sm font-medium uppercase tracking-wider text-white/70">
                   {journal.shortTitle}
@@ -338,6 +348,7 @@ export default async function JournalDetailPage({
                     publishedAt: a.publishedAt.toISOString().slice(0, 10),
                     journalTitle: journal.title,
                     journalSlug: journal.slug,
+                    coverColor: journal.coverColor,
                     volume: numbered.volume,
                     issue: numbered.issue,
                     views: a.views,

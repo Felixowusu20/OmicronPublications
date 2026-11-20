@@ -27,6 +27,7 @@ type ArticleCard = {
   journalTitle: string;
   journalSlug: string;
   journalSubjects: string[];
+  coverColor: string | null;
   views: number;
   downloads: number;
   keywords: string[];
@@ -66,6 +67,7 @@ async function getArticles(): Promise<ArticleCard[]> {
         journalTitle: a.journal.title,
         journalSlug: a.journal.slug,
         journalSubjects: a.journal.subjects ?? [],
+        coverColor: a.journal.coverColor,
         views: a.views,
         downloads: a.downloads,
         keywords: a.keywords,
@@ -134,18 +136,10 @@ export default async function ArticlesPage({
             <h1 className="page-title mt-1">
               {filterLabel ? `${filterLabel} articles` : "Articles"}
             </h1>
-            <p className="mt-2 text-[1.05rem] leading-relaxed text-[var(--muted)]">
-              {fieldDef
-                ? `Papers published in journals tagged for ${fieldDef.label}. The journal chosen at submission binds each article to this field.`
-                : "Published articles by journal issue. Each paper counts toward the volume and issue number set from its publication date."}
-            </p>
-            {fieldDef ? (
-              <p className="mt-3 text-sm text-[var(--muted)]">
-                Related subjects:{" "}
-                {fieldDef.aliases
-                  .slice(0, 5)
-                  .map((a) => a.replace(/\b\w/g, (c) => c.toUpperCase()))
-                  .join(" · ")}
+            {!fieldDef ? (
+              <p className="mt-2 text-[1.05rem] leading-relaxed text-[var(--muted)]">
+                Published articles by journal issue. Each paper counts toward the
+                volume and issue number set from its publication date.
               </p>
             ) : null}
           </div>
@@ -197,6 +191,7 @@ export default async function ArticlesPage({
                 publishedAt: article.publishedAt,
                 journalTitle: article.journalTitle,
                 journalSlug: article.journalSlug,
+                coverColor: article.coverColor,
                 volume: article.volume,
                 issue: article.issue,
                 views: article.views,

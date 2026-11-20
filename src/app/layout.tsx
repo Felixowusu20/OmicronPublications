@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Outfit, Source_Sans_3 } from "next/font/google";
+import { EB_Garamond, Libre_Baskerville, Outfit } from "next/font/google";
 import { AuthProvider } from "@/components/auth-provider";
 import { AosProvider } from "@/components/aos-provider";
 import { CookieConsentGate } from "@/components/cookie-consent-gate";
@@ -7,11 +7,24 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { seoBaseUrl } from "@/lib/seo/scholar";
 import "./globals.css";
 
-/** ACS-style institutional sans for body + headings. */
-const body = Source_Sans_3({
+/**
+ * Classic publishing-house body face — bookish, journal-like reading text.
+ */
+const body = EB_Garamond({
   variable: "--font-body",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "800"],
+  style: ["normal", "italic"],
+});
+
+/**
+ * Traditional display serif for titles — old imprint / letterpress feel.
+ */
+const display = Libre_Baskerville({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
 });
 
 /** Brand lockup face for the Omicron wordmark only. */
@@ -85,7 +98,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${body.variable} ${brand.variable} h-full`}
+      className={`${body.variable} ${display.variable} ${brand.variable} h-full`}
       suppressHydrationWarning
     >
       <body

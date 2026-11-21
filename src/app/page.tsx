@@ -12,6 +12,7 @@ import { parseGoalTabLinks } from "@/lib/home-cms-defaults";
 import { resolveArticleIssue } from "@/lib/issues";
 import {
   articlesPathForField,
+  fieldImageUrl,
   journalMatchesField,
   RESEARCH_FIELDS,
 } from "@/lib/research-fields";
@@ -143,8 +144,8 @@ async function getHomeData() {
               journalCoverImageUrl: featured.journal.coverImageUrl,
             })
           : null) ||
-        cms?.logoUrl ||
-        null;
+        field.imageUrl ||
+        fieldImageUrl(field.id);
 
       return {
         id: field.id,

@@ -184,44 +184,61 @@ const DEFAULT_PAGES: Record<
 
 /** Ensure default CMS rows exist (idempotent). Safe to call from public pages. */
 export async function ensureCmsDefaults() {
-  for (const slug of CMS_PAGE_SLUGS) {
-    const existing = await prisma.cmsPage.findUnique({ where: { slug } });
-    if (!existing) {
-      const def = DEFAULT_PAGES[slug];
-      await prisma.cmsPage.create({
-        data: {
-          slug,
-          title: def.title,
-          subtitle: def.subtitle,
-          body: def.body,
-          isActive: true,
-        },
-      });
+  try {
+    for (const slug of CMS_PAGE_SLUGS) {
+      const existing = await prisma.cmsPage.findUnique({ where: { slug } });
+      if (!existing) {
+        const def = DEFAULT_PAGES[slug];
+        await prisma.cmsPage.create({
+          data: {
+            slug,
+            title: def.title,
+            subtitle: def.subtitle,
+            body: def.body,
+            isActive: true,
+          },
+        });
+      }
     }
-  }
 
-  const faqCount = await prisma.faqItem.count();
-  if (faqCount === 0) {
-    await prisma.faqItem.createMany({ data: DEFAULT_FAQS });
+    const faqCount = await prisma.faqItem.count();
+    if (faqCount === 0) {
+      await prisma.faqItem.createMany({ data: DEFAULT_FAQS });
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[cms] ensureCmsDefaults unavailable:", message.split("\n")[0]);
   }
 }
 
 export async function getCmsPage(slug: CmsPageSlug) {
-  await ensureCmsDefaults();
-  return prisma.cmsPage.findUnique({
-    where: { slug },
-    include: {
-      images: { orderBy: { sortOrder: "asc" } },
-    },
-  });
+  try {
+    await ensureCmsDefaults();
+    return await prisma.cmsPage.findUnique({
+      where: { slug },
+      include: {
+        images: { orderBy: { sortOrder: "asc" } },
+      },
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[cms] getCmsPage unavailable:", message.split("\n")[0]);
+    return null;
+  }
 }
 
 export async function listFaqs(activeOnly = true) {
-  await ensureCmsDefaults();
-  return prisma.faqItem.findMany({
-    where: activeOnly ? { isActive: true } : undefined,
-    orderBy: { sortOrder: "asc" },
-  });
+  try {
+    await ensureCmsDefaults();
+    return await prisma.faqItem.findMany({
+      where: activeOnly ? { isActive: true } : undefined,
+      orderBy: { sortOrder: "asc" },
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.warn("[cms] listFaqs unavailable:", message.split("\n")[0]);
+    return [];
+  }
 }
 
 /** Split CMS body into paragraphs and bullet groups for safe HTML-free rendering. */

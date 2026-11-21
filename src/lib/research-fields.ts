@@ -8,6 +8,8 @@ export type ResearchFieldDef = {
   id: string;
   label: string;
   summary: string;
+  /** Homepage card photo (local path under /public) */
+  imageUrl: string;
   /** Lowercase tokens matched against journal.subjects / title / description */
   aliases: string[];
   /** ACS-style browse labels that resolve to this field */
@@ -20,6 +22,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Chemistry",
     summary:
       "Synthesis, materials, and analytical methods that support experimental discovery.",
+    imageUrl: "/fields/chemistry.jpg",
     aliases: [
       "chemistry",
       "chemical",
@@ -49,6 +52,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Biology",
     summary:
       "Cellular systems, molecular life sciences, and organism-level research.",
+    imageUrl: "/fields/biology.jpg",
     aliases: [
       "biology",
       "biological",
@@ -66,6 +70,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Physics",
     summary:
       "Theory and experiment spanning condensed matter, optics, and applied physics.",
+    imageUrl: "/fields/physics.jpg",
     aliases: ["physics", "science", "technology", "applied research"],
     browseLabels: ["Physics"],
   },
@@ -74,6 +79,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Medicine",
     summary:
       "Biomedical findings and clinical research that strengthen patient-facing science.",
+    imageUrl: "/fields/medicine.jpg",
     aliases: [
       "medicine",
       "medical",
@@ -89,6 +95,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Engineering",
     summary:
       "Applied design, systems, and technology research across engineering fields.",
+    imageUrl: "/fields/engineering.jpg",
     aliases: [
       "engineering",
       "technology",
@@ -103,6 +110,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Earth science",
     summary:
       "Climate, geoscience, and environmental studies grounded in rigorous evidence.",
+    imageUrl: "/fields/earth.jpg",
     aliases: [
       "earth",
       "environment",
@@ -119,6 +127,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Education",
     summary:
       "Pedagogy, learning technology, and research that improves teaching practice.",
+    imageUrl: "/fields/education.jpg",
     aliases: ["education", "pedagogy", "edtech", "learning", "development"],
     browseLabels: ["Education"],
   },
@@ -127,6 +136,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Business & economics",
     summary:
       "Management, markets, economics, and innovation studies for practice and policy.",
+    imageUrl: "/fields/business.jpg",
     aliases: [
       "business",
       "economics",
@@ -142,6 +152,7 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     label: "Social sciences & humanities",
     summary:
       "Society, culture, history, and the humanities in rigorous scholarly form.",
+    imageUrl: "/fields/social.jpg",
     aliases: [
       "sociology",
       "humanities",
@@ -153,6 +164,12 @@ export const RESEARCH_FIELDS: ResearchFieldDef[] = [
     browseLabels: [],
   },
 ];
+
+/** Default card photo for a research field. */
+export function fieldImageUrl(fieldId: string) {
+  const def = RESEARCH_FIELDS.find((f) => f.id === fieldId);
+  return def?.imageUrl ?? `/fields/${fieldId}.jpg`;
+}
 
 export type JournalFieldSource = {
   id?: string;

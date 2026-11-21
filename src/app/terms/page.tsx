@@ -3,6 +3,8 @@ import Link from "next/link";
 import { CmsProse } from "@/components/cms-prose";
 import { getCmsPage, parseCmsBody } from "@/lib/cms";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Terms & Conditions",
   description:

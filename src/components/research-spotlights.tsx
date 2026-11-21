@@ -3,7 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { articlesPathForField, RESEARCH_FIELDS } from "@/lib/research-fields";
+import {
+  articlesPathForField,
+  fieldImageUrl,
+  RESEARCH_FIELDS,
+} from "@/lib/research-fields";
 
 export type ResearchSpotlightCard = {
   id: string;
@@ -16,11 +20,16 @@ export type ResearchSpotlightCard = {
   ctaLabel?: string | null;
 };
 
-const FALLBACK_FIELDS = RESEARCH_FIELDS.slice(0, 6).map((f) => ({
-  id: f.id,
-  title: f.label,
-  summary: f.summary,
-}));
+const FALLBACK_FIELDS: ResearchSpotlightCard[] = RESEARCH_FIELDS.slice(0, 6).map(
+  (f) => ({
+    id: f.id,
+    title: f.label,
+    summary: f.summary,
+    imageUrl: f.imageUrl,
+    href: articlesPathForField(f.id),
+    ctaLabel: "Browse field articles",
+  }),
+);
 
 /**
  * Interactive field index — select a discipline to preview it.
@@ -47,15 +56,12 @@ export function ResearchSpotlights({
 
   const fields: ResearchSpotlightCard[] = useMemo(
     () =>
-      items.length > 0
-        ? items
-        : FALLBACK_FIELDS.map((f) => ({
-            id: f.id,
-            title: f.title,
-            summary: f.summary,
-            href: articlesPathForField(f.id),
-            ctaLabel: "Browse field articles",
-          })),
+      (items.length > 0 ? items : FALLBACK_FIELDS).map((f) => ({
+        ...f,
+        imageUrl: f.imageUrl || fieldImageUrl(f.id),
+        href: f.href ?? articlesPathForField(f.id),
+        ctaLabel: f.ctaLabel ?? "Browse field articles",
+      })),
     [items],
   );
 
@@ -126,25 +132,18 @@ export function ResearchSpotlights({
             className="flex flex-col overflow-hidden border border-[var(--line)] bg-[var(--surface)]"
           >
             <div className="relative aspect-[16/10] overflow-hidden bg-[var(--ink)] sm:aspect-[16/9]">
-              {active.imageUrl ? (
-                <Image
-                  src={active.imageUrl}
-                  alt={active.articleTitle || active.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  unoptimized
-                />
-              ) : (
-                <div
-                  className="absolute inset-0"
-                  style={{
-                    background:
-                      "linear-gradient(145deg, #1a3a5a 0%, #243f5c 45%, #c84e27 120%)",
-                  }}
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/70 via-transparent to-transparent" />
+              <Image
+                src={active.imageUrl || fieldImageUrl(active.id)}
+                alt={active.articleTitle || active.title}
+                fill
+                className="object-cover transition duration-700 ease-out"
+                sizes="(max-width: 1024px) 100vw, 55vw"
+                unoptimized={Boolean(
+                  (active.imageUrl || "").startsWith("http"),
+                )}
+                priority={active.id === fields[0]?.id}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--ink)]/75 via-[var(--ink)]/15 to-transparent" />
               <p className="absolute bottom-4 left-4 right-4 font-[family-name:var(--font-display)] text-2xl text-white sm:bottom-5 sm:left-5 sm:text-3xl">
                 {active.title}
               </p>
